@@ -1,0 +1,1 @@
+enum BillTypes { passed, }
