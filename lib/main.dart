@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:democratus/models/proposals_model.dart';
 import 'package:flutter/material.dart';
 import 'api/govinfo_api.dart';
 import 'models/proposal.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -66,15 +68,37 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: proposals.numProposals,
               itemBuilder: ((context, index) {
                 Proposal proposal = proposals.getProposalByIndex(index);
-                return ListTile(
-                    leading: Text(proposal.category),
-                    trailing: Text(proposal.packageId),
-                    title: Text(proposal.shortTitle[0]["title"].toString()));
+                return Card(child: ProposalTile(proposal: proposal));
               }))),
       floatingActionButton: FloatingActionButton(
         onPressed: _addTestProposal,
         tooltip: 'Add Proposal',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class ProposalTile extends StatelessWidget {
+  const ProposalTile({super.key, required this.proposal});
+  final Proposal proposal;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 2, child: Text(proposal.shortTitle[0]["title"].toString())),
+          Expanded(
+            flex: 1,
+            child: Text(
+              "Last Action\n${DateFormat.yMMMd().format(proposal.lastModified)}",
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }
