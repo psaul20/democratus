@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:democratus/models/proposals_model.dart';
 import 'package:flutter/material.dart';
 import 'api/govinfo_api.dart';
 import 'models/proposal.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,12 +18,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-  late Future<Proposal> testProposal;
-  @override
-  void initState() {
-    super.initState();
-    testProposal = GovinfoApi().getProposalById("BILLS-111hr131enr");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +27,11 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      home: MyHomePage(
-        title: 'Democratus',
-        proposals: [testProposal],
+      home: ChangeNotifierProvider(
+        create: (context) => ProposalsModel(),
+        child: const MyHomePage(
+          title: 'Democratus',
+        ),
       ),
     );
   }
@@ -43,18 +41,17 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({
     Key? key,
     required this.title,
-    required this.proposals,
   }) : super(key: key);
   final String title;
-  final List proposals;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _incrementCounter() {
-    setState(() {});
+  void _addTestProposal() async {
+    ProposalsModel proposalsModel = context.read<ProposalsModel>();
+    proposalsModel.add(await GovinfoApi().getProposalById("BILLS-111hr131enr"));
   }
 
   @override
@@ -64,29 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              'Legislation',
-            ),
-            SizedBox(
-              height: 50,
-              width: 50,
-              child: SizedBox(
-                height: 50,
-                width: 50,
-                child: Text("Child 1"),
-              ),
-            )
-          ],
-        ),
-      ),
+      body: Consumer<ProposalsModel>(
+          builder: (context, proposals, child) => ListView.builder(
+              itemCount: proposals.numProposals,
+              itemBuilder: ((context, index) {
+                Proposal proposal = proposals.getProposalByIndex(index);
+                return ListTile(
+                    leading: Text(proposal.category),
+                    trailing: Text(proposal.packageId),
+                    title: Text(proposal.shortTitle[0]["title"].toString()));
+              }))),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _addTestProposal,
+        tooltip: 'Add Proposal',
         child: const Icon(Icons.add),
       ),
     );
