@@ -1,3 +1,4 @@
+import 'package:democratus/pages/add_proposal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/proposal.dart';
@@ -19,11 +20,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _addTestProposal() async {
-    ProposalsModel proposalsModel = context.read<ProposalsModel>();
-    proposalsModel.add(await GovinfoApi().getProposalById("BILLS-111hr131enr"));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +35,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 return Card(child: ProposalTile(proposal: proposal));
               }))),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addTestProposal,
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddProposal(),
+              ));
+        },
         tooltip: 'Add Proposal',
         child: const Icon(Icons.add),
       ),

@@ -21,15 +21,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Democratus',
+      title: 'DEMOCRATUS',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
         useMaterial3: true,
       ),
       home: ChangeNotifierProvider(
         create: (context) => ProposalsModel(),
         child: const MyHomePage(
-          title: 'Democratus',
+          title: 'DEMOCRATUS',
         ),
       ),
     );
