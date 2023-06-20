@@ -10,16 +10,41 @@ class AddProposal extends StatefulWidget {
 }
 
 class _AddProposalState extends State<AddProposal> {
-  CollectionList collections = await GovinfoApi().getCollections();
+  @override
+  Future<void> initState() async {
+    super.initState(
+    CollectionList collections = await GovinfoApi().getCollections();
+    List collectionNames = collections.getCollectionNames();
+    String selectedCollection = collectionNames[0];
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Search Documents"),
         ),
-        body: const Column(
+        body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [DropdownButton(items: , onChanged: onChanged)],
+          children: [],
         ));
+  }
+}
+
+class CollectionDropDown extends StatefulWidget {
+  const CollectionDropDown({super.key, required this.collectionNames});
+  final List collectionNames;
+
+  @override
+  State<CollectionDropDown> createState() => _CollectionDropDownState();
+}
+
+class _CollectionDropDownState extends State<CollectionDropDown> {
+    String dropdownValue = widget.collectionNames.first;
+
+  @override
+  Widget build(BuildContext context) {
+
+    
   }
 }

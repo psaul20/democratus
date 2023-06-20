@@ -10,6 +10,14 @@ class CollectionList {
     required this.collectionsList,
   });
 
+  List<String> getCollectionNames() {
+    List<String> collectionNames = [];
+    for (var element in collectionsList) {
+      collectionNames.add(element.collectionName);
+    }
+    return collectionNames;
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'collectionsList': collectionsList.map((x) => x.toMap()).toList(),
@@ -18,13 +26,18 @@ class CollectionList {
 
   factory CollectionList.fromMap(Map<String, dynamic> map) {
     return CollectionList(
-      collectionsList: List<Collection>.from((map['collectionsList'] as List<int>).map<Collection>((x) => Collection.fromMap(x as Map<String,dynamic>),),),
+      collectionsList: List<Collection>.from(
+        (map['collectionsList'] as List<int>).map<Collection>(
+          (x) => Collection.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory CollectionList.fromJson(String source) => CollectionList.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory CollectionList.fromJson(String source) =>
+      CollectionList.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class Collection {
