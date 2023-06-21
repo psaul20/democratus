@@ -23,6 +23,10 @@ class _AddProposalState extends State<AddProposal> {
     );
   }
 
+  searchProposals() async {
+    return 
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +36,12 @@ class _AddProposalState extends State<AddProposal> {
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Text(
+                "Choose a Collection:",
+                textAlign: TextAlign.left,
+              ),
               FutureBuilder(
                 future: getCollections(),
                 builder:
@@ -53,7 +62,30 @@ class _AddProposalState extends State<AddProposal> {
                   }
                   return returnWidget;
                 },
+              ),
+              const Text('Published after date:'),
+              InputDatePickerFormField(
+                firstDate: DateTime(1776, 1, 1),
+                lastDate: DateTime.now(),
               )
+              FutureBuilder(
+                future: ,builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                  Widget returnWidget;
+                  if (snapshot.hasData) {
+                    CollectionList collections =
+                        snapshot.data as CollectionList;
+                    List collectionNames = collections.getCollectionNames();
+                    returnWidget = CollectionDropDown(
+                      names: collectionNames,
+                    );
+                  } else if (snapshot.hasError) {
+                    log("Error fetching collections data");
+                    returnWidget = const Text("Error fetching data");
+                  } else {
+                    returnWidget = const Text("Fetching Data...");
+                  }
+                  return returnWidget;
+              })
             ],
           ),
         ));
