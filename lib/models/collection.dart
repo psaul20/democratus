@@ -5,14 +5,14 @@ import 'package:collection/collection.dart';
 
 // See https://api.govinfo.gov/collections?api_key=DEMO_KEY for example
 class CollectionList {
-  List<Collection> collectionsList;
+  List<Collection> collections;
   CollectionList({
-    required this.collectionsList,
+    required this.collections,
   });
 
   List<String> getCollectionNames() {
     List<String> collectionNames = [];
-    for (var element in collectionsList) {
+    for (var element in collections) {
       collectionNames.add(element.collectionName);
     }
     return collectionNames;
@@ -20,14 +20,14 @@ class CollectionList {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'collectionsList': collectionsList.map((x) => x.toMap()).toList(),
+      'collections': collections.map((x) => x.toMap()).toList(),
     };
   }
 
   factory CollectionList.fromMap(Map<String, dynamic> map) {
     return CollectionList(
-      collectionsList: List<Collection>.from(
-        (map['collectionsList'] as List<int>).map<Collection>(
+      collections: List<Collection>.from(
+        (map['collections'] as List).map<Collection>(
           (x) => Collection.fromMap(x as Map<String, dynamic>),
         ),
       ),
