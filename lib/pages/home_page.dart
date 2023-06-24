@@ -1,12 +1,11 @@
-import 'package:democratus/pages/add_proposal.dart';
+import 'package:democratus/pages/add_package.dart';
+import 'package:democratus/widgets/package_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/package.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import '../models/proposals_model.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -28,12 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Consumer<PackageList>(
-          builder: (context, proposals, child) => ListView.builder(
-              itemCount: proposals.numProposals,
-              itemBuilder: ((context, index) {
-                Package proposal = proposals.getProposalByIndex(index);
-                return Card(child: ProposalTile(proposal: proposal));
-              }))),
+          builder: (context, packages, child) =>
+              PackageListView(packages: packages)),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

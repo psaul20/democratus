@@ -5,6 +5,8 @@ import 'package:democratus/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'models/package.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -28,7 +30,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       home: ChangeNotifierProvider(
-        create: (context) => ProposalsList(),
+        create: (context) => PackageList(),
         child: const MyHomePage(
           title: 'DEMOCRATUS',
         ),

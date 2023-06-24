@@ -111,11 +111,11 @@ class Package {
 }
 
 class PackageList extends ChangeNotifier {
-  PackageList(this.packages);
-  final List<Package> packages;
+  PackageList({this.packages = const []});
+  List<Package> packages;
 
-  int get numProposals => packages.length;
-  Package getProposalByIndex(int index) => packages[index];
+  int get numPackages => packages.length;
+  Package getPackagebyIndex(int index) => packages[index];
 
   void add(Package proposal) {
     packages.add(proposal);
@@ -139,13 +139,12 @@ class PackageList extends ChangeNotifier {
   // }
 
   factory PackageList.fromMap(Map<String, dynamic> map) {
-    return PackageList(
-      List<Package>.from(
-        (map['packages'] as List<dynamic>).map<Package>(
-          (x) => Package.fromMap(x as Map<String, dynamic>),
-        ),
+    List<Package> packages = List<Package>.from(
+      (map['packages'] as List<dynamic>).map<Package>(
+        (x) => Package.fromMap(x as Map<String, dynamic>),
       ),
     );
+    return PackageList(packages: packages);
   }
 
   // String toJson() => json.encode(toMap());

@@ -12,8 +12,8 @@ void main() {
     DateTime startDate = DateTime(2019, 1, 1);
     DateTime endDate = DateTime(2019, 7, 31);
     List collectionCodes = ["BILLS"];
-    PackageList result = await GovinfoApi()
-        .searchPackages(startDate, endDate, collectionCodes, 10);
+    PackageList result =
+        await GovinfoApi().searchPackages(startDate, endDate, collectionCodes);
     expect(result.packages.first.toMap()["packageId"], "BILLS-116hr809ih");
   });
 }
