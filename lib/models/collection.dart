@@ -1,18 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
-
 // See https://api.govinfo.gov/collections?api_key=DEMO_KEY for example
 class CollectionList {
-  List<Collection> collections;
+  List<Collection> _collections;
   CollectionList({
-    required this.collections,
-  });
+    required List<Collection> collections,
+  }) : _collections = collections;
+
+  List<Collection> get asList => _collections;
 
   List<String> getCollectionNames() {
     List<String> collectionNames = [];
-    for (var element in collections) {
+    for (var element in _collections) {
       collectionNames.add(element.collectionName);
     }
     return collectionNames;
@@ -20,7 +20,7 @@ class CollectionList {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'collections': collections.map((x) => x.toMap()).toList(),
+      'collections': _collections.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -51,6 +51,18 @@ class Collection {
     required this.packageCount,
     this.granuleCount,
   });
+
+  static List<Collection> listFromMap(Map<String, dynamic> map) {
+    return List<Collection>.from(
+      (map['collections'] as List).map<Collection>(
+        (x) => Collection.fromMap(x as Map<String, dynamic>),
+      ),
+    );
+  }
+
+  static List<Collection> listFromJson(String source) {
+    return Collection.listFromMap(json.decode(source) as Map<String, dynamic>);
+  }
 
   Collection copyWith({
     String? collectionCode,

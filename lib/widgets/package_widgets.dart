@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../models/package.dart';
 
@@ -42,7 +40,7 @@ class PackageListView extends StatelessWidget {
     return ListView.builder(
         itemCount: packages.numPackages,
         itemBuilder: ((context, index) {
-          Package package = packages.getPackagebyIndex(index);
+          Package package = packages.getPackageByIndex(index);
           return Card(child: PackageTile(package: package));
         }));
   }

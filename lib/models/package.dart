@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -111,25 +110,30 @@ class Package {
 }
 
 class PackageList extends ChangeNotifier {
-  PackageList({this.packages = const []});
-  List<Package> packages;
+  PackageList({List<Package> packages = const []}) : _packages = packages;
+  List<Package> _packages;
 
-  int get numPackages => packages.length;
-  Package getPackagebyIndex(int index) => packages[index];
+  int get numPackages => _packages.length;
+  Package getPackageByIndex(int index) => _packages[index];
+  List<Package> get packages => _packages;
 
-  void add(Package proposal) {
-    packages.add(proposal);
+  void add(Package package) {
+    _packages.add(package);
     notifyListeners();
   }
 
   void removeAll() {
-    packages.clear();
+    _packages.clear();
     notifyListeners();
   }
 
-  void remove(Package proposal) {
-    packages.remove(proposal);
+  void remove(Package package) {
+    _packages.remove(package);
     notifyListeners();
+  }
+
+  void replace(List<Package> packages) {
+    _packages = packages;
   }
 
   // Map<String, dynamic> toMap() {

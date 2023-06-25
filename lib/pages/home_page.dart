@@ -1,10 +1,7 @@
-import 'package:democratus/pages/add_package.dart';
+import 'package:democratus/pages/search_packages.dart';
 import 'package:democratus/widgets/package_widgets.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/package.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -34,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const AddProposal(),
+                builder: (context) => const SearchPackages(),
               ));
         },
         tooltip: 'Add Proposal',
