@@ -5,12 +5,11 @@ import 'package:democratus/redux/actions.dart';
 
 SearchState searchStateReducer(SearchState state, action) {
   return SearchState(
-      collections: collectionsReducer(state.collections, action),
-      queryParams: queryParamsReducer(state.queryParams, action));
+      collections: collectionsReducer(state.collections, action));
 }
 
 List<Collection> collectionsReducer(List<Collection> state, action) {
-  if (action is GetCollectionsAction) {
+  if (action is LoadedCollectionsAction) {
     return action.collections;
   }
   return state;

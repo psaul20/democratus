@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:democratus/models/collection.dart';
 
-class GetCollectionsAction {
+class GetCollectionsAction {}
+
+class LoadedCollectionsAction {
   List<Collection> collections;
-  GetCollectionsAction(this.collections);
+  LoadedCollectionsAction(this.collections);
 }
 
 class SelectCollectionAction {
