@@ -3,6 +3,8 @@ import 'dart:core';
 
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/collection.dart';
+import 'package:democratus/models/package.dart';
+import 'package:democratus/widgets/package_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,6 +19,15 @@ final selectedCollectionProvider = StateProvider<Collection?>((ref) {
   collections.whenData((data) => data.first);
   return null;
 });
+
+final queryParamsProvider = StateProvider<Map>((ref) {
+  final Map<String, String?> queryParams = {};
+  queryParams["collectionCode"] =
+      ref.watch(selectedCollectionProvider)?.collectionCode;
+  return queryParams;
+});
+
+final packagesProvider = StateProvider<List<Package>>((ref) => []);
 
 class SearchPackages extends ConsumerWidget {
   const SearchPackages({super.key});
@@ -41,9 +52,13 @@ class SearchPackages extends ConsumerWidget {
               const CollectionsDropDownBuilder(),
               const Text('Published after date:'),
               InputDatePickerFormField(
-                firstDate: DateTime(1900, 1, 1),
-                lastDate: DateTime.now(),
-              ),
+                  firstDate: DateTime(1900, 1, 1),
+                  lastDate: DateTime.now(),
+                  initialDate: DateTime.now(),
+                  onDateSubmitted: (DateTime value) {
+                    ref.read(queryParamsProvider.notifier).state['startDate'] =
+                        value;
+                  }),
             ],
           ),
         ),
@@ -96,56 +111,53 @@ class CollectionsDropDownBuilder extends ConsumerWidget {
   }
 }
 
-// class SearchPackagesBuilder extends StatelessWidget {
-//   const SearchPackagesBuilder({super.key});
+class SearchPackagesBuilder extends ConsumerWidget {
+  const SearchPackagesBuilder({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     Widget returnWidget;
-//                 if (packages._packages.isEmpty) {
-//                   returnWidget = const Expanded(
-//                     child: Center(
-//                         child: Text(
-//                       "Tap below to Search",
-//                       textAlign: TextAlign.center,
-//                     )),
-//                   );
-//                 } else {
-//                   returnWidget = PackageListView(packages: packages);
-//                 }
-//                 return returnWidget;
-//   }
-// }
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<Package> packages = ref.watch(packagesProvider);
+    Widget returnWidget;
+    if (packages.isEmpty) {
+      returnWidget = const Expanded(
+        child: Center(
+            child: Text(
+          "Tap below to Search",
+          textAlign: TextAlign.center,
+        )),
+      );
+    } else {
+      returnWidget = PackageListView(packages: packages);
+    }
+    return returnWidget;
+  }
+}
 
-// class SearchButtonBuilder extends StatelessWidget {
-//   const SearchButtonBuilder({super.key});
+class SearchButtonBuilder extends ConsumerWidget {
+  const SearchButtonBuilder({super.key});
+  void submitSearch () {
+    
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//               double iconSize = 50.0;
-//           if (packages._packages.isEmpty) {
-//             return IconButton(
-//               icon: const Icon(Icons.search),
-//               onPressed: submitSearch,
-//               iconSize: iconSize,
-//             );
-//           } else {
-//             return IconButton(
-//               onPressed: packages.removeAll,
-//               icon: const Icon(Icons.remove),
-//               iconSize: iconSize,
-//             );
-//   }
-// }
-
-// class FeedbackWidget extends StatelessWidget {
-//   const FeedbackWidget({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    double iconSize = 50.0;
+    List<Package> packages = ref.watch(packagesProvider);
+    if (packages.isEmpty) {
+      return IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: submitSearch,
+        iconSize: iconSize,
+      );
+    } else {
+      return IconButton(
+        onPressed: () => packages = [],
+        icon: const Icon(Icons.remove),
+        iconSize: iconSize,
+      );
+    }
+  }
+}
 
 // class CollectionDropDown extends StatefulWidget {
 //   const CollectionDropDown({super.key, required this.collections});

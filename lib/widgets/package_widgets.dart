@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../models/package.dart';
+import 'package:democratus/models/package.dart';
 
 class PackageTile extends StatelessWidget {
   const PackageTile({super.key, required this.package});
@@ -33,14 +33,14 @@ class PackageListView extends StatelessWidget {
     super.key,
     required this.packages,
   });
-  final PackageList packages;
+  final List<Package> packages;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: packages.numPackages,
+        itemCount: packages.length,
         itemBuilder: ((context, index) {
-          Package package = packages.getPackageByIndex(index);
+          Package package = packages.elementAt(index);
           return Card(child: PackageTile(package: package));
         }));
   }
