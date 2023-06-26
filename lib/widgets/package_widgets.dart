@@ -14,7 +14,7 @@ class PackageTile extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              flex: 2, child: Text(package.shortTitle![0]["title"].toString())),
+              flex: 2, child: Text(package.title)),
           Expanded(
             flex: 1,
             child: Text(

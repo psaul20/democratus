@@ -16,7 +16,9 @@ final collectionsProvider = FutureProvider<List<Collection>>((ref) async {
 
 final selectedCollectionProvider = StateProvider<Collection?>((ref) {
   final collections = ref.watch(collectionsProvider);
-  collections.whenData((data) => data.first);
+  if (collections.hasValue) {
+    return collections.value?.first;
+  }
   return null;
 });
 
@@ -32,40 +34,35 @@ final packagesProvider = StateProvider<List<Package>>((ref) => []);
 class SearchPackages extends ConsumerWidget {
   const SearchPackages({super.key});
 
-  // submitSearch() async {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ProviderScope(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Search Documents"),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Choose a Collection:",
-                textAlign: TextAlign.left,
-              ),
-              const CollectionsDropDownBuilder(),
-              const Text('Published after date:'),
-              InputDatePickerFormField(
-                  firstDate: DateTime(1900, 1, 1),
-                  lastDate: DateTime.now(),
-                  initialDate: DateTime.now(),
-                  onDateSubmitted: (DateTime value) {
-                    ref.read(queryParamsProvider.notifier).state['startDate'] =
-                        value;
-                  }),
-            ],
-          ),
-        ),
-        // floatingActionButton: const SearchButtonBuilder(),
-        // floatingActionButtonLocation:
-        //     FloatingActionButtonLocation.centerFloat,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Search Documents"),
       ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Choose a Collection:",
+              textAlign: TextAlign.left,
+            ),
+            const CollectionsDropDownBuilder(),
+            const Text('Published after date:'),
+            TextField(
+              onSubmitted: (value) {
+                ref.read(queryParamsProvider.notifier).state['startDate'] =
+                    value;
+              },
+            ),
+            const SearchPackagesBuilder(),
+          ],
+        ),
+      ),
+      floatingActionButton: const SearchButtonBuilder(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
@@ -127,7 +124,7 @@ class SearchPackagesBuilder extends ConsumerWidget {
         )),
       );
     } else {
-      returnWidget = PackageListView(packages: packages);
+      returnWidget = Expanded(child: PackageListView(packages: packages));
     }
     return returnWidget;
   }
@@ -135,9 +132,6 @@ class SearchPackagesBuilder extends ConsumerWidget {
 
 class SearchButtonBuilder extends ConsumerWidget {
   const SearchButtonBuilder({super.key});
-  void submitSearch () {
-    
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -146,7 +140,16 @@ class SearchButtonBuilder extends ConsumerWidget {
     if (packages.isEmpty) {
       return IconButton(
         icon: const Icon(Icons.search),
-        onPressed: submitSearch,
+        // TODO: Move out of onPressed to clean up - possibly convert to stateful
+        onPressed: () async {
+          DateTime startDate =
+              DateTime.parse(ref.read(queryParamsProvider)['startDate']);
+          String collectionCode =
+              ref.read(queryParamsProvider)['collectionCode'];
+          PackageList packages = await GovinfoApi().searchPackages(
+              startDate: startDate, collectionCodes: [collectionCode]);
+          ref.read(packagesProvider.notifier).state = packages.packages;
+        },
         iconSize: iconSize,
       );
     } else {
