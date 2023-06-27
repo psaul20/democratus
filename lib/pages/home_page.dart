@@ -1,9 +1,7 @@
-import 'package:democratus/pages/search_packages.dart';
+import 'package:democratus/pages/search_packages_page.dart';
 import 'package:democratus/widgets/package_widgets.dart';
-import 'package:democratus/models/package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -24,13 +22,14 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: PackageListView(packages: const []),
+      body: const PackageListView(packages: []),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ProviderScope(child: SearchPackages()),
+                builder: (context) =>
+                    const ProviderScope(child: SearchPackagesPage()),
               ));
         },
         tooltip: 'Add Proposal',

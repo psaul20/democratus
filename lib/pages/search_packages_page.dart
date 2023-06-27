@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:core';
 
+import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/collection.dart';
 import 'package:democratus/models/package.dart';
+import 'package:democratus/widgets/dropdowns.dart';
 import 'package:democratus/widgets/package_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,11 +33,12 @@ final queryParamsProvider = StateProvider<Map>((ref) {
 
 final packagesProvider = StateProvider<List<Package>>((ref) => []);
 
-class SearchPackages extends ConsumerWidget {
-  const SearchPackages({super.key});
+class SearchPackagesPage extends ConsumerWidget {
+  const SearchPackagesPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    List<Collection>? collections = ref.read(collectionsProvider).asData?.value;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Search Documents"),
@@ -45,12 +48,34 @@ class SearchPackages extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Choose a Collection:",
+            Text(
+              "Choose a Collection",
               textAlign: TextAlign.left,
+              style: TextStyles.fieldTitle,
             ),
-            const CollectionsDropDownBuilder(),
-            const Text('Published after date:'),
+            AsyncDropDownBuilder(
+              provider: collectionsProvider,
+              dropDownValue:
+                  ref.watch(selectedCollectionProvider)?.collectionName,
+              onChanged: (String? value) {
+                if (collections != null) {
+                  int? idx = collections
+                      .indexWhere((element) => element.collectionName == value);
+                  ref.read(selectedCollectionProvider.notifier).state =
+                      collections.elementAt(idx);
+                }
+              },
+              mapFunction: (element) {
+                return DropdownMenuItem<String>(
+                  value: element.collectionName,
+                  child: Text(element.collectionName, style: TextStyles.dropDownStyle,),
+                );
+              },
+            ),
+            Text(
+              'Published After',
+              style: TextStyles.fieldTitle,
+            ),
             TextField(
               onSubmitted: (value) {
                 ref.read(queryParamsProvider.notifier).state['startDate'] =
@@ -135,21 +160,22 @@ class SearchButtonBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    void submitSearch() async {
+      DateTime startDate =
+          DateTime.parse(ref.read(queryParamsProvider)['startDate']);
+      String collectionCode = ref.read(queryParamsProvider)['collectionCode'];
+      PackageList packages = await GovinfoApi().searchPackages(
+          startDate: startDate, collectionCodes: [collectionCode]);
+      ref.read(packagesProvider.notifier).state = packages.packages;
+    }
+
     double iconSize = 50.0;
     List<Package> packages = ref.watch(packagesProvider);
+
     if (packages.isEmpty) {
       return IconButton(
         icon: const Icon(Icons.search),
-        // TODO: Move out of onPressed to clean up - possibly convert to stateful
-        onPressed: () async {
-          DateTime startDate =
-              DateTime.parse(ref.read(queryParamsProvider)['startDate']);
-          String collectionCode =
-              ref.read(queryParamsProvider)['collectionCode'];
-          PackageList packages = await GovinfoApi().searchPackages(
-              startDate: startDate, collectionCodes: [collectionCode]);
-          ref.read(packagesProvider.notifier).state = packages.packages;
-        },
+        onPressed: submitSearch,
         iconSize: iconSize,
       );
     } else {
