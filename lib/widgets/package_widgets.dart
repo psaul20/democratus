@@ -1,32 +1,13 @@
+import 'package:democratus/main.dart';
+import 'package:democratus/models/saved_packages.dart';
+import 'package:democratus/pages/search_packages_page.dart';
+import 'package:democratus/styles/text_styles.dart';
+import 'package:democratus/widgets/buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'package:democratus/models/package.dart';
-
-class PackageTile extends StatelessWidget {
-  const PackageTile({super.key, required this.package});
-  final Package package;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 2, child: Text(package.title)),
-          Expanded(
-            flex: 1,
-            child: Text(
-              "Last Action\n${DateFormat.yMMMd().format(package.lastModified)}",
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class PackageListView extends StatelessWidget {
   const PackageListView({
@@ -41,7 +22,56 @@ class PackageListView extends StatelessWidget {
         itemCount: packages.length,
         itemBuilder: ((context, index) {
           Package package = packages.elementAt(index);
-          return Card(child: PackageTile(package: package));
+          return PackageTile(package: package);
         }));
+  }
+}
+
+class PackageTile extends ConsumerWidget {
+  const PackageTile({super.key, required this.package});
+  final Package package;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(savedPackagesProvider);
+    onTap() {
+      if (package.isSaved) {
+        ref.read(savedPackagesProvider.notifier).removePackage(package);
+        package.isSaved = false;
+      } else {
+        ref.read(savedPackagesProvider.notifier).savePackage(package);
+        package.isSaved = true;
+      }
+    }
+
+    return Card(
+      child: ExpansionTile(
+        title: Text(package.title),
+        tilePadding: const EdgeInsets.only(left: 10, bottom: 0, right: 10),
+        children: [
+          ListTile(
+            contentPadding: const EdgeInsets.only(left: 10),
+            dense: true,
+            title: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Last Action: ${DateFormat.yMMMd().format(package.lastModified)}",
+                      textAlign: TextAlign.start,
+                      style: TextStyles.expandedListTile,
+                    ),
+                  ],
+                ),
+                SaveButton(
+                  isSaved: package.isSaved,
+                  onTap: onTap,
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

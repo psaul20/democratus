@@ -18,6 +18,11 @@ final collectionsProvider = FutureProvider<List<Collection>>((ref) async {
 });
 
 // TODO: Consolidate providers?
+// TODO: Update search to load 10 at a time, not just 10
+// TODO: Sort by last action date
+// TODO: Search by text
+// TODO: Make search parameters a drawer
+// TODO: Fix search/remove button look and feel (possible as an overlay)
 final selectedCollectionProvider = StateProvider<Collection?>((ref) {
   final collections = ref.watch(collectionsProvider);
   if (collections.hasValue) {

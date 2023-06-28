@@ -2,31 +2,33 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Package {
   Package(
-    this.originChamber,
-    this.session,
-    this.detailsLink,
-    this.shortTitle,
-    this.title,
-    this.branch,
-    this.download,
-    this.pages,
-    this.dateIssued,
-    this.currentChamber,
-    this.billVersion,
-    this.billType,
-    this.packageId,
-    this.collectionCode,
-    this.governmentAuthor1,
-    this.publisher,
-    this.docClass,
-    this.lastModified,
-    this.category,
-    this.billNumber,
-    this.congress,
-  );
+      this.originChamber,
+      this.session,
+      this.detailsLink,
+      this.shortTitle,
+      this.title,
+      this.branch,
+      this.download,
+      this.pages,
+      this.dateIssued,
+      this.currentChamber,
+      this.billVersion,
+      this.billType,
+      this.packageId,
+      this.collectionCode,
+      this.governmentAuthor1,
+      this.publisher,
+      this.docClass,
+      this.lastModified,
+      this.category,
+      this.billNumber,
+      this.congress,
+      {this.isSaved = false});
+  // Driven by GovInfo data structure
   final String? originChamber;
   final String? session;
   final String? detailsLink;
@@ -48,6 +50,9 @@ class Package {
   final String? category;
   final int? billNumber;
   final String? congress;
+
+  // Driven by app logic needs
+  bool isSaved;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -107,8 +112,58 @@ class Package {
 
   factory Package.fromJson(String source) =>
       Package.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  Package copyWith({
+    String? originChamber,
+    String? session,
+    String? detailsLink,
+    List? shortTitle,
+    String? title,
+    String? branch,
+    Map? download,
+    int? pages,
+    DateTime? dateIssued,
+    String? currentChamber,
+    String? billVersion,
+    String? billType,
+    String? packageId,
+    String? collectionCode,
+    String? governmentAuthor1,
+    String? publisher,
+    String? docClass,
+    DateTime? lastModified,
+    String? category,
+    int? billNumber,
+    String? congress,
+    bool? isSaved,
+  }) {
+    return Package(
+      originChamber ?? this.originChamber,
+      session ?? this.session,
+      detailsLink ?? this.detailsLink,
+      shortTitle ?? this.shortTitle,
+      title ?? this.title,
+      branch ?? this.branch,
+      download ?? this.download,
+      pages ?? this.pages,
+      dateIssued ?? this.dateIssued,
+      currentChamber ?? this.currentChamber,
+      billVersion ?? this.billVersion,
+      billType ?? this.billType,
+      packageId ?? this.packageId,
+      collectionCode ?? this.collectionCode,
+      governmentAuthor1 ?? this.governmentAuthor1,
+      publisher ?? this.publisher,
+      docClass ?? this.docClass,
+      lastModified ?? this.lastModified,
+      category ?? this.category,
+      billNumber ?? this.billNumber,
+      congress ?? this.congress,
+    );
+  }
 }
 
+// TODO: Remove ChangeNotifier - convert to simply json getter class
 class PackageList extends ChangeNotifier {
   PackageList({List<Package> packages = const []}) : _packages = packages;
   List<Package> _packages;
