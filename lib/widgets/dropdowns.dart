@@ -19,12 +19,17 @@ class AsyncDropDownBuilder extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int elevation = 16;
-    double containerHeight = 2;
-    Color loadedColor = DemocTheme.mainTheme.colorScheme.onBackground;
-    Icon loadedIcon = const Icon(Icons.arrow_drop_down_circle_outlined);
+    double containerHeight = 1;
+    double padding = 1;
+    double iconSize = 30;
+    Color loadedColor = DemocScheme.scheme.onBackground;
+    Icon loadedIcon = Icon(
+      Icons.arrow_drop_down_sharp,
+      size: iconSize,
+    );
     Color fetchColor = loadedColor;
-    Icon fetchIcon = const Icon(Icons.download);
-    Color errorColor = DemocTheme.mainTheme.colorScheme.error;
+    Icon? fetchIcon;
+    Color errorColor = DemocScheme.scheme.error;
     Icon errorIcon = const Icon(Icons.cancel_outlined);
     AsyncValue<List<dynamic>> listItems = ref.watch(provider);
 
@@ -35,10 +40,11 @@ class AsyncDropDownBuilder extends ConsumerWidget {
           value: dropDownValue,
           icon: loadedIcon,
           elevation: elevation,
-          style: TextStyles.dropDownStyle,
+          style: TextStyles.inputStyle,
           underline: Container(
             height: containerHeight,
             color: loadedColor,
+            padding: EdgeInsets.only(bottom: padding),
           ),
           onChanged: onChanged,
           items: listItems.map<DropdownMenuItem<String>>(mapFunction).toList(),
@@ -50,7 +56,7 @@ class AsyncDropDownBuilder extends ConsumerWidget {
           value: dropDownValue,
           icon: errorIcon,
           elevation: elevation,
-          style: TextStyles.dropDownStyle,
+          style: TextStyles.inputStyle,
           underline: Container(
             height: containerHeight,
             color: errorColor,
@@ -65,7 +71,7 @@ class AsyncDropDownBuilder extends ConsumerWidget {
           value: dropDownValue,
           icon: fetchIcon,
           elevation: elevation,
-          style: TextStyles.dropDownStyle,
+          style: TextStyles.inputStyle,
           underline: Container(
             height: containerHeight,
             color: fetchColor,

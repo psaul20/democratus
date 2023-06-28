@@ -6,6 +6,8 @@ class TextStyles {
         fontSize: 15,
         fontWeight: FontWeight.w700,
       );
-  static TextStyle get dropDownStyle => TextStyle(
-      fontSize: 18, color: DemocTheme.mainTheme.colorScheme.onBackground);
+  static TextStyle get inputStyle => TextStyle(
+      fontSize: 18, color: DemocScheme.scheme.onBackground, height: 1);
+  static TextStyle get hintStyle =>
+      TextStyle(fontSize: 18, color: DemocScheme.scheme.secondary, height: 0);
 }

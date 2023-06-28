@@ -5,6 +5,7 @@ import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/collection.dart';
 import 'package:democratus/models/package.dart';
+import 'package:democratus/styles/theme_data.dart';
 import 'package:democratus/widgets/dropdowns.dart';
 import 'package:democratus/widgets/package_widgets.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ final collectionsProvider = FutureProvider<List<Collection>>((ref) async {
   return collections.asList;
 });
 
+// TODO: Consolidate providers?
 final selectedCollectionProvider = StateProvider<Collection?>((ref) {
   final collections = ref.watch(collectionsProvider);
   if (collections.hasValue) {
@@ -24,11 +26,25 @@ final selectedCollectionProvider = StateProvider<Collection?>((ref) {
   return null;
 });
 
+final dateInputProvider = StateProvider<DateTime?>(
+  (ref) => null,
+);
+
 final queryParamsProvider = StateProvider<Map>((ref) {
   final Map<String, String?> queryParams = {};
   queryParams["collectionCode"] =
       ref.watch(selectedCollectionProvider)?.collectionCode;
+  queryParams["startDate"] = ref.watch(dateInputProvider).toString();
   return queryParams;
+});
+
+final canSearchProvider = StateProvider<bool>((ref) {
+  bool canSearch = false;
+  if (ref.watch(selectedCollectionProvider) != null &&
+      ref.watch(dateInputProvider) != null) {
+    canSearch = true;
+  }
+  return canSearch;
 });
 
 final packagesProvider = StateProvider<List<Package>>((ref) => []);
@@ -68,7 +84,10 @@ class SearchPackagesPage extends ConsumerWidget {
               mapFunction: (element) {
                 return DropdownMenuItem<String>(
                   value: element.collectionName,
-                  child: Text(element.collectionName, style: TextStyles.dropDownStyle,),
+                  child: Text(
+                    element.collectionName,
+                    style: TextStyles.inputStyle,
+                  ),
                 );
               },
             ),
@@ -76,60 +95,58 @@ class SearchPackagesPage extends ConsumerWidget {
               'Published After',
               style: TextStyles.fieldTitle,
             ),
-            TextField(
-              onSubmitted: (value) {
-                ref.read(queryParamsProvider.notifier).state['startDate'] =
-                    value;
-              },
-            ),
+            const DateTextField(),
             const SearchPackagesBuilder(),
           ],
         ),
       ),
       floatingActionButton: const SearchButtonBuilder(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
 
-class CollectionsDropDownBuilder extends ConsumerWidget {
-  const CollectionsDropDownBuilder({super.key});
+class DateTextField extends ConsumerStatefulWidget {
+  const DateTextField({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<Collection>> collections = ref.watch(collectionsProvider);
-    String? dropDownValue =
-        ref.watch(selectedCollectionProvider)?.collectionName;
-    //TODO: Error handling
-    return collections.when(data: ((collections) {
-      return DropdownButton<String>(
-        isExpanded: true,
-        value: dropDownValue,
-        icon: const Icon(Icons.arrow_downward),
-        elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
-        underline: Container(
-          height: 2,
-          color: Colors.deepPurpleAccent,
+  ConsumerState<ConsumerStatefulWidget> createState() => _DateTextFieldState();
+}
+
+class _DateTextFieldState extends ConsumerState<DateTextField> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: TextFormField(
+        style: TextStyles.inputStyle,
+        // inputFormatters: [
+        // Not working with iOS Simulator on Mac
+        // FilteringTextInputFormatter.allow(RegExp(r'^\d{4}-\d{2}-\d{2}$')),
+        // ],
+        decoration: const InputDecoration(
+          hintText: "Format: 1776-04-07",
         ),
-        onChanged: (String? value) {
-          int idx = collections
-              .indexWhere((element) => element.collectionName == value);
-          ref.read(selectedCollectionProvider.notifier).state =
-              collections.elementAt(idx);
+        validator: (value) {
+          if (value != null && DateTime.tryParse(value) != null) {
+            return null;
+          } else if (value == null) {
+            return null;
+          } else {
+            return "Format must be YYYY-MM-DD";
+          }
         },
-        items: collections.map<DropdownMenuItem<String>>((element) {
-          return DropdownMenuItem<String>(
-            value: element.collectionName,
-            child: Text(element.collectionName),
-          );
-        }).toList(),
-      );
-    }), error: (Object error, StackTrace stackTrace) {
-      return (Text("{$error}"));
-    }, loading: () {
-      return const Text("Fetching Collections");
-    });
+        onChanged: (value) {
+          if (_formKey.currentState!.validate()) {
+            ref.read(dateInputProvider.notifier).state = DateTime.parse(value);
+          } else {
+            ref.read(dateInputProvider.notifier).state = null;
+          }
+        },
+      ),
+    );
   }
 }
 
@@ -139,14 +156,18 @@ class SearchPackagesBuilder extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Package> packages = ref.watch(packagesProvider);
+    bool canSearch = ref.watch(canSearchProvider);
     Widget returnWidget;
     if (packages.isEmpty) {
-      returnWidget = const Expanded(
+      returnWidget = Padding(
+        padding: const EdgeInsets.only(top: 50),
         child: Center(
-            child: Text(
-          "Tap below to Search",
-          textAlign: TextAlign.center,
-        )),
+            child: canSearch
+                ? const Text(
+                    "Tap below to search.",
+                    textAlign: TextAlign.center,
+                  )
+                : const Text("Fill out the search fields above.")),
       );
     } else {
       returnWidget = Expanded(child: PackageListView(packages: packages));
@@ -169,48 +190,28 @@ class SearchButtonBuilder extends ConsumerWidget {
       ref.read(packagesProvider.notifier).state = packages.packages;
     }
 
+    void removeSearch() {
+      ref.read(packagesProvider.notifier).state = [];
+    }
+
     double iconSize = 50.0;
     List<Package> packages = ref.watch(packagesProvider);
-
+    bool canSearch = ref.watch(canSearchProvider.notifier).state;
+    Color iconColor = DemocScheme.scheme.onBackground;
     if (packages.isEmpty) {
       return IconButton(
-        icon: const Icon(Icons.search),
-        onPressed: submitSearch,
+        icon: const Icon(Icons.search_outlined),
+        onPressed: canSearch ? submitSearch : null,
         iconSize: iconSize,
+        color: iconColor,
       );
     } else {
       return IconButton(
-        onPressed: () => packages = [],
-        icon: const Icon(Icons.remove),
+        onPressed: removeSearch,
+        icon: const Icon(Icons.highlight_remove),
         iconSize: iconSize,
+        color: iconColor,
       );
     }
   }
 }
-
-// class CollectionDropDown extends StatefulWidget {
-//   const CollectionDropDown({super.key, required this.collections});
-//   final CollectionList collections;
-
-//   @override
-//   State<CollectionDropDown> createState() => _CollectionDropDownState();
-// }
-
-// class _CollectionDropDownState extends State<CollectionDropDown> {
-//   late List<String> names;
-//   late String dropDownValue;
-//   late Collection selectedCollection;
-
-//   @override
-//   void initState() {
-//     names = widget.collections.getCollectionNames();
-//     dropDownValue = names.first;
-//     selectedCollection = widget.collections._collections.first;
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return 
-//   }
-// }
