@@ -137,7 +137,7 @@ class PackageTile extends ConsumerWidget {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SaveButton(
                         isSaved: package.isSaved,
