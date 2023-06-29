@@ -7,6 +7,7 @@ class SavedPackages extends StateNotifier<List<Package>> {
 
   void savePackage(Package package) {
     state = [...state, package.copyWith(isSaved: true)];
+    package.isSaved = true;
   }
 
   void removePackage(Package package) {
@@ -14,5 +15,6 @@ class SavedPackages extends StateNotifier<List<Package>> {
       for (final package in state)
         if (package.packageId != package.packageId) package,
     ];
+    package.isSaved = false;
   }
 }

@@ -10,6 +10,7 @@ import 'package:democratus/widgets/dropdowns.dart';
 import 'package:democratus/widgets/package_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 //Basing Riverpod implementation off of https://www.youtube.com/watch?v=Zp7
 final collectionsProvider = FutureProvider<List<Collection>>((ref) async {
@@ -123,9 +124,17 @@ class _DateTextFieldState extends ConsumerState<DateTextField> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime? initialDate = ref.read(dateInputProvider.notifier).state;
+    String initialString = '';
+    initialDate != null
+        ? initialString = DateFormat("y-MM-dd").format(initialDate)
+        : initialString;
     return Form(
       key: _formKey,
       child: TextFormField(
+        // TODO: fix formatting oninitial value
+        // TODO: figure out why saved buttons are staying filled in on remove, likely due to lack of state change
+        initialValue: initialString,
         style: TextStyles.inputStyle,
         // inputFormatters: [
         // Not working with iOS Simulator on Mac

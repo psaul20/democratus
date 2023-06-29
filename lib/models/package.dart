@@ -159,6 +159,7 @@ class Package {
       category ?? this.category,
       billNumber ?? this.billNumber,
       congress ?? this.congress,
+      isSaved: isSaved ?? this.isSaved,
     );
   }
 }

@@ -1,9 +1,10 @@
+import 'package:democratus/main.dart';
 import 'package:democratus/pages/search_packages_page.dart';
 import 'package:democratus/widgets/package_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({
     Key? key,
     required this.title,
@@ -11,10 +12,10 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: const PackageListView(packages: []),
+      body: PackageListView(packages: ref.watch(savedPackagesProvider)),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

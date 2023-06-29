@@ -1,6 +1,4 @@
 import 'package:democratus/main.dart';
-import 'package:democratus/models/saved_packages.dart';
-import 'package:democratus/pages/search_packages_page.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/widgets/buttons.dart';
 import 'package:flutter/material.dart';
