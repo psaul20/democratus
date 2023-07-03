@@ -2,12 +2,15 @@ import 'package:democratus/models/package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // TODO: Better to use AsyncNotifier?
-class SavedPackages extends StateNotifier<List<Package>> {
-  SavedPackages() : super([]);
+class PackagesProvider extends StateNotifier<List<Package>> {
+  PackagesProvider(List<Package> packages) : super(packages);
 
-  void savePackage(Package package) {
-    state = [...state, package.copyWith(isSaved: true)];
-    package.isSaved = true;
+  void replacePackages(List<Package> packages) {
+    state = packages;
+  }
+
+  void addPackage(Package package) {
+    state = [...state, package];
   }
 
   void removePackage(Package package) {
@@ -15,6 +18,5 @@ class SavedPackages extends StateNotifier<List<Package>> {
       for (final package in state)
         if (package.packageId != package.packageId) package,
     ];
-    package.isSaved = false;
   }
 }

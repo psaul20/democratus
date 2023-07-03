@@ -1,13 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:core';
 
+import 'package:democratus/models/packages_provider.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/collection.dart';
 import 'package:democratus/models/package.dart';
 import 'package:democratus/styles/theme_data.dart';
 import 'package:democratus/widgets/dropdowns.dart';
-import 'package:democratus/widgets/package_widgets.dart';
+import 'package:democratus/widgets/package_widgets/package_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -22,8 +23,11 @@ final collectionsProvider = FutureProvider<List<Collection>>((ref) async {
 // TODO: Update search to load 10 at a time, not just 10
 // TODO: Sort by last action date
 // TODO: Search by text
-// TODO: Make search parameters a drawer
+// TODO: Make search parameters a drawer/Sliverlist
 // TODO: Fix search/remove button look and feel (possible as an overlay)
+// TODO: Hero animation transition
+// TODO: Reader page
+// TODO: Better date specification
 final selectedCollectionProvider = StateProvider<Collection?>((ref) {
   final collections = ref.watch(collectionsProvider);
   if (collections.hasValue) {
@@ -53,7 +57,8 @@ final canSearchProvider = StateProvider<bool>((ref) {
   return canSearch;
 });
 
-final packagesProvider = StateProvider<List<Package>>((ref) => []);
+final packagesProvider = StateNotifierProvider<PackagesProvider, List<Package>>(
+    (ref) => PackagesProvider([]));
 
 class SearchPackagesPage extends ConsumerWidget {
   const SearchPackagesPage({super.key});
@@ -132,8 +137,6 @@ class _DateTextFieldState extends ConsumerState<DateTextField> {
     return Form(
       key: _formKey,
       child: TextFormField(
-        // TODO: fix formatting oninitial value
-        // TODO: figure out why saved buttons are staying filled in on remove, likely due to lack of state change
         initialValue: initialString,
         style: TextStyles.inputStyle,
         // inputFormatters: [
@@ -169,8 +172,8 @@ class SearchPackagesBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Package> packages = ref.watch(packagesProvider);
     bool canSearch = ref.watch(canSearchProvider);
+    List<Package> packages = ref.watch(packagesProvider);
     Widget returnWidget;
     if (packages.isEmpty) {
       returnWidget = Padding(
@@ -184,7 +187,8 @@ class SearchPackagesBuilder extends ConsumerWidget {
                 : const Text("Fill out the search fields above.")),
       );
     } else {
-      returnWidget = Expanded(child: PackageListView(packages: packages));
+      returnWidget =
+          Expanded(child: PackageListView(packagesProvider: packagesProvider));
     }
     return returnWidget;
   }
@@ -201,11 +205,11 @@ class SearchButtonBuilder extends ConsumerWidget {
       String collectionCode = ref.read(queryParamsProvider)['collectionCode'];
       PackageList packages = await GovinfoApi().searchPackages(
           startDate: startDate, collectionCodes: [collectionCode]);
-      ref.read(packagesProvider.notifier).state = packages.packages;
+      ref.read(packagesProvider.notifier).replacePackages(packages.packages);
     }
 
     void removeSearch() {
-      ref.read(packagesProvider.notifier).state = [];
+      ref.read(packagesProvider.notifier).replacePackages([]);
     }
 
     double iconSize = 50.0;

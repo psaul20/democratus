@@ -1,6 +1,6 @@
 import 'package:democratus/main.dart';
 import 'package:democratus/pages/search_packages_page.dart';
-import 'package:democratus/widgets/package_widgets.dart';
+import 'package:democratus/widgets/package_widgets/package_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,7 +23,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: PackageListView(packages: ref.watch(savedPackagesProvider)),
+      // TODO: Fix saved button showing correctly on homepage
+      body: PackageListView(packagesProvider: savedPackagesProvider),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -33,7 +34,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     const ProviderScope(child: SearchPackagesPage()),
               ));
         },
-        tooltip: 'Add Proposal',
+        tooltip: 'Add Package',
         child: const Icon(Icons.add),
       ),
     );

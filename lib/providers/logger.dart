@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:democratus/models/package.dart';
-import 'package:democratus/models/saved_packages.dart';
+import 'package:democratus/models/packages_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Logger extends ProviderObserver {
@@ -19,7 +19,7 @@ class Logger extends ProviderObserver {
       log('[${provider.name ?? provider.runtimeType}] value: $packageIds');
     }
     if (provider.runtimeType ==
-        StateNotifierProvider<SavedPackages, List<Package>>) {
+        StateNotifierProvider<PackagesProvider, List<Package>>) {
       newValue = newValue as List<Package>;
       List packageIds = newValue.map((e) => e.packageId.toString()).toList();
       log('[${provider.name ?? provider.runtimeType}] value: $packageIds');

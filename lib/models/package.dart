@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:democratus/models/packages_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -113,6 +114,8 @@ class Package {
   factory Package.fromJson(String source) =>
       Package.fromMap(json.decode(source) as Map<String, dynamic>);
 
+  factory Package.fromPackage(Package package) => package.copyWith();
+
   Package copyWith({
     String? originChamber,
     String? session,
@@ -161,6 +164,17 @@ class Package {
       congress ?? this.congress,
       isSaved: isSaved ?? this.isSaved,
     );
+  }
+}
+
+class PackageProvider extends StateNotifier<Package> {
+  PackageProvider(package) : super(Package.fromPackage(package));
+  void updatePackage(Package package) {
+    state = package;
+  }
+
+  void toggleSave() {
+    state = state.copyWith(isSaved: !state.isSaved);
   }
 }
 
