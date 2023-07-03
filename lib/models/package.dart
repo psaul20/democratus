@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:democratus/models/packages_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,7 +26,8 @@ class Package {
       this.category,
       this.billNumber,
       this.congress,
-      {this.isSaved = false});
+      {this.isSaved = false,
+      this.hasHtml});
   // Driven by GovInfo data structure
   final String? originChamber;
   final String? session;
@@ -54,6 +53,7 @@ class Package {
 
   // Driven by app logic needs
   bool isSaved;
+  bool? hasHtml;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -90,7 +90,7 @@ class Package {
       map['title'] as String,
       map['branch'] != null ? map['branch'] as String : null,
       map['download'] != null ? map['download'] as Map<String, dynamic> : null,
-      map['pages'] != null ? map['pages'] as int : null,
+      map['pages'] != null ? int.parse(map['pages']) : null,
       DateTime.parse(map['dateIssued']),
       map['currentChamber'] != null ? map['currentChamber'] as String : null,
       map['billVersion'] != null ? map['billVersion'] as String : null,
@@ -104,8 +104,9 @@ class Package {
       map['docClass'] as String,
       DateTime.parse(map['lastModified']),
       map['category'] != null ? map['category'] as String : null,
-      map['billNumber'] != null ? map['billNumber'] as int : null,
+      map['billNumber'] != null ? int.parse(map['billNumber']) : null,
       map['congress'] != null ? map['congress'] as String : null,
+      hasHtml: map['download']?['txtLink'] != null ? true : false,
     );
   }
 
@@ -139,6 +140,7 @@ class Package {
     int? billNumber,
     String? congress,
     bool? isSaved,
+    bool? hasHtml,
   }) {
     return Package(
       originChamber ?? this.originChamber,
@@ -163,6 +165,7 @@ class Package {
       billNumber ?? this.billNumber,
       congress ?? this.congress,
       isSaved: isSaved ?? this.isSaved,
+      hasHtml: hasHtml ?? this.hasHtml,
     );
   }
 }

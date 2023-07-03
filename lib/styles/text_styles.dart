@@ -12,6 +12,10 @@ class TextStyles {
       TextStyle(fontSize: 18, color: DemocScheme.scheme.secondary, height: 0);
   static TextStyle get expandedListTile => const TextStyle(fontSize: 12);
   static TextStyle get iconText => const TextStyle(fontSize: 10);
-  // static TextStyle get appBarText =>
-  //     TextStyle(fontSize: 20, color: DemocScheme.scheme.onBackground);
+  static TextStyle get titleText =>
+      const TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+  static TextStyle get listTileTitle => const TextStyle(
+        fontSize: 18,
+        overflow: TextOverflow.ellipsis,
+      );
 }

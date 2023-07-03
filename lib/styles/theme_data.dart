@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 class DemocTheme {
   static ThemeData get mainTheme => ThemeData(
-        colorScheme: DemocScheme.scheme,
-        useMaterial3: true,
-        fontFamily: "RobotoSlab",
-        inputDecorationTheme: WidgetThemes.inputTheme,
-      );
+      colorScheme: DemocScheme.scheme,
+      useMaterial3: true,
+      fontFamily: "RobotoSlab",
+      inputDecorationTheme: WidgetThemes.inputTheme,
+      expansionTileTheme: ExpansionTileThemeData(
+        shape: Border.all(style: BorderStyle.none, width: 0),
+      ));
 }
 
 class DemocScheme {

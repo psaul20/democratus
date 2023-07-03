@@ -4,12 +4,12 @@ import 'package:democratus/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ReadMoreButton extends StatelessWidget {
+class ReadMoreButton extends ConsumerWidget {
   const ReadMoreButton({super.key, required this.packageProvider});
   final StateNotifierProvider<PackageProvider, Package> packageProvider;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     readMore() {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (BuildContext context) {
