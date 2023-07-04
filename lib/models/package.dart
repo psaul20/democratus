@@ -209,6 +209,7 @@ class Package {
     bool? hasHtml,
     bool? hasDetails,
     String? displayTitle,
+    String? typeVerbose,
   }) {
     return Package(
       originChamber: originChamber ?? this.originChamber,
@@ -236,6 +237,7 @@ class Package {
       hasHtml: hasHtml ?? this.hasHtml,
       hasDetails: hasDetails ?? this.hasDetails,
       displayTitle: displayTitle ?? this.displayTitle,
+      typeVerbose: typeVerbose ?? this.typeVerbose,
     );
   }
 }
