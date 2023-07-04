@@ -16,13 +16,19 @@ void main() async {
     CollectionList collections = await GovinfoApi().getCollections();
     expect(collections.getCollectionNames().first, "Congressional Bills");
   });
-  test('Package Retrieval Test', () async {
+
+  test('Package List Retrieval Test', () async {
     DateTime startDate = DateTime(2019, 1, 1);
     DateTime endDate = DateTime(2019, 7, 31);
     List collectionCodes = ["BILLS"];
-    PackageList result = await GovinfoApi()
-        .searchPackages(startDate: startDate, collectionCodes: collectionCodes);
+    PackageList result = await GovinfoApi().searchPackages(
+        startDate: startDate,
+        endDate: endDate,
+        collectionCodes: collectionCodes);
     expect(result.packages.length, greaterThan(0));
+    Package package = result.packages.first;
+    package = await GovinfoApi().getPackageById(package.packageId);
+    expect(package.collectionCode, collectionCodes[0]);
   });
   test('HTML Retrieval Test', () async {
     Package testPackage = await GovinfoApi().getPackageById(testID);

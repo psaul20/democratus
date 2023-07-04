@@ -1,39 +1,43 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:democratus/converters/date_converters.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:democratus/converters/string_converters.dart';
 
 class Package {
   Package(
-      this.originChamber,
+      {this.originChamber,
       this.session,
       this.detailsLink,
       this.shortTitle,
-      this.title,
+      required this.longTitle,
       this.branch,
       this.download,
       this.pages,
-      this.dateIssued,
+      required this.dateIssued,
       this.currentChamber,
       this.billVersion,
       this.billType,
-      this.packageId,
+      required this.packageId,
       this.collectionCode,
       this.governmentAuthor1,
       this.publisher,
-      this.docClass,
+      required this.docClass,
       this.lastModified,
       this.category,
       this.billNumber,
       this.congress,
-      {this.isSaved = false,
-      this.hasHtml});
+      this.isSaved = false,
+      this.hasHtml,
+      this.hasDetails = false,
+      required this.displayTitle});
   // Driven by GovInfo data structure
   final String? originChamber;
   final String? session;
   final String? detailsLink;
-  final List? shortTitle;
-  final String title;
+  final Map? shortTitle;
+  final String? longTitle;
   final String? branch;
   final Map? download;
   final int? pages;
@@ -46,7 +50,7 @@ class Package {
   final String? governmentAuthor1;
   final String? publisher;
   final String docClass;
-  final DateTime lastModified;
+  final DateTime? lastModified;
   final String? category;
   final int? billNumber;
   final String? congress;
@@ -54,63 +58,136 @@ class Package {
   // Driven by app logic needs
   bool isSaved;
   bool? hasHtml;
+  bool hasDetails;
+  String displayTitle;
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'originChamber': originChamber,
-      'session': session,
-      'detailsLink': detailsLink,
-      'shortTitle': shortTitle,
-      'title': title,
-      'branch': branch,
-      'download': download,
-      'pages': pages,
-      'dateIssued': dateIssued.millisecondsSinceEpoch,
-      'currentChamber': currentChamber,
-      'billVersion': billVersion,
-      'billType': billType,
-      'packageId': packageId,
-      'collectionCode': collectionCode,
-      'governmentAuthor1': governmentAuthor1,
-      'publisher': publisher,
-      'docClass': docClass,
-      'lastModified': lastModified.millisecondsSinceEpoch,
-      'category': category,
-      'billNumber': billNumber,
-      'congress': congress,
-    };
+  List<Widget> getTextWidgets({TextStyle? style}) {
+    return [
+      Text(
+        "Full Title: ${StringConverters.toTitleCase(longTitle) ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Author: ${StringConverters.toTitleCase(governmentAuthor1) ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Category: ${StringConverters.toTitleCase(category) ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Type: ${billType ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Branch: ${StringConverters.toTitleCase(branch) ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Origin Chamber: ${StringConverters.toTitleCase(originChamber) ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Current Chamber: ${StringConverters.toTitleCase(currentChamber) ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Pages: ${pages?.toString() ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Publisher: ${publisher ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Congress: ${congress ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Text(
+        "Bill Number: ${billNumber?.toString() ?? "Unknown"}",
+        textAlign: TextAlign.start,
+        style: style,
+      ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Text(
+          "Last Action: ${lastModified != null ? DateConverters.formatDate(lastModified!) : "Unknown"}",
+          textAlign: TextAlign.start,
+          style: style,
+        ),
+      )
+    ];
   }
+
+  // Map<String, dynamic> toMap() {
+  //   return <String, dynamic>{
+  //     'originChamber': originChamber,
+  //     'session': session,
+  //     'detailsLink': detailsLink,
+  //     'shortTitle': shortTitle,
+  //     'title': longTitle,
+  //     'branch': branch,
+  //     'download': download,
+  //     'pages': pages,
+  //     'dateIssued': dateIssued.millisecondsSinceEpoch,
+  //     'currentChamber': currentChamber,
+  //     'billVersion': billVersion,
+  //     'billType': billType,
+  //     'packageId': packageId,
+  //     'collectionCode': collectionCode,
+  //     'governmentAuthor1': governmentAuthor1,
+  //     'publisher': publisher,
+  //     'docClass': docClass,
+  //     'lastModified': lastModified?.millisecondsSinceEpoch,
+  //     'category': category,
+  //     'billNumber': billNumber,
+  //     'congress': congress,
+  //   };
+  // }
 
   factory Package.fromMap(Map<String, dynamic> map) {
     return Package(
-      map['originChamber'] != null ? map['originChamber'] as String : null,
-      map['session'] != null ? map['session'] as String : null,
-      map['detailsLink'] != null ? map['detailsLink'] as String : null,
-      map['shortTitle'] != null ? List.from(map['shortTitle']) : null,
-      map['title'] as String,
-      map['branch'] != null ? map['branch'] as String : null,
-      map['download'] != null ? map['download'] as Map<String, dynamic> : null,
-      map['pages'] != null ? int.parse(map['pages']) : null,
-      DateTime.parse(map['dateIssued']),
-      map['currentChamber'] != null ? map['currentChamber'] as String : null,
-      map['billVersion'] != null ? map['billVersion'] as String : null,
-      map['billType'] != null ? map['billType'] as String : null,
-      map['packageId'] as String,
-      map['collectionCode'] != null ? map['collectionCode'] as String : null,
-      map['governmentAuthor1'] != null
+      originChamber: map['originChamber'] != null ? map['originChamber'] as String : null,
+      session: map['session'] != null ? map['session'] as String : null,
+      detailsLink: map['detailsLink'] != null ? map['detailsLink'] as String : null,
+      shortTitle: map['shortTitle'] ?? {'title' : map['title']},
+      longTitle: map['shortTitle'] != null ? map['title'] as String : null,
+      branch: map['branch'] != null ? map['branch'] as String : null,
+      download: map['download'] != null ? map['download'] as Map<String, dynamic> : null,
+      pages: map['pages'] != null ? int.parse(map['pages']) : null,
+      dateIssued: DateTime.parse(map['dateIssued']),
+      currentChamber: map['currentChamber'] != null ? map['currentChamber'] as String : null,
+      billVersion: map['billVersion'] != null ? map['billVersion'] as String : null,
+      billType: map['billType'] != null ? map['billType'] as String : null,
+      packageId: map['packageId'] as String,
+      collectionCode: map['collectionCode'] != null ? map['collectionCode'] as String : null,
+      governmentAuthor1: map['governmentAuthor1'] != null
           ? map['governmentAuthor1'] as String
           : null,
-      map['publisher'] != null ? map['publisher'] as String : null,
-      map['docClass'] as String,
-      DateTime.parse(map['lastModified']),
-      map['category'] != null ? map['category'] as String : null,
-      map['billNumber'] != null ? int.parse(map['billNumber']) : null,
-      map['congress'] != null ? map['congress'] as String : null,
+      publisher: map['publisher'] != null ? map['publisher'] as String : null,
+      docClass: map['docClass'] as String,
+      lastModified: map['lastModified'] != null ? DateTime.parse(map['lastModified']) : null,
+      category: map['category'] != null ? map['category'] as String : null,
+      billNumber: map['billNumber'] != null ? int.parse(map['billNumber']) : null,
+      congress: map['congress'] != null ? map['congress'] as String : null,
       hasHtml: map['download']?['txtLink'] != null ? true : false,
+      displayTitle: map['shortTitle']?['title'] != null
+          ? map['shortTitle']['title'] as String
+          : map['title'] as String,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
 
   factory Package.fromJson(String source) =>
       Package.fromMap(json.decode(source) as Map<String, dynamic>);
@@ -121,8 +198,8 @@ class Package {
     String? originChamber,
     String? session,
     String? detailsLink,
-    List? shortTitle,
-    String? title,
+    Map? shortTitle,
+    String? longTitle,
     String? branch,
     Map? download,
     int? pages,
@@ -141,31 +218,35 @@ class Package {
     String? congress,
     bool? isSaved,
     bool? hasHtml,
+    bool? hasDetails,
+    String? displayTitle,
   }) {
     return Package(
-      originChamber ?? this.originChamber,
-      session ?? this.session,
-      detailsLink ?? this.detailsLink,
-      shortTitle ?? this.shortTitle,
-      title ?? this.title,
-      branch ?? this.branch,
-      download ?? this.download,
-      pages ?? this.pages,
-      dateIssued ?? this.dateIssued,
-      currentChamber ?? this.currentChamber,
-      billVersion ?? this.billVersion,
-      billType ?? this.billType,
-      packageId ?? this.packageId,
-      collectionCode ?? this.collectionCode,
-      governmentAuthor1 ?? this.governmentAuthor1,
-      publisher ?? this.publisher,
-      docClass ?? this.docClass,
-      lastModified ?? this.lastModified,
-      category ?? this.category,
-      billNumber ?? this.billNumber,
-      congress ?? this.congress,
+      originChamber: originChamber ?? this.originChamber,
+      session: session ?? this.session,
+      detailsLink: detailsLink ?? this.detailsLink,
+      shortTitle: shortTitle ?? this.shortTitle,
+      longTitle: longTitle ?? this.longTitle,
+      branch: branch ?? this.branch,
+      download: download ?? this.download,
+      pages: pages ?? this.pages,
+      dateIssued: dateIssued ?? this.dateIssued,
+      currentChamber: currentChamber ?? this.currentChamber,
+      billVersion: billVersion ?? this.billVersion,
+      billType: billType ?? this.billType,
+      packageId: packageId ?? this.packageId,
+      collectionCode: collectionCode ?? this.collectionCode,
+      governmentAuthor1: governmentAuthor1 ?? this.governmentAuthor1,
+      publisher: publisher ?? this.publisher,
+      docClass: docClass ?? this.docClass,
+      lastModified: lastModified ?? this.lastModified,
+      category: category ?? this.category,
+      billNumber: billNumber ?? this.billNumber,
+      congress: congress ?? this.congress,
       isSaved: isSaved ?? this.isSaved,
       hasHtml: hasHtml ?? this.hasHtml,
+      hasDetails: hasDetails ?? this.hasDetails,
+      displayTitle: displayTitle ?? this.displayTitle,
     );
   }
 }

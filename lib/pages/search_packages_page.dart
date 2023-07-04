@@ -7,17 +7,12 @@ import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/collection.dart';
 import 'package:democratus/models/package.dart';
 import 'package:democratus/styles/theme_data.dart';
+import 'package:democratus/widgets/date_input/date_picker.dart';
 import 'package:democratus/widgets/dropdowns.dart';
 import 'package:democratus/widgets/package_widgets/package_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
-//Basing Riverpod implementation off of https://www.youtube.com/watch?v=Zp7
-final collectionsProvider = FutureProvider<List<Collection>>((ref) async {
-  CollectionList collections = await GovinfoApi().getCollections();
-  return collections.asList;
-});
 
 // TODO: Consolidate providers?
 // TODO: Update search to load 10 at a time, not just 10
@@ -27,7 +22,12 @@ final collectionsProvider = FutureProvider<List<Collection>>((ref) async {
 // TODO: Fix search/remove button look and feel (possible as an overlay)
 // TODO: Hero animation transition
 // TODO: Reader page
-// TODO: Better date specification
+// TODO: Better date specification//Basing Riverpod implementation off of https://www.youtube.com/watch?v=Zp7
+final collectionsProvider = FutureProvider<List<Collection>>((ref) async {
+  CollectionList collections = await GovinfoApi().getCollections();
+  return collections.asList;
+});
+
 final selectedCollectionProvider = StateProvider<Collection?>((ref) {
   final collections = ref.watch(collectionsProvider);
   if (collections.hasValue) {
@@ -36,7 +36,11 @@ final selectedCollectionProvider = StateProvider<Collection?>((ref) {
   return null;
 });
 
-final dateInputProvider = StateProvider<DateTime?>(
+final startDateInputProvider = StateProvider<DateTime?>(
+  (ref) => null,
+);
+
+final endDateInputProvider = StateProvider<DateTime?>(
   (ref) => null,
 );
 
@@ -44,14 +48,16 @@ final queryParamsProvider = StateProvider<Map>((ref) {
   final Map<String, String?> queryParams = {};
   queryParams["collectionCode"] =
       ref.watch(selectedCollectionProvider)?.collectionCode;
-  queryParams["startDate"] = ref.watch(dateInputProvider).toString();
+  queryParams["startDate"] = ref.watch(startDateInputProvider).toString();
+  queryParams["endDate"] = ref.watch(endDateInputProvider).toString();
   return queryParams;
 });
 
 final canSearchProvider = StateProvider<bool>((ref) {
   bool canSearch = false;
   if (ref.watch(selectedCollectionProvider) != null &&
-      ref.watch(dateInputProvider) != null) {
+      ref.watch(startDateInputProvider) != null &&
+      ref.watch(endDateInputProvider) != null) {
     canSearch = true;
   }
   return canSearch;
@@ -102,67 +108,40 @@ class SearchPackagesPage extends ConsumerWidget {
                 );
               },
             ),
-            Text(
-              'Published After',
-              style: TextStyles.fieldTitle,
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Published After',
+                        style: TextStyles.fieldTitle,
+                      ),
+                      MyDatePicker(dateProvider: startDateInputProvider),
+                    ],
+                  ),
+                ),
+                Column(
+                  children: [
+                    Text(
+                      'Published Before',
+                      style: TextStyles.fieldTitle,
+                    ),
+                    MyDatePicker(
+                      dateProvider: endDateInputProvider,
+                      afterDateProvider: startDateInputProvider,
+                    ),
+                  ],
+                ),
+              ],
             ),
-            const DateTextField(),
             const SearchPackagesBuilder(),
           ],
         ),
       ),
       floatingActionButton: const SearchButtonBuilder(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-}
-
-class DateTextField extends ConsumerStatefulWidget {
-  const DateTextField({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _DateTextFieldState();
-}
-
-class _DateTextFieldState extends ConsumerState<DateTextField> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime? initialDate = ref.read(dateInputProvider.notifier).state;
-    String initialString = '';
-    initialDate != null
-        ? initialString = DateFormat("y-MM-dd").format(initialDate)
-        : initialString;
-    return Form(
-      key: _formKey,
-      child: TextFormField(
-        initialValue: initialString,
-        style: TextStyles.inputStyle,
-        // inputFormatters: [
-        // Not working with iOS Simulator on Mac
-        // FilteringTextInputFormatter.allow(RegExp(r'^\d{4}-\d{2}-\d{2}$')),
-        // ],
-        decoration: const InputDecoration(
-          hintText: "Format: 1776-04-07",
-        ),
-        validator: (value) {
-          if (value != null && DateTime.tryParse(value) != null) {
-            return null;
-          } else if (value == null) {
-            return null;
-          } else {
-            return "Format must be YYYY-MM-DD";
-          }
-        },
-        onChanged: (value) {
-          if (_formKey.currentState!.validate()) {
-            ref.read(dateInputProvider.notifier).state = DateTime.parse(value);
-          } else {
-            ref.read(dateInputProvider.notifier).state = null;
-          }
-        },
-      ),
     );
   }
 }
@@ -202,9 +181,13 @@ class SearchButtonBuilder extends ConsumerWidget {
     void submitSearch() async {
       DateTime startDate =
           DateTime.parse(ref.read(queryParamsProvider)['startDate']);
+      DateTime? endDate =
+          DateTime.parse(ref.read(queryParamsProvider)['endDate']);
       String collectionCode = ref.read(queryParamsProvider)['collectionCode'];
       PackageList packages = await GovinfoApi().searchPackages(
-          startDate: startDate, collectionCodes: [collectionCode]);
+          startDate: startDate,
+          endDate: endDate,
+          collectionCodes: [collectionCode]);
       ref.read(packagesProvider.notifier).replacePackages(packages.packages);
     }
 

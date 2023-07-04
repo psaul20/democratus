@@ -1,3 +1,4 @@
+import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/package.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/widgets/buttons/read_more_button.dart';
@@ -16,40 +17,29 @@ class PackageTile extends ConsumerStatefulWidget {
 
 class _PackageTileState extends ConsumerState<PackageTile> {
   bool isExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     Package package = ref.watch(widget.packageProvider);
-    // Navigator.push(
-    //     context,
-    //     PageRouteBuilder(
-    //       pageBuilder: (context, animation, secondaryAnimation) {
-    //         return PackageReader(
-    //           heroTag: heroTag,
-    //         );
-    //       },
-    //       transitionsBuilder:
-    //           (context, animation, secondaryAnimation, child) {
-    //         return SlideTransition(
-    //           position: Tween<Offset>(
-    //             begin: const Offset(1.0, 0.0),
-    //             end: Offset.zero,
-    //           ).animate(animation),
-    //           child: child,
-    //         );
-    //       },
-    //     ));
+    getPackage() async {
+      Package updatePackage =
+          await GovinfoApi().getPackageById(package.packageId);
+      ref.read(widget.packageProvider.notifier).updatePackage(updatePackage);
+    }
 
     return Card(
       child: ExpansionTile(
-        onExpansionChanged: (value) {
-          setState(() {
-            isExpanded = value;
-          });
+        onExpansionChanged: (value) async {
+          if (value) {
+            if (!package.hasDetails) {
+              await getPackage();
+            }
+          }
         },
         //TODO: Redundant, figure out why it's not inheriting from themedata
         shape: Border.all(style: BorderStyle.none, width: 0),
         title: Text(
-          package.title,
+          package.displayTitle,
           maxLines: !isExpanded ? 2 : 6,
           style: TextStyles.listTileTitle,
         ),
@@ -63,8 +53,6 @@ class _PackageTileState extends ConsumerState<PackageTile> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PackageDetails(
-                    package: package, style: TextStyles.expandedListTile),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SaveButton(
                     packageProvider: widget.packageProvider,

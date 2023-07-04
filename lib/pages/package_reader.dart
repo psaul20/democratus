@@ -27,7 +27,7 @@ class PackageReader extends ConsumerWidget {
               padding:
                   const EdgeInsets.only(top: 12.0, right: 12.0, left: 12.0),
               child: Text(
-                package.title,
+                package.displayTitle,
                 style: TextStyles.titleText,
               ),
             ),
