@@ -25,7 +25,8 @@ class StringConverters {
 
         // Capitalize first letter if it's not a filler word or the first word
         if (!fillerWords.contains(word) || i == 0) {
-          words[i] = '${word?[0].toUpperCase()}${word?.substring(1)}';
+          words[i] =
+              '${word?[0].toUpperCase()}${word?.substring(1).toLowerCase()}';
         }
       }
 

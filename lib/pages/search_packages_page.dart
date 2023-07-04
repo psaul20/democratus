@@ -12,7 +12,6 @@ import 'package:democratus/widgets/dropdowns.dart';
 import 'package:democratus/widgets/package_widgets/package_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 // TODO: Consolidate providers?
 // TODO: Update search to load 10 at a time, not just 10

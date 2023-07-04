@@ -6,32 +6,34 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:democratus/converters/string_converters.dart';
 
 class Package {
-  Package(
-      {this.originChamber,
-      this.session,
-      this.detailsLink,
-      this.shortTitle,
-      required this.longTitle,
-      this.branch,
-      this.download,
-      this.pages,
-      required this.dateIssued,
-      this.currentChamber,
-      this.billVersion,
-      this.billType,
-      required this.packageId,
-      this.collectionCode,
-      this.governmentAuthor1,
-      this.publisher,
-      required this.docClass,
-      this.lastModified,
-      this.category,
-      this.billNumber,
-      this.congress,
-      this.isSaved = false,
-      this.hasHtml,
-      this.hasDetails = false,
-      required this.displayTitle});
+  Package({
+    this.originChamber,
+    this.session,
+    this.detailsLink,
+    this.shortTitle,
+    required this.longTitle,
+    this.branch,
+    this.download,
+    this.pages,
+    required this.dateIssued,
+    this.currentChamber,
+    this.billVersion,
+    this.billType,
+    required this.packageId,
+    this.collectionCode,
+    this.governmentAuthor1,
+    this.publisher,
+    required this.docClass,
+    this.lastModified,
+    this.category,
+    this.billNumber,
+    this.congress,
+    this.isSaved = false,
+    this.hasHtml,
+    this.hasDetails = false,
+    required this.displayTitle,
+    this.typeVerbose,
+  });
   // Driven by GovInfo data structure
   final String? originChamber;
   final String? session;
@@ -60,6 +62,7 @@ class Package {
   bool? hasHtml;
   bool hasDetails;
   String displayTitle;
+  String? typeVerbose;
 
   List<Widget> getTextWidgets({TextStyle? style}) {
     return [
@@ -79,7 +82,7 @@ class Package {
         style: style,
       ),
       Text(
-        "Type: ${billType ?? "Unknown"}",
+        "Type: ${typeVerbose ?? billType ?? "Unknown"}",
         textAlign: TextAlign.start,
         style: style,
       ),
@@ -129,65 +132,51 @@ class Package {
     ];
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return <String, dynamic>{
-  //     'originChamber': originChamber,
-  //     'session': session,
-  //     'detailsLink': detailsLink,
-  //     'shortTitle': shortTitle,
-  //     'title': longTitle,
-  //     'branch': branch,
-  //     'download': download,
-  //     'pages': pages,
-  //     'dateIssued': dateIssued.millisecondsSinceEpoch,
-  //     'currentChamber': currentChamber,
-  //     'billVersion': billVersion,
-  //     'billType': billType,
-  //     'packageId': packageId,
-  //     'collectionCode': collectionCode,
-  //     'governmentAuthor1': governmentAuthor1,
-  //     'publisher': publisher,
-  //     'docClass': docClass,
-  //     'lastModified': lastModified?.millisecondsSinceEpoch,
-  //     'category': category,
-  //     'billNumber': billNumber,
-  //     'congress': congress,
-  //   };
-  // }
-
   factory Package.fromMap(Map<String, dynamic> map) {
     return Package(
-      originChamber: map['originChamber'] != null ? map['originChamber'] as String : null,
+      originChamber:
+          map['originChamber'] != null ? map['originChamber'] as String : null,
       session: map['session'] != null ? map['session'] as String : null,
-      detailsLink: map['detailsLink'] != null ? map['detailsLink'] as String : null,
-      shortTitle: map['shortTitle'] ?? {'title' : map['title']},
+      detailsLink:
+          map['detailsLink'] != null ? map['detailsLink'] as String : null,
+      shortTitle: map['shortTitle']?[0] ?? {'title': map['title']},
       longTitle: map['shortTitle'] != null ? map['title'] as String : null,
       branch: map['branch'] != null ? map['branch'] as String : null,
-      download: map['download'] != null ? map['download'] as Map<String, dynamic> : null,
+      download: map['download'] != null
+          ? map['download'] as Map<String, dynamic>
+          : null,
       pages: map['pages'] != null ? int.parse(map['pages']) : null,
       dateIssued: DateTime.parse(map['dateIssued']),
-      currentChamber: map['currentChamber'] != null ? map['currentChamber'] as String : null,
-      billVersion: map['billVersion'] != null ? map['billVersion'] as String : null,
+      currentChamber: map['currentChamber'] != null
+          ? map['currentChamber'] as String
+          : null,
+      billVersion:
+          map['billVersion'] != null ? map['billVersion'] as String : null,
       billType: map['billType'] != null ? map['billType'] as String : null,
       packageId: map['packageId'] as String,
-      collectionCode: map['collectionCode'] != null ? map['collectionCode'] as String : null,
+      collectionCode: map['collectionCode'] != null
+          ? map['collectionCode'] as String
+          : null,
       governmentAuthor1: map['governmentAuthor1'] != null
           ? map['governmentAuthor1'] as String
           : null,
       publisher: map['publisher'] != null ? map['publisher'] as String : null,
       docClass: map['docClass'] as String,
-      lastModified: map['lastModified'] != null ? DateTime.parse(map['lastModified']) : null,
+      lastModified: map['lastModified'] != null
+          ? DateTime.parse(map['lastModified'])
+          : null,
       category: map['category'] != null ? map['category'] as String : null,
-      billNumber: map['billNumber'] != null ? int.parse(map['billNumber']) : null,
+      billNumber:
+          map['billNumber'] != null ? int.parse(map['billNumber']) : null,
       congress: map['congress'] != null ? map['congress'] as String : null,
       hasHtml: map['download']?['txtLink'] != null ? true : false,
-      displayTitle: map['shortTitle']?['title'] != null
-          ? map['shortTitle']['title'] as String
+      displayTitle: map['shortTitle'] != null
+          ? map['shortTitle'][0]['title'] as String
           : map['title'] as String,
+      typeVerbose:
+          map['billType'] != null ? getTypeVerbose(map['billType']) : null,
     );
   }
-
-  // String toJson() => json.encode(toMap());
 
   factory Package.fromJson(String source) =>
       Package.fromMap(json.decode(source) as Map<String, dynamic>);
@@ -248,6 +237,25 @@ class Package {
       hasDetails: hasDetails ?? this.hasDetails,
       displayTitle: displayTitle ?? this.displayTitle,
     );
+  }
+}
+
+// Defining type list based on https://www.govinfo.gov/help/bills#types
+String getTypeVerbose(billType) {
+  Map typeList = {
+    'hr': 'House Bill',
+    's': 'Senate Bill',
+    'hjres': 'House Joint Resolution',
+    'sjres': 'Senate Joint Resolution',
+    'hconres': 'House Concurrent Resolution',
+    'sconres': 'Senate Concurrent Resolution',
+    'hres': 'House Simple Resolution',
+    'sres': 'Senate Simple Resolution',
+  };
+  if (typeList.keys.contains(billType)) {
+    return typeList[billType];
+  } else {
+    return "Not Mapped";
   }
 }
 

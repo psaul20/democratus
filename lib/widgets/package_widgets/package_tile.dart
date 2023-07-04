@@ -3,10 +3,12 @@ import 'package:democratus/models/package.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/widgets/buttons/read_more_button.dart';
 import 'package:democratus/widgets/buttons/save_button.dart';
+import 'package:democratus/widgets/fetch_circle.dart';
 import 'package:democratus/widgets/package_widgets/package_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//TODO: Animate data retrieval
 class PackageTile extends ConsumerStatefulWidget {
   const PackageTile({super.key, required this.packageProvider});
   final StateNotifierProvider<PackageProvider, Package> packageProvider;
@@ -53,6 +55,9 @@ class _PackageTileState extends ConsumerState<PackageTile> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                package.hasDetails
+                    ? PackageDetails(package: package)
+                    : const Center(child: FetchCircle()),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SaveButton(
                     packageProvider: widget.packageProvider,

@@ -23,8 +23,9 @@ class Logger extends ProviderObserver {
       newValue = newValue as List<Package>;
       List packageIds = newValue.map((e) => e.packageId.toString()).toList();
       log('[${provider.name ?? provider.runtimeType}] value: $packageIds');
-    } else
+    } else {
       log('[${provider.name ?? provider.runtimeType}] value: $newValue');
+    }
     super.didUpdateProvider(provider, previousValue, newValue, container);
   }
 }
