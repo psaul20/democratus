@@ -2,6 +2,7 @@ import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/package.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/widgets/buttons/save_button.dart';
+import 'package:democratus/widgets/fetch_circle.dart';
 import 'package:democratus/widgets/package_widgets/package_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -60,8 +61,7 @@ class PackageReader extends ConsumerWidget {
                     return const Center(
                         child: Column(
                       children: [
-                        Text("Fetching Text..."),
-                        CircularProgressIndicator()
+                        FetchCircle()
                       ],
                     ));
                   }
