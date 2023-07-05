@@ -1,7 +1,5 @@
 import 'dart:developer';
-
 import 'package:democratus/models/package.dart';
-import 'package:democratus/models/packages_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Logger extends ProviderObserver {

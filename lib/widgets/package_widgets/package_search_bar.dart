@@ -1,5 +1,5 @@
 import 'package:democratus/models/collection.dart';
-import 'package:democratus/pages/search_packages_page.dart';
+import 'package:democratus/providers/search_providers.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/widgets/buttons/search_button_builder.dart';
 import 'package:democratus/widgets/date_input/date_picker.dart';
@@ -76,7 +76,7 @@ class PackageSearchBar extends ConsumerWidget {
                 child: SearchButtonBuilder(
               canSearchProvider: canSearchProvider,
               queryParamsProvider: queryParamsProvider,
-              packagesProvider: packagesProvider,
+              packagesProvider: searchPackagesProvider,
             )),
           ],
         ));

@@ -1,7 +1,5 @@
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/package.dart';
-import 'package:democratus/models/packages_provider.dart';
-import 'package:democratus/pages/search_packages_page.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/styles/theme_data.dart';
 import 'package:flutter/material.dart';

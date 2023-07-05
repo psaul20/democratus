@@ -1,5 +1,4 @@
 import 'package:democratus/models/package.dart';
-import 'package:democratus/models/packages_provider.dart';
 import 'package:democratus/widgets/package_widgets/package_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,10 +16,8 @@ class PackageListView extends ConsumerWidget {
     return ListView.builder(
         itemCount: packages.length,
         itemBuilder: ((context, index) {
-          StateNotifierProvider<PackageProvider, Package> packageProvider =
-              StateNotifierProvider<PackageProvider, Package>(
-                  (ref) => PackageProvider(packages.elementAt(index)));
-          return PackageTile(packageProvider: packageProvider);
+          Package package = packages.elementAt(index);
+          return PackageTile(packagesProvider: packagesProvider, packageId: package.packageId,);
         }));
   }
 }

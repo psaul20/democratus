@@ -5,15 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ReadMoreButton extends ConsumerWidget {
-  const ReadMoreButton({super.key, required this.packageProvider});
-  final StateNotifierProvider<PackageProvider, Package> packageProvider;
+  const ReadMoreButton(
+      {super.key, required this.packagesProvider, required this.packageId});
+  final StateNotifierProvider<PackagesProvider, List<Package>> packagesProvider;
+  final String packageId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     readMore() {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (BuildContext context) {
-        return PackageReader(packageProvider: packageProvider);
+        return PackageReader(
+          packagesProvider: packagesProvider,
+          packageId: packageId,
+        );
       }));
     }
 

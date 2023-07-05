@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'package:democratus/converters/date_converters.dart';
+import 'package:democratus/providers/package_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:democratus/converters/string_converters.dart';
@@ -270,6 +271,16 @@ class PackageProvider extends StateNotifier<Package> {
   void toggleSave() {
     state = state.copyWith(isSaved: !state.isSaved);
   }
+
+  void checkSaved(WidgetRef ref) {
+    List<String> packageIds =
+        ref.read(savedPackagesProvider).map((e) => e.packageId).toList();
+    if (packageIds.contains(state.packageId)) {
+      state = state.copyWith(isSaved: true);
+    } else {
+      state = state.copyWith(isSaved: false);
+    }
+  }
 }
 
 // TODO: Remove ChangeNotifier - convert to simply json getter class
@@ -319,4 +330,31 @@ class PackageList extends ChangeNotifier {
 
   factory PackageList.fromJson(String source) =>
       PackageList.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+class PackagesProvider extends StateNotifier<List<Package>> {
+  PackagesProvider(List<Package> packages) : super(packages);
+
+  void replacePackages(List<Package> packages) {
+    state = packages;
+  }
+
+  void addPackage(Package package) {
+    state = [...state, package];
+  }
+
+  void updatePackageWith(
+      {required String packageId, required Package updatePackage}) {
+    state = [
+      for (final package in state)
+        if (package.packageId == packageId) updatePackage else package
+    ];
+  }
+
+  void removePackage(Package package) {
+    state = [
+      for (final package in state)
+        if (package.packageId != package.packageId) package,
+    ];
+  }
 }

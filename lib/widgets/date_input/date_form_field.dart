@@ -1,4 +1,4 @@
-import 'package:democratus/pages/search_packages_page.dart';
+import 'package:democratus/providers/search_providers.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

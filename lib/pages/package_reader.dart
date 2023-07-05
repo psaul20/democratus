@@ -9,12 +9,14 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PackageReader extends ConsumerWidget {
-  const PackageReader({super.key, required this.packageProvider});
-  final StateNotifierProvider<PackageProvider, Package> packageProvider;
+  const PackageReader(
+      {super.key, required this.packagesProvider, required this.packageId});
+  final StateNotifierProvider<PackagesProvider, List<Package>> packagesProvider;
+  final String packageId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Package package = ref.watch(packageProvider);
+    Package package = ref.watch(packagesProvider.select((packages) => packages.firstWhere((package) => package.packageId == packageId)));
     return Scaffold(
       body: CustomScrollView(slivers: [
         const SliverAppBar(
@@ -60,9 +62,7 @@ class PackageReader extends ConsumerWidget {
                   } else {
                     return const Center(
                         child: Column(
-                      children: [
-                        FetchCircle()
-                      ],
+                      children: [FetchCircle()],
                     ));
                   }
                 })
@@ -70,7 +70,8 @@ class PackageReader extends ConsumerWidget {
         ))
       ]),
       floatingActionButton: SaveButton(
-        packageProvider: packageProvider,
+        packageId: packageId,
+        packagesProvider: packagesProvider,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

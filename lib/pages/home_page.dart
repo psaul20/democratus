@@ -1,5 +1,5 @@
-import 'package:democratus/main.dart';
 import 'package:democratus/pages/search_packages_page.dart';
+import 'package:democratus/providers/package_providers.dart';
 import 'package:democratus/widgets/package_widgets/package_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

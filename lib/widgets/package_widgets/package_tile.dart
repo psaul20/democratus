@@ -10,8 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //TODO: Animate data retrieval
 class PackageTile extends ConsumerStatefulWidget {
-  const PackageTile({super.key, required this.packageProvider});
-  final StateNotifierProvider<PackageProvider, Package> packageProvider;
+  const PackageTile(
+      {super.key, required this.packagesProvider, required this.packageId});
+  final StateNotifierProvider<PackagesProvider, List<Package>> packagesProvider;
+  final String packageId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PackageTileState();
@@ -22,11 +24,16 @@ class _PackageTileState extends ConsumerState<PackageTile> {
 
   @override
   Widget build(BuildContext context) {
-    Package package = ref.watch(widget.packageProvider);
+    Package package = ref.watch(widget.packagesProvider.select((packages) =>
+        packages
+            .firstWhere((element) => element.packageId == widget.packageId),));
     getPackage() async {
       Package updatePackage =
-          await GovinfoApi().getPackageById(package.packageId);
-      ref.read(widget.packageProvider.notifier).updatePackage(updatePackage);
+          await GovinfoApi().getPackageById(widget.packageId);
+      ref.read(widget.packagesProvider.notifier).updatePackageWith(
+            packageId: widget.packageId,
+            updatePackage: updatePackage,
+          );
     }
 
     return Card(
@@ -60,12 +67,14 @@ class _PackageTileState extends ConsumerState<PackageTile> {
                     : const Center(child: FetchCircle()),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SaveButton(
-                    packageProvider: widget.packageProvider,
+                    packagesProvider: widget.packagesProvider,
+                    packageId: package.packageId,
                   ),
                   Builder(builder: (context) {
                     if (package.hasHtml ?? false) {
                       return ReadMoreButton(
-                        packageProvider: widget.packageProvider,
+                        packagesProvider: widget.packagesProvider,
+                        packageId: package.packageId,
                       );
                     } else {
                       return const SizedBox.shrink();
