@@ -2,11 +2,11 @@
 import 'dart:convert';
 import 'package:democratus/converters/date_converters.dart';
 import 'package:democratus/providers/package_providers.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:democratus/converters/string_converters.dart';
 
-class Package {
+class Package extends Equatable {
   Package({
     this.originChamber,
     this.session,
@@ -64,10 +64,6 @@ class Package {
   bool hasDetails;
   String displayTitle;
   String? typeVerbose;
-
-  StateProvider<Package> getPackageProvider(Package package) {
-    return StateProvider<Package>((ref) => Package.fromPackage(package));
-  }
 
   List<Widget> getTextWidgets({TextStyle? style}) {
     return [
@@ -245,6 +241,10 @@ class Package {
       typeVerbose: typeVerbose ?? this.typeVerbose,
     );
   }
+  
+  @override
+  // TODO: implement props
+  List<Object?> get props => [packageId, shortTitle, lastModified];
 }
 
 // Defining type list based on https://www.govinfo.gov/help/bills#types
@@ -266,26 +266,7 @@ String getTypeVerbose(billType) {
   }
 }
 
-class PackageProvider extends StateNotifier<Package> {
-  PackageProvider(package) : super(Package.fromPackage(package));
-  void updatePackage(Package package) {
-    state = package;
-  }
 
-  void toggleSave() {
-    state = state.copyWith(isSaved: !state.isSaved);
-  }
-
-  void checkSaved(WidgetRef ref) {
-    List<String> packageIds =
-        ref.read(savedPackagesProvider).map((e) => e.packageId).toList();
-    if (packageIds.contains(state.packageId)) {
-      state = state.copyWith(isSaved: true);
-    } else {
-      state = state.copyWith(isSaved: false);
-    }
-  }
-}
 
 // TODO: Remove ChangeNotifier - convert to simply json getter class
 class PackageList extends ChangeNotifier {
@@ -315,12 +296,6 @@ class PackageList extends ChangeNotifier {
     _packages = packages;
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return <String, dynamic>{
-  //     'proposals': proposals.map((x) => x.toMap()).toList(),
-  //   };
-  // }
-
   factory PackageList.fromMap(Map<String, dynamic> map) {
     List<Package> packages = List<Package>.from(
       (map['packages'] as List<dynamic>).map<Package>(
@@ -330,38 +305,6 @@ class PackageList extends ChangeNotifier {
     return PackageList(packages: packages);
   }
 
-  // String toJson() => json.encode(toMap());
-
   factory PackageList.fromJson(String source) =>
       PackageList.fromMap(json.decode(source) as Map<String, dynamic>);
-}
-
-class PackagesProvider extends StateNotifier<List<Package>> {
-  PackagesProvider(List<Package> packages) : super(packages);
-
-  void replacePackages(List<Package> packages) {
-    state = packages;
-  }
-
-  void addPackage(Package package) {
-    state = [...state, package];
-  }
-
-  void updatePackageWith(
-      {required String packageId, required Package updatePackage}) {
-    state = [
-      for (final package in state)
-        if (package.packageId == packageId)
-          Package.fromPackage(updatePackage)
-        else
-          package,
-    ];
-  }
-
-  void removePackage(Package removePackage) {
-    state = [
-      for (final package in state)
-        if (package.packageId != removePackage.packageId) package,
-    ];
-  }
 }

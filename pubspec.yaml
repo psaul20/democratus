@@ -36,9 +36,10 @@ dependencies:
   webview_flutter_wkwebview: ^2.9.5
   flutter_html: ^2.2.1
   flutter_math_fork: ^0.7.1
+  equatable: ^2.0.5
 
-  # For riverpod
-  flutter_riverpod: ^2.3.6
+  # For Bloc
+  flutter_bloc: ^8.1.3
 
 
 
