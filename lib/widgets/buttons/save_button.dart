@@ -11,7 +11,7 @@ class SaveButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Package thisPackage = ref.watch(thisPackageProvider);
+    Package thisPackage = context.watch(packageProvider);
     // Check if package is already saved
     List<Package> savedPackages = ref.watch(savedPackagesProvider);
     List<String> savedIds = [

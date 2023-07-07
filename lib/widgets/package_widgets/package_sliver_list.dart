@@ -4,6 +4,30 @@ import 'package:democratus/widgets/package_widgets/package_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+class PackageSliverList extends StatelessWidget {
+  const PackageSliverList({
+    super.key,
+    required this.packages,
+  });
+
+  final List<Package> packages;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+        delegate: SliverChildListDelegate(
+      [
+        //TODO: Update with fetch data button while fetching
+        packages.isEmpty
+            ? const SizedBox.shrink()
+            : PackageListColumn(
+              packages: packages,
+            )
+      ],
+    ));
+  }
+}
+
 class PackageListColumn extends ConsumerWidget {
   const PackageListColumn({
     super.key,

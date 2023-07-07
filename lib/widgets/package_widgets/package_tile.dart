@@ -11,7 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //TODO: Animate data retrieval
 class PackageTile extends ConsumerStatefulWidget {
-  const PackageTile({super.key});
+  const PackageTile({super.key, required this.package});
+  final Package package;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PackageTileState();
@@ -22,13 +23,15 @@ class _PackageTileState extends ConsumerState<PackageTile> {
 
   @override
   Widget build(BuildContext context) {
-    Package package = ref.watch(thisPackageProvider);
+    final packageProvider = StateNotifierProvider<PackageProvider, Package>(
+        (ref) => PackageProvider(widget.package));
+    Package thisPackage = ref.watch(packageProvider);
+
     getPackage() async {
       Package updatePackage =
-          await GovinfoApi().getPackageById(package.packageId);
+          await GovinfoApi().getPackageById(widget.package.packageId);
       //TODO: Figure out how to just update the local package
-      ref.read(thisPackageProvider.notifier).state =
-          updatePackage.copyWith(hasDetails: true);
+      ref.read(packageProvider.notifier).updatePackage(updatePackage);
     }
 
     return Card(
@@ -36,7 +39,7 @@ class _PackageTileState extends ConsumerState<PackageTile> {
         onExpansionChanged: (value) async {
           isExpanded = value;
           if (value) {
-            if (!package.hasDetails) {
+            if (!thisPackage.hasDetails) {
               await getPackage();
             }
           }
@@ -44,7 +47,7 @@ class _PackageTileState extends ConsumerState<PackageTile> {
         //TODO: Redundant, figure out why it's not inheriting from themedata
         shape: Border.all(style: BorderStyle.none, width: 0),
         title: Text(
-          package.displayTitle,
+          thisPackage.displayTitle,
           maxLines: isExpanded ? 6 : 2,
           style: TextStyles.listTileTitle,
         ),
@@ -58,13 +61,13 @@ class _PackageTileState extends ConsumerState<PackageTile> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                package.hasDetails
-                    ? PackageDetails(package: package)
+                thisPackage.hasDetails
+                    ? PackageDetails(package: thisPackage)
                     : const Center(child: FetchCircle()),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   const SaveButton(),
                   Builder(builder: (context) {
-                    if (package.hasHtml ?? false) {
+                    if (thisPackage.hasHtml ?? false) {
                       return const ReadMoreButton();
                     } else {
                       return const SizedBox.shrink();

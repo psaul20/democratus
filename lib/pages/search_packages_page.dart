@@ -4,7 +4,7 @@ import 'dart:core';
 import 'package:democratus/models/package.dart';
 import 'package:democratus/providers/package_providers.dart';
 import 'package:democratus/providers/search_providers.dart';
-import 'package:democratus/widgets/package_widgets/package_list_column.dart';
+import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:democratus/widgets/package_widgets/package_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,21 +34,7 @@ class SearchPackagesPage extends ConsumerWidget {
               preferredSize: Size.fromHeight(240), child: PackageSearchBar()),
           floating: true,
         ),
-        SliverList(
-            delegate: SliverChildListDelegate(
-          [
-            //TODO: Update with fetch data button while fetching
-            packages.isEmpty
-                ? const SizedBox.shrink()
-                : Column(
-                    children: [
-                      PackageListColumn(
-                        packages: packages,
-                      )
-                    ],
-                  )
-          ],
-        ))
+        PackageSliverList(packages: packages)
       ]),
     );
   }

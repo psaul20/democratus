@@ -2,6 +2,7 @@ import 'package:democratus/models/package.dart';
 import 'package:democratus/pages/search_packages_page.dart';
 import 'package:democratus/providers/package_providers.dart';
 import 'package:democratus/widgets/package_widgets/package_list_view.dart';
+import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,7 +27,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         title: Text(widget.title),
       ),
       // TODO: Fix saved button showing correctly on homepage
-      body: PackageListView(packages: savedPackages,),
+      body: CustomScrollView(slivers: [
+        PackageSliverList(
+          packages: savedPackages,
+        )
+      ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
