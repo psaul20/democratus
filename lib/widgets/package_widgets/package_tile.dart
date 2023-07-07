@@ -1,5 +1,6 @@
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/package.dart';
+import 'package:democratus/providers/package_providers.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/widgets/buttons/read_more_button.dart';
 import 'package:democratus/widgets/buttons/save_button.dart';
@@ -10,10 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //TODO: Animate data retrieval
 class PackageTile extends ConsumerStatefulWidget {
-  const PackageTile(
-      {super.key, required this.packagesProvider, required this.packageId});
-  final StateNotifierProvider<PackagesProvider, List<Package>> packagesProvider;
-  final String packageId;
+  const PackageTile({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PackageTileState();
@@ -24,21 +22,19 @@ class _PackageTileState extends ConsumerState<PackageTile> {
 
   @override
   Widget build(BuildContext context) {
-    Package package = ref.watch(widget.packagesProvider.select((packages) =>
-        packages
-            .firstWhere((element) => element.packageId == widget.packageId),));
+    Package package = ref.watch(thisPackageProvider);
     getPackage() async {
       Package updatePackage =
-          await GovinfoApi().getPackageById(widget.packageId);
-      ref.read(widget.packagesProvider.notifier).updatePackageWith(
-            packageId: widget.packageId,
-            updatePackage: updatePackage,
-          );
+          await GovinfoApi().getPackageById(package.packageId);
+      //TODO: Figure out how to just update the local package
+      ref.read(thisPackageProvider.notifier).state =
+          updatePackage.copyWith(hasDetails: true);
     }
 
     return Card(
       child: ExpansionTile(
         onExpansionChanged: (value) async {
+          isExpanded = value;
           if (value) {
             if (!package.hasDetails) {
               await getPackage();
@@ -49,7 +45,7 @@ class _PackageTileState extends ConsumerState<PackageTile> {
         shape: Border.all(style: BorderStyle.none, width: 0),
         title: Text(
           package.displayTitle,
-          maxLines: !isExpanded ? 2 : 6,
+          maxLines: isExpanded ? 6 : 2,
           style: TextStyles.listTileTitle,
         ),
         tilePadding: const EdgeInsets.only(left: 10, bottom: 0, right: 10),
@@ -66,16 +62,10 @@ class _PackageTileState extends ConsumerState<PackageTile> {
                     ? PackageDetails(package: package)
                     : const Center(child: FetchCircle()),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  SaveButton(
-                    packagesProvider: widget.packagesProvider,
-                    packageId: package.packageId,
-                  ),
+                  const SaveButton(),
                   Builder(builder: (context) {
                     if (package.hasHtml ?? false) {
-                      return ReadMoreButton(
-                        packagesProvider: widget.packagesProvider,
-                        packageId: package.packageId,
-                      );
+                      return const ReadMoreButton();
                     } else {
                       return const SizedBox.shrink();
                     }

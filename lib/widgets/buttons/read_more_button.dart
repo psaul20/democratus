@@ -1,24 +1,17 @@
-import 'package:democratus/models/package.dart';
 import 'package:democratus/pages/package_reader.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ReadMoreButton extends ConsumerWidget {
-  const ReadMoreButton(
-      {super.key, required this.packagesProvider, required this.packageId});
-  final StateNotifierProvider<PackagesProvider, List<Package>> packagesProvider;
-  final String packageId;
+  const ReadMoreButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     readMore() {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (BuildContext context) {
-        return PackageReader(
-          packagesProvider: packagesProvider,
-          packageId: packageId,
-        );
+        return const PackageReader();
       }));
     }
 

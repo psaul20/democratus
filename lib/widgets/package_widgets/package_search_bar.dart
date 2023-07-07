@@ -72,12 +72,7 @@ class PackageSearchBar extends ConsumerWidget {
                 ),
               ],
             ),
-            Center(
-                child: SearchButtonBuilder(
-              canSearchProvider: canSearchProvider,
-              queryParamsProvider: queryParamsProvider,
-              packagesProvider: searchPackagesProvider,
-            )),
+            const Center(child: SearchButtonBuilder()),
           ],
         ));
   }

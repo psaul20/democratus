@@ -2,6 +2,7 @@
 import 'dart:core';
 
 import 'package:democratus/models/package.dart';
+import 'package:democratus/providers/package_providers.dart';
 import 'package:democratus/providers/search_providers.dart';
 import 'package:democratus/widgets/package_widgets/package_list_column.dart';
 import 'package:democratus/widgets/package_widgets/package_search_bar.dart';
@@ -42,7 +43,8 @@ class SearchPackagesPage extends ConsumerWidget {
                 : Column(
                     children: [
                       PackageListColumn(
-                          packagesProvider: searchPackagesProvider),
+                        packages: packages,
+                      )
                     ],
                   )
           ],

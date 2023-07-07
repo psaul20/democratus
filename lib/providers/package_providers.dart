@@ -5,3 +5,6 @@ final savedPackagesProvider =
     StateNotifierProvider<PackagesProvider, List<Package>>(
   (ref) => PackagesProvider([]),
 );
+
+final thisPackageProvider = StateNotifierProvider<PackageProvider, Package>((ref) =>
+    throw UnimplementedError("Did not implement thisPackage for this scope"));

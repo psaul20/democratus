@@ -1,5 +1,6 @@
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/package.dart';
+import 'package:democratus/providers/package_providers.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:democratus/widgets/buttons/save_button.dart';
 import 'package:democratus/widgets/fetch_circle.dart';
@@ -9,14 +10,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PackageReader extends ConsumerWidget {
-  const PackageReader(
-      {super.key, required this.packagesProvider, required this.packageId});
-  final StateNotifierProvider<PackagesProvider, List<Package>> packagesProvider;
-  final String packageId;
+  const PackageReader({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Package package = ref.watch(packagesProvider.select((packages) => packages.firstWhere((package) => package.packageId == packageId)));
+    Package package = ref.watch(thisPackageProvider);
     return Scaffold(
       body: CustomScrollView(slivers: [
         const SliverAppBar(
@@ -69,10 +67,7 @@ class PackageReader extends ConsumerWidget {
           ],
         ))
       ]),
-      floatingActionButton: SaveButton(
-        packageId: packageId,
-        packagesProvider: packagesProvider,
-      ),
+      floatingActionButton: const SaveButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

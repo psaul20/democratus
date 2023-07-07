@@ -7,26 +7,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SaveButton extends ConsumerWidget {
   const SaveButton({
     super.key,
-    required this.packagesProvider,
-    required this.packageId,
   });
-  final StateNotifierProvider<PackagesProvider, List<Package>> packagesProvider;
-  final String packageId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Package package = ref.watch(packagesProvider.select((packages) =>
-        packages.firstWhere((package) => package.packageId == packageId)));
+    Package thisPackage = ref.watch(thisPackageProvider);
+    // Check if package is already saved
+    List<Package> savedPackages = ref.watch(savedPackagesProvider);
+    List<String> savedIds = [
+      for (final package in savedPackages) package.packageId
+    ];
+    savedIds.contains(thisPackage.packageId)
+        ? thisPackage.isSaved = true
+        : thisPackage.isSaved = false;
+
     saveTap() {
-      if (package.isSaved) {
-        ref.read(savedPackagesProvider.notifier).removePackage(package);
+      if (thisPackage.isSaved) {
+        ref.read(savedPackagesProvider.notifier).removePackage(thisPackage);
       } else {
-        ref.read(savedPackagesProvider.notifier).addPackage(package);
+        ref
+            .read(savedPackagesProvider.notifier)
+            .addPackage(thisPackage.copyWith(isSaved: true));
       }
-      package.isSaved = !package.isSaved;
-      ref
-          .read(packagesProvider.notifier)
-          .updatePackageWith(packageId: packageId, updatePackage: package);
+      ref.read(thisPackageProvider.notifier).toggleSave();
     }
 
     return Container(
@@ -41,9 +44,11 @@ class SaveButton extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(package.isSaved ? Icons.favorite : Icons.favorite_border),
+                Icon(thisPackage.isSaved
+                    ? Icons.favorite
+                    : Icons.favorite_border),
                 Text(
-                  package.isSaved ? "Saved" : "Save",
+                  thisPackage.isSaved ? "Saved" : "Save",
                   textAlign: TextAlign.center,
                   style: TextStyles.iconText,
                 )

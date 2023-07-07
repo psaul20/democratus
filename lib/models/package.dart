@@ -65,6 +65,10 @@ class Package {
   String displayTitle;
   String? typeVerbose;
 
+  StateProvider<Package> getPackageProvider(Package package) {
+    return StateProvider<Package>((ref) => Package.fromPackage(package));
+  }
+
   List<Widget> getTextWidgets({TextStyle? style}) {
     return [
       Text(
@@ -164,7 +168,7 @@ class Package {
       publisher: map['publisher'] != null ? map['publisher'] as String : null,
       docClass: map['docClass'] as String,
       lastModified: map['lastModified'] != null
-          ? DateTime.parse(map['lastModified'])
+          ? DateTime.tryParse(map['lastModified'])
           : null,
       category: map['category'] != null ? map['category'] as String : null,
       billNumber:
@@ -347,14 +351,17 @@ class PackagesProvider extends StateNotifier<List<Package>> {
       {required String packageId, required Package updatePackage}) {
     state = [
       for (final package in state)
-        if (package.packageId == packageId) updatePackage else package
+        if (package.packageId == packageId)
+          Package.fromPackage(updatePackage)
+        else
+          package,
     ];
   }
 
-  void removePackage(Package package) {
+  void removePackage(Package removePackage) {
     state = [
       for (final package in state)
-        if (package.packageId != package.packageId) package,
+        if (package.packageId != removePackage.packageId) package,
     ];
   }
 }
