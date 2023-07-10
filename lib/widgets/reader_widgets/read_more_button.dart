@@ -12,13 +12,13 @@ class ReadMoreButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PackageBloc, PackageState>(builder: (context, state) {
       readMore() {
-        Package package = state.package;
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (BuildContext context) {
-          return PackageReader(
-            package: package,
-          );
-        }));
+        // Package package = state.package;
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (BuildContext context) {
+        //   return PackageReader(
+        //     package: package,
+        //   );
+        // }));
       }
 
       if (state.package.hasHtml == true) {
