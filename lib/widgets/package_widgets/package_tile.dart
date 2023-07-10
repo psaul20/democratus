@@ -82,12 +82,13 @@ class _PackageTileState extends State<PackageTile> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const SaveButton(),
+                            //TODO: Figure out read more screen
                             Builder(builder: (context) {
-                              // if (state.package.hasHtml ?? false) {
-                              // return const ReadMoreButton();
-                              // } else {
-                              return const SizedBox.shrink();
-                              // }
+                              if (state.package.hasHtml ?? false) {
+                                return const ReadMoreButton();
+                              } else {
+                                return const SizedBox.shrink();
+                              }
                             })
                           ]),
                     ],
