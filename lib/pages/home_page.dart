@@ -1,6 +1,5 @@
 import 'package:democratus/blocs/saved_package_bloc.dart';
 import 'package:democratus/blocs/package_search_bloc.dart';
-import 'package:democratus/models/package.dart';
 import 'package:democratus/pages/search_packages_page.dart';
 import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:flutter/material.dart';

@@ -31,7 +31,7 @@ class ReadMoreButton extends ConsumerWidget {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: readMore(),
+                onTap: readMore,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

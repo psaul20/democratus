@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PackageSearchBar extends ConsumerWidget {
   const PackageSearchBar({super.key});
+  //TODO: Create persistent state (look into hydratedbloc?)
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

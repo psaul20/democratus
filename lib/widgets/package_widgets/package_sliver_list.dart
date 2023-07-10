@@ -14,38 +14,42 @@ class PackageSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-        delegate: SliverChildListDelegate(
-      [
-        //TODO: Update with fetch data button while fetching
-        PackageListColumn(
-          packages: packages,
-        )
-      ],
-    ));
+    return packages.isEmpty
+        ? SliverList(
+            delegate: SliverChildListDelegate([const SizedBox.shrink()]),
+          )
+        : SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+            final packageBloc = PackageBloc(packages[index]);
+            return BlocProvider<PackageBloc>(
+                create: (_) => packageBloc,
+                child: PackageTile(
+                  packageBloc: packageBloc,
+                ));
+          }, childCount: packages.length));
   }
 }
 
-class PackageListColumn extends StatelessWidget {
-  const PackageListColumn({
-    super.key,
-    required this.packages,
-  });
-  final List<Package> packages;
+// class PackageListColumn extends StatelessWidget {
+//   const PackageListColumn({
+//     super.key,
+//     required this.packages,
+//   });
+//   final List<Package> packages;
 
-  @override
-  Widget build(BuildContext context) {
-    if (packages.isEmpty) {
-      return const SizedBox.shrink();
-    } else {
-      List<Widget> tiles = [];
-      for (var package in packages) {
-        tiles.add(BlocProvider<PackageBloc>(
-          create: (_) => PackageBloc(package),
-          child: const PackageTile(),
-        ));
-      }
-      return Column(children: tiles);
-    }
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     if (packages.isEmpty) {
+//       return const SizedBox.shrink();
+//     } else {
+//       List<Widget> tiles = [];
+//       for (var package in packages) {
+//         tiles.add(BlocProvider<PackageBloc>(
+//           create: (_) => PackageBloc(package),
+//           child: const PackageTile(),
+//         ));
+//       }
+//       return Column(children: tiles);
+//     }
+//   }
+// }

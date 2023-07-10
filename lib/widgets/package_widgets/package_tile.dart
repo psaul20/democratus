@@ -12,7 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 //TODO: Animate data retrieval
 
 class PackageTile extends StatefulWidget {
-  const PackageTile({super.key});
+  const PackageTile({super.key, required this.packageBloc});
+  final PackageBloc packageBloc;
 
   @override
   State<PackageTile> createState() => _PackageTileState();
@@ -35,60 +36,66 @@ class _PackageTileState extends State<PackageTile> {
       }
     }
 
-    return BlocBuilder<PackageBloc, PackageState>(builder: (context, state) {
-      if (!state.package.isSaved) {
-        checkSaved(state.package);
-      }
-      return Card(
-        child: ExpansionTile(
-          onExpansionChanged: (value) {
-            if (value) {
-              if (!state.package.hasDetails) {
-                context
-                    .read<PackageBloc>()
-                    .add(GetPackage(state.package.packageId));
-              }
-            }
-            setState(() {
-              isExpanded = value;
-            });
-          },
-          //TODO: Redundant, figure out why it's not inheriting from themedata
-          shape: Border.all(style: BorderStyle.none, width: 0),
-          title: Text(
-            state.package.displayTitle,
-            maxLines: isExpanded ? 6 : 2,
-            style: TextStyles.listTileTitle,
-          ),
-          tilePadding: const EdgeInsets.only(left: 10, bottom: 0, right: 10),
-          children: [
-            ListTile(
-              contentPadding: const EdgeInsets.only(
-                left: 10,
+    return BlocBuilder<PackageBloc, PackageState>(
+        // Specifying to avoid state weirdness
+        bloc: widget.packageBloc,
+        builder: (context, state) {
+          if (!state.package.isSaved) {
+            checkSaved(state.package);
+          }
+          return Card(
+            child: ExpansionTile(
+              onExpansionChanged: (value) {
+                if (value) {
+                  if (!state.package.hasDetails) {
+                    context
+                        .read<PackageBloc>()
+                        .add(GetPackage(state.package.packageId));
+                  }
+                }
+                setState(() {
+                  isExpanded = value;
+                });
+              },
+              //TODO: Redundant, figure out why it's not inheriting from themedata
+              shape: Border.all(style: BorderStyle.none, width: 0),
+              title: Text(
+                state.package.displayTitle,
+                maxLines: isExpanded ? 6 : 2,
+                style: TextStyles.listTileTitle,
               ),
-              dense: true,
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  state.package.hasDetails
-                      ? PackageDetails(package: state.package)
-                      : const Center(child: FetchCircle()),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    const SaveButton(),
-                    Builder(builder: (context) {
-                      if (state.package.hasHtml ?? false) {
-                        return const ReadMoreButton();
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    })
-                  ]),
-                ],
-              ),
-            )
-          ],
-        ),
-      );
-    });
+              tilePadding:
+                  const EdgeInsets.only(left: 10, bottom: 0, right: 10),
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.only(
+                    left: 10,
+                  ),
+                  dense: true,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      state.package.hasDetails
+                          ? PackageDetails(package: state.package)
+                          : const Center(child: FetchCircle()),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SaveButton(),
+                            Builder(builder: (context) {
+                              // if (state.package.hasHtml ?? false) {
+                              // return const ReadMoreButton();
+                              // } else {
+                              return const SizedBox.shrink();
+                              // }
+                            })
+                          ]),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 }
