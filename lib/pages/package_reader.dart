@@ -6,13 +6,12 @@ import 'package:democratus/widgets/package_widgets/package_details.dart';
 import 'package:democratus/widgets/save_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PackageReader extends ConsumerWidget {
+class PackageReader extends StatelessWidget {
   const PackageReader({super.key, required this.package});
   final Package package;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(slivers: [
         const SliverAppBar(

@@ -8,17 +8,16 @@ import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:democratus/widgets/search_widgets/package_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // TODO: Update search to load 10 at a time, not just 10
 // TODO: Sort by last action date
 // TODO: Search by text
 
-class SearchPackagesPage extends ConsumerWidget {
+class SearchPackagesPage extends StatelessWidget {
   const SearchPackagesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(slivers: [
         const SliverAppBar(

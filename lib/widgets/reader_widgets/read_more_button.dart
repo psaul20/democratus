@@ -4,13 +4,12 @@ import 'package:democratus/pages/package_reader.dart';
 import 'package:democratus/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ReadMoreButton extends ConsumerWidget {
+class ReadMoreButton extends StatelessWidget {
   const ReadMoreButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return BlocBuilder<PackageBloc, PackageState>(builder: (context, state) {
       readMore() {
         Package package = state.package;
