@@ -1,12 +1,12 @@
+import 'package:democratus/blocs/saved_package_bloc.dart';
+import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:democratus/models/package.dart';
 import 'package:democratus/pages/search_packages_page.dart';
-import 'package:democratus/providers/package_providers.dart';
-import 'package:democratus/widgets/package_widgets/package_list_view.dart';
 import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyHomePage extends ConsumerStatefulWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({
     Key? key,
     required this.title,
@@ -14,31 +14,30 @@ class MyHomePage extends ConsumerStatefulWidget {
   final String title;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends ConsumerState<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    List<Package> savedPackages = ref.watch(savedPackagesProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      // TODO: Fix saved button showing correctly on homepage
       body: CustomScrollView(slivers: [
-        PackageSliverList(
-          packages: savedPackages,
-        )
+        BlocBuilder<SavedPackagesBloc, SavedPackagesState>(
+            builder: (context, state) =>
+                PackageSliverList(packages: state.packages)),
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
               context,
-              //TODO: Convert to singleton for persistence
               MaterialPageRoute(
-                builder: (context) => const SearchPackagesPage(),
+                builder: (context) => BlocProvider<PackageSearchBloc>(
+                    create: (_) => PackageSearchBloc()..add(GetCollections()),
+                    child: const SearchPackagesPage()),
               ));
         },
         tooltip: 'Add Package',

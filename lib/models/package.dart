@@ -1,13 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'package:democratus/converters/date_converters.dart';
-import 'package:democratus/providers/package_providers.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:democratus/converters/string_converters.dart';
 
 class Package extends Equatable {
-  Package({
+  const Package({
     this.originChamber,
     this.session,
     this.detailsLink,
@@ -29,11 +28,11 @@ class Package extends Equatable {
     this.category,
     this.billNumber,
     this.congress,
-    this.isSaved = false,
     this.hasHtml,
-    this.hasDetails = false,
     required this.displayTitle,
     this.typeVerbose,
+    this.hasDetails = false,
+    this.isSaved = false,
   });
   // Driven by GovInfo data structure
   final String? originChamber;
@@ -59,11 +58,11 @@ class Package extends Equatable {
   final String? congress;
 
   // Driven by app logic needs
-  bool isSaved;
-  bool? hasHtml;
-  bool hasDetails;
-  String displayTitle;
-  String? typeVerbose;
+  final bool? hasHtml;
+  final String displayTitle;
+  final String? typeVerbose;
+  final bool hasDetails;
+  final bool isSaved;
 
   List<Widget> getTextWidgets({TextStyle? style}) {
     return [
@@ -234,16 +233,15 @@ class Package extends Equatable {
       category: category ?? this.category,
       billNumber: billNumber ?? this.billNumber,
       congress: congress ?? this.congress,
-      isSaved: isSaved ?? this.isSaved,
       hasHtml: hasHtml ?? this.hasHtml,
-      hasDetails: hasDetails ?? this.hasDetails,
       displayTitle: displayTitle ?? this.displayTitle,
       typeVerbose: typeVerbose ?? this.typeVerbose,
+      hasDetails: hasDetails ?? this.hasDetails,
+      isSaved: isSaved ?? this.isSaved,
     );
   }
-  
+
   @override
-  // TODO: implement props
   List<Object?> get props => [packageId, shortTitle, lastModified];
 }
 
@@ -265,8 +263,6 @@ String getTypeVerbose(billType) {
     return "Not Mapped";
   }
 }
-
-
 
 // TODO: Remove ChangeNotifier - convert to simply json getter class
 class PackageList extends ChangeNotifier {

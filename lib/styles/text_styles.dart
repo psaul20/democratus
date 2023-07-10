@@ -18,4 +18,5 @@ class TextStyles {
         fontSize: 18,
         overflow: TextOverflow.ellipsis,
       );
+  static TextStyle get errorText => TextStyle(color: DemocScheme.scheme.error);
 }

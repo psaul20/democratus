@@ -10,9 +10,12 @@ class FetchCircle extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Text(
-            "Fetching Data",
-            style: txtStyle,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              "Fetching Data",
+              style: txtStyle,
+            ),
           ),
           const CircularProgressIndicator()
         ],

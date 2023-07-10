@@ -1,8 +1,8 @@
+import 'package:democratus/blocs/package_bloc.dart';
 import 'package:democratus/models/package.dart';
-import 'package:democratus/providers/package_providers.dart';
 import 'package:democratus/widgets/package_widgets/package_tile.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PackageSliverList extends StatelessWidget {
   const PackageSliverList({
@@ -18,33 +18,30 @@ class PackageSliverList extends StatelessWidget {
         delegate: SliverChildListDelegate(
       [
         //TODO: Update with fetch data button while fetching
-        packages.isEmpty
-            ? const SizedBox.shrink()
-            : PackageListColumn(
-              packages: packages,
-            )
+        PackageListColumn(
+          packages: packages,
+        )
       ],
     ));
   }
 }
 
-class PackageListColumn extends ConsumerWidget {
+class PackageListColumn extends StatelessWidget {
   const PackageListColumn({
     super.key,
     required this.packages,
   });
   final List<Package> packages;
 
-  //TODO: write test to ensure packageprovider checksaved is working
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     if (packages.isEmpty) {
       return const SizedBox.shrink();
     } else {
       List<Widget> tiles = [];
       for (var package in packages) {
-        tiles.add(ProviderScope(
-          overrides: [thisPackageProvider.overrideWith((ref) => PackageProvider(package))],
+        tiles.add(BlocProvider<PackageBloc>(
+          create: (_) => PackageBloc(package),
           child: const PackageTile(),
         ));
       }
