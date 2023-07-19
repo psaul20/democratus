@@ -12,8 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 //TODO: Animate data retrieval
 
 class PackageTile extends StatefulWidget {
-  const PackageTile({super.key, required this.packageBloc});
-  final PackageBloc packageBloc;
+  const PackageTile({super.key});
 
   @override
   State<PackageTile> createState() => _PackageTileState();
@@ -38,7 +37,7 @@ class _PackageTileState extends State<PackageTile> {
 
     return BlocBuilder<PackageBloc, PackageState>(
         // Specifying to avoid state weirdness
-        bloc: widget.packageBloc,
+        // bloc: widget.packageBloc,
         builder: (context, state) {
           if (!state.package.isSaved) {
             checkSaved(state.package);
@@ -82,16 +81,18 @@ class _PackageTileState extends State<PackageTile> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SaveButton(
-                              packageBloc: widget.packageBloc,
+                              key: widget.key,
                             ),
                             //TODO: Figure out read more screen
-                            Builder(builder: (context) {
-                              if (state.package.hasHtml ?? false) {
-                                return const ReadMoreButton();
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            })
+                            // Builder(builder: (context) {
+                            //   if (state.package.hasHtml ?? false) {
+                            //     return ReadMoreButton(
+                            //       packageBloc: widget.packageBloc,
+                            //     );
+                            //   } else {
+                            //     return const SizedBox.shrink();
+                            //   }
+                            // })
                           ]),
                     ],
                   ),

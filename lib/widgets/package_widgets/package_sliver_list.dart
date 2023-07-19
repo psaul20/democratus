@@ -20,12 +20,10 @@ class PackageSliverList extends StatelessWidget {
           )
         : SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-            final packageBloc = PackageBloc(packages[index]);
             return BlocProvider<PackageBloc>(
-                create: (_) => packageBloc,
-                child: PackageTile(
-                  packageBloc: packageBloc,
-                ));
+                key: ValueKey(packages[index].packageId),
+                create: (_) => PackageBloc(packages[index]),
+                child: const PackageTile());
           }, childCount: packages.length));
   }
 }
