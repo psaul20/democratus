@@ -10,12 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class PackageReader extends StatelessWidget {
-  const PackageReader({super.key, required this.packageBloc});
-  final PackageBloc packageBloc;
+  const PackageReader({super.key});
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PackageBloc, PackageState>(
-      bloc: packageBloc,
       builder: (context, state) {
         Package package = state.package;
         return Scaffold(
@@ -50,6 +48,7 @@ class PackageReader extends StatelessWidget {
                     ],
                   ),
                 ),
+                //TODO: Convert to Bloc?
                 FutureBuilder(
                     future: GovinfoApi().getHtml(package),
                     builder: (context, snapshot) {

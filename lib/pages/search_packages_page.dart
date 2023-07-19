@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // TODO: Update search to load 10 at a time, not just 10
 // TODO: Sort by last action date
 // TODO: Search by text
+//TODO: Persist state
 
 class SearchPackagesPage extends StatelessWidget {
   const SearchPackagesPage({super.key});

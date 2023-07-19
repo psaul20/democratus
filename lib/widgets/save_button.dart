@@ -11,7 +11,7 @@ class SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Package package = context.watch<PackageBloc>().state.package;
-    saveTap(BuildContext context) {
+    saveTap() {
       //TODO: Add repository to tie these events together
       context.read<PackageBloc>().add(ToggleSave());
 
@@ -32,7 +32,7 @@ class SaveButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () => saveTap(context),
+            onTap: saveTap,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

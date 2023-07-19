@@ -27,27 +27,3 @@ class PackageSliverList extends StatelessWidget {
           }, childCount: packages.length));
   }
 }
-
-// class PackageListColumn extends StatelessWidget {
-//   const PackageListColumn({
-//     super.key,
-//     required this.packages,
-//   });
-//   final List<Package> packages;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     if (packages.isEmpty) {
-//       return const SizedBox.shrink();
-//     } else {
-//       List<Widget> tiles = [];
-//       for (var package in packages) {
-//         tiles.add(BlocProvider<PackageBloc>(
-//           create: (_) => PackageBloc(package),
-//           child: const PackageTile(),
-//         ));
-//       }
-//       return Column(children: tiles);
-//     }
-//   }
-// }

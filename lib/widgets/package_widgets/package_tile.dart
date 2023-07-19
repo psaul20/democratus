@@ -39,67 +39,62 @@ class _PackageTileState extends State<PackageTile> {
         // Specifying to avoid state weirdness
         // bloc: widget.packageBloc,
         builder: (context, state) {
-          if (!state.package.isSaved) {
-            checkSaved(state.package);
-          }
-          return Card(
-            child: ExpansionTile(
-              onExpansionChanged: (value) {
-                if (value) {
-                  if (!state.package.hasDetails) {
-                    context
-                        .read<PackageBloc>()
-                        .add(GetPackage(state.package.packageId));
-                  }
-                }
-                setState(() {
-                  isExpanded = value;
-                });
-              },
-              //TODO: Redundant, figure out why it's not inheriting from themedata
-              shape: Border.all(style: BorderStyle.none, width: 0),
-              title: Text(
-                state.package.displayTitle,
-                maxLines: isExpanded ? 6 : 2,
-                style: TextStyles.listTileTitle,
+      if (!state.package.isSaved) {
+        checkSaved(state.package);
+      }
+      return Card(
+        child: ExpansionTile(
+          onExpansionChanged: (value) {
+            if (value) {
+              if (!state.package.hasDetails) {
+                context
+                    .read<PackageBloc>()
+                    .add(GetPackage(state.package.packageId));
+              }
+            }
+            setState(() {
+              isExpanded = value;
+            });
+          },
+          //TODO: Redundant, figure out why it's not inheriting from themedata
+          shape: Border.all(style: BorderStyle.none, width: 0),
+          title: Text(
+            state.package.displayTitle,
+            maxLines: isExpanded ? 6 : 2,
+            style: TextStyles.listTileTitle,
+          ),
+          tilePadding: const EdgeInsets.only(left: 10, bottom: 0, right: 10),
+          children: [
+            ListTile(
+              contentPadding: const EdgeInsets.only(
+                left: 10,
               ),
-              tilePadding:
-                  const EdgeInsets.only(left: 10, bottom: 0, right: 10),
-              children: [
-                ListTile(
-                  contentPadding: const EdgeInsets.only(
-                    left: 10,
-                  ),
-                  dense: true,
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      state.package.hasDetails
-                          ? PackageDetails(package: state.package)
-                          : const Center(child: FetchCircle()),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SaveButton(
-                              key: widget.key,
-                            ),
-                            //TODO: Figure out read more screen
-                            // Builder(builder: (context) {
-                            //   if (state.package.hasHtml ?? false) {
-                            //     return ReadMoreButton(
-                            //       packageBloc: widget.packageBloc,
-                            //     );
-                            //   } else {
-                            //     return const SizedBox.shrink();
-                            //   }
-                            // })
-                          ]),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        });
+              dense: true,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  state.package.hasDetails
+                      ? PackageDetails(package: state.package)
+                      : const Center(child: FetchCircle()),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    SaveButton(
+                      key: widget.key,
+                    ),
+                    //TODO: Figure out read more screen
+                    Builder(builder: (context) {
+                      if (state.package.hasHtml ?? false) {
+                        return const ReadMoreButton();
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    })
+                  ]),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 }
