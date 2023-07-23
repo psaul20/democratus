@@ -65,6 +65,7 @@ class Package extends Equatable {
   final bool hasDetails;
   final bool isSaved;
 
+  //TODO: Probably a better place for this
   List<Widget> getTextWidgets({TextStyle? style}) {
     return [
       Text(
@@ -174,7 +175,7 @@ class Package extends Equatable {
       hasHtml: map['download']?['txtLink'] != null ? true : false,
       displayTitle: map.containsKey('displayTitle')
           ? map['displayTitle']
-          : map['shortTitle']?[0] ?? map['title'],
+          : map['shortTitle']?[0]['title'] ?? map['title'],
       typeVerbose:
           map['billType'] != null ? getTypeVerbose(map['billType']) : null,
     );

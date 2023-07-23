@@ -2,6 +2,7 @@ import 'package:democratus/blocs/package_bloc.dart';
 import 'package:democratus/blocs/saved_package_bloc.dart';
 import 'package:democratus/models/package.dart';
 import 'package:democratus/theming/text_styles.dart';
+import 'package:democratus/widgets/generic/errors.dart';
 import 'package:democratus/widgets/generic/fetch_circle.dart';
 import 'package:democratus/widgets/package_widgets/package_details.dart';
 import 'package:democratus/widgets/reader_widgets/read_more_button.dart';
@@ -39,7 +40,11 @@ class _PackageTileState extends State<PackageTile> {
         // Specifying to avoid state weirdness
         // bloc: widget.packageBloc,
         builder: (context, state) {
-      if (!state.package.isSaved) {
+      if (state.status == PackageStatus.failure) {
+        return const Card(
+          child: ErrorText()
+        );
+      } else if (!state.package.isSaved) {
         checkSaved(state.package);
       }
       return Card(

@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/package.dart';
 import 'package:equatable/equatable.dart';
@@ -25,23 +27,27 @@ class PackageState extends Equatable {
   const PackageState({
     this.status = PackageStatus.success,
     required this.package,
+    this.except,
   });
   final PackageStatus status;
   final Package package;
+  final Exception? except;
 
   PackageState copyWith({
     PackageStatus? status,
     Package? package,
+    Exception? except,
   }) {
     return PackageState(
       status: status ?? this.status,
       package: package ?? this.package,
+      except: except ?? this.except
     );
   }
 
   @override
   List<Object?> get props =>
-      [status, package, package.hasDetails, package.isSaved];
+      [status, package, package.hasDetails, package.isSaved, except];
 }
 
 class PackageBloc extends Bloc<PackageEvent, PackageState> {
@@ -67,8 +73,9 @@ class PackageBloc extends Bloc<PackageEvent, PackageState> {
           status: PackageStatus.success,
         ));
       }
-    } catch (_) {
-      emit(state.copyWith(status: PackageStatus.failure));
+    } catch (e) {
+      log("Exception: $e");
+      emit(state.copyWith(status: PackageStatus.failure, except: e as Exception));
     }
   }
 
