@@ -6,8 +6,8 @@ import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/collection.dart';
 import 'package:democratus/models/package.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 sealed class PackageSearchEvent extends Equatable {
   @override
@@ -39,7 +39,7 @@ final class GetCollections extends PackageSearchEvent {}
 //TODO: Handle no results retrieved
 enum PackageSearchStatus { initial, success, failure }
 
-final class PackageSearchState extends Equatable {
+class PackageSearchState extends Equatable {
   final DateTime? startDate;
   final DateTime? endDate;
   final List<Collection> collections;
@@ -86,9 +86,59 @@ final class PackageSearchState extends Equatable {
         searchPackages: searchPackages ?? this.searchPackages,
         isReady: isReady ?? this.isReady);
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'startDate': startDate?.millisecondsSinceEpoch,
+      'endDate': endDate?.millisecondsSinceEpoch,
+      'collections': collections.map((x) => x.toMap()).toList(),
+      'selectedCollection': selectedCollection?.toMap(),
+      'searchPackages': searchPackages.map((x) => x.toMap()).toList(),
+      'isReady': isReady,
+    };
+  }
+
+  factory PackageSearchState.fromMap(Map<String, dynamic> map) {
+    if (map.isEmpty) {
+      return const PackageSearchState();
+    } else {
+      List<Package> searchPackages = List<Package>.from(
+          (map['searchPackages'] as List<dynamic>).map<Package>(
+        (x) => Package.fromMap(x as Map<String, dynamic>),
+      ));
+      return PackageSearchState(
+        startDate: map['startDate'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(map['startDate'])
+            : null,
+        endDate: map['endDate'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(map['endDate'])
+            : null,
+        collections: List<Collection>.from(
+          (map['collections'] as List<dynamic>).map<Collection>(
+            (x) => Collection.fromMap(x as Map<String, dynamic>),
+          ),
+        ),
+        selectedCollection: map['selectedCollection'] != null
+            ? Collection.fromMap(
+                map['selectedCollection'] as Map<String, dynamic>)
+            : null,
+        status: searchPackages.isNotEmpty
+            ? PackageSearchStatus.success
+            : PackageSearchStatus.initial,
+        searchPackages: searchPackages.isNotEmpty ? searchPackages : [],
+        isReady: map['isReady'] as bool,
+      );
+    }
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory PackageSearchState.fromJson(String source) =>
+      PackageSearchState.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-class PackageSearchBloc extends Bloc<PackageSearchEvent, PackageSearchState> {
+class PackageSearchBloc
+    extends HydratedBloc<PackageSearchEvent, PackageSearchState> {
   PackageSearchBloc() : super(const PackageSearchState()) {
     on<SelectCollection>(
       (event, emit) {
@@ -187,5 +237,15 @@ class PackageSearchBloc extends Bloc<PackageSearchEvent, PackageSearchState> {
       return CollectionList.fromJson(response.body).asList;
     }
     throw Exception('Error fetching Collections');
+  }
+
+  @override
+  PackageSearchState? fromJson(Map<String, dynamic> json) {
+    return PackageSearchState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(PackageSearchState state) {
+    return state.toMap();
   }
 }

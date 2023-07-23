@@ -1,9 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_import
 import 'dart:convert';
 import 'package:democratus/converters/date_converters.dart';
+import 'package:democratus/converters/string_converters.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:democratus/converters/string_converters.dart';
+import 'package:intl/intl.dart';
 
 class Package extends Equatable {
   const Package({
@@ -139,14 +140,16 @@ class Package extends Equatable {
       session: map['session'] != null ? map['session'] as String : null,
       detailsLink:
           map['detailsLink'] != null ? map['detailsLink'] as String : null,
-      shortTitle: map['shortTitle']?[0] ?? {'title': map['title']},
-      longTitle: map['shortTitle'] != null ? map['title'] as String : null,
+      shortTitle: map['shortTitle']?[0],
+      longTitle:
+          map['title'] != null ? map['title'] as String : map['shortTitle']?[0],
       branch: map['branch'] != null ? map['branch'] as String : null,
       download: map['download'] != null
           ? map['download'] as Map<String, dynamic>
           : null,
       pages: map['pages'] != null ? int.parse(map['pages']) : null,
-      dateIssued: DateTime.parse(map['dateIssued']),
+      dateIssued: DateTime.tryParse(map['dateIssued'].toString()) ??
+          DateTime.fromMillisecondsSinceEpoch(map['dateIssued'] as int),
       currentChamber: map['currentChamber'] != null
           ? map['currentChamber'] as String
           : null,
@@ -162,17 +165,16 @@ class Package extends Equatable {
           : null,
       publisher: map['publisher'] != null ? map['publisher'] as String : null,
       docClass: map['docClass'] as String,
-      lastModified: map['lastModified'] != null
-          ? DateTime.tryParse(map['lastModified'])
-          : null,
+      lastModified: DateTime.tryParse(map['dateIssued'].toString()) ??
+          DateTime.fromMillisecondsSinceEpoch(map['dateIssued'] as int),
       category: map['category'] != null ? map['category'] as String : null,
       billNumber:
           map['billNumber'] != null ? int.parse(map['billNumber']) : null,
       congress: map['congress'] != null ? map['congress'] as String : null,
       hasHtml: map['download']?['txtLink'] != null ? true : false,
-      displayTitle: map['shortTitle'] != null
-          ? map['shortTitle'][0]['title'] as String
-          : map['title'] as String,
+      displayTitle: map.containsKey('displayTitle')
+          ? map['displayTitle']
+          : map['shortTitle']?[0] ?? map['title'],
       typeVerbose:
           map['billType'] != null ? getTypeVerbose(map['billType']) : null,
     );
@@ -243,6 +245,39 @@ class Package extends Equatable {
 
   @override
   List<Object?> get props => [packageId, shortTitle, lastModified];
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'originChamber': originChamber,
+      'session': session,
+      'detailsLink': detailsLink,
+      'shortTitle': shortTitle,
+      'longTitle': longTitle,
+      'branch': branch,
+      'download': download,
+      'pages': pages,
+      'dateIssued': dateIssued.millisecondsSinceEpoch,
+      'currentChamber': currentChamber,
+      'billVersion': billVersion,
+      'billType': billType,
+      'packageId': packageId,
+      'collectionCode': collectionCode,
+      'governmentAuthor1': governmentAuthor1,
+      'publisher': publisher,
+      'docClass': docClass,
+      'lastModified': lastModified?.millisecondsSinceEpoch,
+      'category': category,
+      'billNumber': billNumber,
+      'congress': congress,
+      'hasHtml': hasHtml,
+      'displayTitle': displayTitle,
+      'typeVerbose': typeVerbose,
+      'hasDetails': hasDetails,
+      'isSaved': isSaved,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 }
 
 // Defining type list based on https://www.govinfo.gov/help/bills#types

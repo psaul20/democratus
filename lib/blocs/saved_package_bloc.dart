@@ -1,7 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_import
+import 'dart:convert';
+
 import 'package:democratus/models/package.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 //TODO: Implement repository to share state across blocs
 
@@ -30,7 +33,7 @@ final class RemovePackage extends SavedPackagesEvent {
 
 enum SavedPackagesStatus { initial, success, failure }
 
-final class SavedPackagesState extends Equatable {
+class SavedPackagesState extends Equatable {
   const SavedPackagesState({
     this.status = SavedPackagesStatus.initial,
     this.packages = const <Package>[],
@@ -51,9 +54,38 @@ final class SavedPackagesState extends Equatable {
 
   @override
   List<Object?> get props => [status, packages];
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'packages': packages.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory SavedPackagesState.fromMap(Map<String, dynamic> map) {
+    List<Package> packages = PackageList.fromMap(map).packages;
+
+    if (packages.isNotEmpty) {
+      return SavedPackagesState(
+        status: SavedPackagesStatus.success,
+        packages: List<Package>.from(
+          (map['packages'] as List<dynamic>).map<Package>(
+            (x) => Package.fromMap(x as Map<String, dynamic>),
+          ),
+        ),
+      );
+    } else {
+      return const SavedPackagesState();
+    }
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory SavedPackagesState.fromJson(String source) =>
+      SavedPackagesState.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-class SavedPackagesBloc extends Bloc<SavedPackagesEvent, SavedPackagesState> {
+class SavedPackagesBloc
+    extends HydratedBloc<SavedPackagesEvent, SavedPackagesState> {
   SavedPackagesBloc() : super(const SavedPackagesState()) {
     on<ReplacePackages>(
       (event, emit) => state.copyWith(
@@ -78,5 +110,15 @@ class SavedPackagesBloc extends Bloc<SavedPackagesEvent, SavedPackagesState> {
                 : SavedPackagesStatus.success));
       },
     );
+  }
+
+  @override
+  SavedPackagesState? fromJson(Map<String, dynamic> json) {
+    return SavedPackagesState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic> toJson(SavedPackagesState state) {
+    return state.toMap();
   }
 }
