@@ -1,7 +1,7 @@
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/blocs/package_bloc.dart';
 import 'package:democratus/models/package.dart';
-import 'package:democratus/styles/text_styles.dart';
+import 'package:democratus/theming/text_styles.dart';
 import 'package:democratus/widgets/generic/fetch_circle.dart';
 import 'package:democratus/widgets/package_widgets/package_details.dart';
 import 'package:democratus/widgets/save_button.dart';

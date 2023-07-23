@@ -1,4 +1,4 @@
-import 'package:democratus/styles/text_styles.dart';
+import 'package:democratus/theming/text_styles.dart';
 import 'package:democratus/widgets/search_widgets/search_button_builder.dart';
 import 'package:democratus/widgets/search_widgets/search_date_picker.dart';
 import 'package:democratus/widgets/search_widgets/search_collection_dropdown.dart';

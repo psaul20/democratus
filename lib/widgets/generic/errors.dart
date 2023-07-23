@@ -1,4 +1,4 @@
-import 'package:democratus/styles/text_styles.dart';
+import 'package:democratus/theming/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class ErrorText extends StatelessWidget {
