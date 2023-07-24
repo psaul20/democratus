@@ -24,7 +24,7 @@ final class SelectStartDate extends PackageSearchEvent {
   SelectStartDate(this.startDate);
 }
 
-final class SelectEndDate extends PackageSearchEvent {
+class SelectEndDate extends PackageSearchEvent {
   final DateTime endDate;
   SelectEndDate(this.endDate);
 }
@@ -59,13 +59,18 @@ class PackageSearchState extends Equatable {
 
   @override
   List<Object?> get props => [
-        startDate,
-        endDate,
         collections,
         selectedCollection,
+        startDate,
+        endDate,
         status,
         isReady,
         searchPackages,
+      ];
+
+  List<Object?> get reqFields => [
+        collections,
+        selectedCollection,
       ];
 
   PackageSearchState copyWith({
@@ -78,8 +83,8 @@ class PackageSearchState extends Equatable {
     bool? isReady,
   }) {
     return PackageSearchState(
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
+        startDate: startDate,
+        endDate: endDate,
         collections: collections ?? this.collections,
         selectedCollection: selectedCollection ?? this.selectedCollection,
         status: status ?? this.status,
@@ -88,14 +93,18 @@ class PackageSearchState extends Equatable {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'startDate': startDate?.millisecondsSinceEpoch,
-      'endDate': endDate?.millisecondsSinceEpoch,
-      'collections': collections.map((x) => x.toMap()).toList(),
-      'selectedCollection': selectedCollection?.toMap(),
-      'searchPackages': searchPackages.map((x) => x.toMap()).toList(),
-      'isReady': isReady,
-    };
+    Map<String, dynamic> map = {};
+    if (startDate != null) {
+      map['startDate'] = startDate!.millisecondsSinceEpoch;
+    }
+    if (startDate != null) {
+      map['endDate'] = endDate!.millisecondsSinceEpoch;
+    }
+    map['collections'] = collections.map((x) => x.toMap()).toList();
+    map['selectedCollection'] = selectedCollection?.toMap();
+    map['searchPackages'] = searchPackages.map((x) => x.toMap()).toList();
+    map['isReady'] = isReady;
+    return map;
   }
 
   factory PackageSearchState.fromMap(Map<String, dynamic> map) {
@@ -165,6 +174,8 @@ class PackageSearchBloc
       (event, emit) {
         emit(state.copyWith(
             searchPackages: const <Package>[],
+            startDate: null,
+            endDate: null,
             status: PackageSearchStatus.initial));
       },
     );
@@ -178,7 +189,7 @@ class PackageSearchBloc
   }
 
   bool _checkReady() {
-    return state.props.contains(null) ? false : true;
+    return state.reqFields.contains(null) ? false : true;
   }
 
   Future<void> _submitSearch(event, emit) async {
@@ -199,8 +210,9 @@ class PackageSearchBloc
 
   Future<List<Package>> _fetchPackageSearch() async {
     Response response = await GovinfoApi().searchPackages(
-        startDate: state.startDate!,
-        endDate: state.endDate!,
+        startDate: state.startDate ?? DateTime(1776, 7, 4),
+        endDate: state.endDate ?? DateTime.now(),
+        size: 100,
         collectionCodes: [state.selectedCollection!.collectionCode]);
     if (response.statusCode == 200) {
       log("Search query successful");
