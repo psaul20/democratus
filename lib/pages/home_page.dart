@@ -29,6 +29,13 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, state) =>
                 PackageSliverList(packages: state.packages)),
       ]),
+      bottomSheet: BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return SizedBox.fromSize(
+              size: const Size.square(16),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
