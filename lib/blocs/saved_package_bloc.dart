@@ -57,21 +57,20 @@ class SavedPackagesState extends Equatable {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'packages': packages.map((x) => x.toMap()).toList(),
+      'searchPackages': packages.map((x) => x.toMap()).toList(),
     };
   }
 
   factory SavedPackagesState.fromMap(Map<String, dynamic> map) {
-    List<Package> packages = PackageList.fromMap(map).packages;
+    List<Package> packages = List<Package>.from(
+        (map['searchPackages'] as List<dynamic>).map<Package>(
+      (x) => Package.fromMap(x as Map<String, dynamic>),
+    ));
 
     if (packages.isNotEmpty) {
       return SavedPackagesState(
         status: SavedPackagesStatus.success,
-        packages: List<Package>.from(
-          (map['packages'] as List<dynamic>).map<Package>(
-            (x) => Package.fromMap(x as Map<String, dynamic>),
-          ),
-        ),
+        packages: packages,
       );
     } else {
       return const SavedPackagesState();

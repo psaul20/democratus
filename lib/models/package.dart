@@ -148,7 +148,9 @@ class Package extends Equatable {
       download: map['download'] != null
           ? map['download'] as Map<String, dynamic>
           : null,
-      pages: map['pages'] != null ? int.parse(map['pages']) : null,
+      pages: map['pages'] != null
+          ? int.tryParse(map['pages'].toString()) ?? map['pages']
+          : null,
       dateIssued: DateTime.tryParse(map['dateIssued'].toString()) ??
           DateTime.fromMillisecondsSinceEpoch(map['dateIssued'] as int),
       currentChamber: map['currentChamber'] != null
@@ -169,9 +171,11 @@ class Package extends Equatable {
       lastModified: DateTime.tryParse(map['dateIssued'].toString()) ??
           DateTime.fromMillisecondsSinceEpoch(map['dateIssued'] as int),
       category: map['category'] != null ? map['category'] as String : null,
-      billNumber:
-          map['billNumber'] != null ? int.parse(map['billNumber']) : null,
+      billNumber: map['billNumber'] != null
+          ? int.tryParse(map['billNumber'].toString()) ?? map['billNumber']
+          : null,
       congress: map['congress'] != null ? map['congress'] as String : null,
+      hasDetails: map['hasDetails'] != null ? map['hasDetails'] as bool : false,
       hasHtml: map['download']?['txtLink'] != null ? true : false,
       displayTitle: map.containsKey('displayTitle')
           ? map['displayTitle']

@@ -1,5 +1,4 @@
 import 'package:democratus/blocs/saved_package_bloc.dart';
-import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:democratus/observers/bloc_observer.dart';
 import 'package:democratus/pages/home_page.dart';
 import 'package:democratus/theming/theme_data.dart';
@@ -17,13 +16,7 @@ Future<void> main() async {
         ? HydratedStorage.webStorageDirectory
         : await getTemporaryDirectory(),
   );
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider<PackageSearchBloc>(create: (context) => PackageSearchBloc()),
-      BlocProvider<SavedPackagesBloc>(create: (context) => SavedPackagesBloc())
-    ],
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -32,11 +25,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DEMOCRATUS',
-      theme: DemocTheme.mainTheme,
-      home: const MyHomePage(
+    return BlocProvider(
+      create: (context) => SavedPackagesBloc(),
+      child: MaterialApp(
         title: 'DEMOCRATUS',
+        theme: DemocTheme.mainTheme,
+        home: const MyHomePage(
+          title: 'DEMOCRATUS',
+        ),
       ),
     );
   }

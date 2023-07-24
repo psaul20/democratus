@@ -41,9 +41,7 @@ class _PackageTileState extends State<PackageTile> {
         // bloc: widget.packageBloc,
         builder: (context, state) {
       if (state.status == PackageStatus.failure) {
-        return const Card(
-          child: ErrorText()
-        );
+        return const Card(child: ErrorText());
       } else if (!state.package.isSaved) {
         checkSaved(state.package);
       }
@@ -85,7 +83,6 @@ class _PackageTileState extends State<PackageTile> {
                     SaveButton(
                       key: widget.key,
                     ),
-                    //TODO: Figure out read more screen
                     Builder(builder: (context) {
                       if (state.package.hasHtml ?? false) {
                         return const ReadMoreButton();
