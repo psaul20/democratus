@@ -12,10 +12,9 @@ abstract class FilterCriterion {
 
 class TextFilter extends FilterCriterion {
   TextFilter({
-    required FilterType criteria,
     String data = '',
   }) : super(
-          type: criteria,
+          type: FilterType.text,
           data: data,
         );
 

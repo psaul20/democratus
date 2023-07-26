@@ -286,7 +286,7 @@ class Package extends Equatable {
   String toJson() => json.encode(toMap());
 
   String get searchText {
-    List<String> strings = [shortTitle?[0] ?? '', longTitle ?? '', branch ?? '', originChamber ?? '', session.toString(), currentChamber ?? '', typeVerbose ?? '', collectionCode ?? '', governmentAuthor1 ?? '', publisher ?? '', docClass, category ?? '', congress.toString(),];
+    List<String> strings = [shortTitle?[0] ?? '', longTitle ?? '', displayTitle, branch ?? '', originChamber ?? '', session.toString(), currentChamber ?? '', typeVerbose ?? '', collectionCode ?? '', governmentAuthor1 ?? '', publisher ?? '', docClass, category ?? '', congress.toString(),];
     final buffer = StringBuffer();
     buffer.writeAll(strings, " ");
     return buffer.toString();

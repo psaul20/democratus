@@ -5,16 +5,14 @@ class HomePageBar extends StatelessWidget {
   const HomePageBar({super.key});
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
+    return const SliverAppBar(
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(12),
+        preferredSize: Size.fromHeight(12),
         child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
             child: Wrap(
               children: [
-                SearchTextField(
-                  onChanged: (text) {},
-                ),
+                SearchTextField(),
               ],
             )),
       ),

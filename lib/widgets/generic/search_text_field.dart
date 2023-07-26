@@ -1,8 +1,10 @@
+import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
+import 'package:democratus/models/filter_criteria.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchTextField extends StatefulWidget {
-  const SearchTextField({super.key, required this.onChanged});
-  final void Function(String text) onChanged;
+  const SearchTextField({super.key});
 
   @override
   State<SearchTextField> createState() => _SearchTextFieldState();
@@ -10,6 +12,13 @@ class SearchTextField extends StatefulWidget {
 
 class _SearchTextFieldState extends State<SearchTextField> {
   TextEditingController controller = TextEditingController();
+
+  void _onChanged(BuildContext context) {
+    context
+        .read<FilteredPackagesBloc>()
+        .add(AddFilter(criterion: TextFilter(data: controller.text)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,7 +32,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
             controller: controller,
             decoration:
                 const InputDecoration().copyWith(hintText: 'Keyword Search'),
-            onChanged: widget.onChanged,
+            onChanged: (_) => _onChanged(context),
           ),
         ),
       ],

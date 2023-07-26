@@ -12,36 +12,40 @@ part 'filtered_packages_state.dart';
 class FilteredPackagesBloc
     extends Bloc<FilteredPackagesEvent, FilteredPackagesState> {
   FilteredPackagesBloc() : super(const FilteredPackagesInitial()) {
+    //TODO: May be a better way to manage this besides maps from classes
     on<AddFilter>((event, emit) {
+      Map<FilterType, FilterCriterion> newCriteria =
+          Map.from(state.appliedCriteria);
+      newCriteria[event.criterion.type] = event.criterion;
       emit(state.copyWith(
-        appliedCriteria: [...state.appliedCriteria, event.criterion],
+        appliedCriteria: newCriteria,
       ));
     });
     on<InitPackages>(
-      (event, emit) => emit(state.copyWith(filteredList: event.packages)),
+      (event, emit) => emit(state.copyWith(initList: event.packages)),
     );
     on<FilteredPackagesEvent>(_applyFilters);
   }
 
   void _applyFilters(
       FilteredPackagesEvent event, Emitter<FilteredPackagesState> emit) {
-    List<Package> newFilterPackages = state.filteredList;
+    List<Package> newFilterPackages = state.initList;
 
-    for (var criterion in state.appliedCriteria) {
-      switch (criterion.type) {
+    for (var criterion in state.appliedCriteria.entries) {
+      switch (criterion.key) {
         case FilterType.text:
-          String filterString = criterion.data as String;
+          String filterString = criterion.value.data as String;
+          filterString = filterString.toLowerCase();
           if (filterString != '') {
             newFilterPackages = newFilterPackages
                 .where((package) =>
-                    package.searchText.contains(criterion.data as String))
+                    package.searchText.toLowerCase().contains(filterString))
                 .toList();
           } else {}
 
         default:
       }
-
-      emit(state.copyWith(filteredList: newFilterPackages));
     }
+    emit(state.copyWith(filteredList: newFilterPackages));
   }
 }
