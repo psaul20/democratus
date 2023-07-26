@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //TODO: Animate data retrieval
+//TODO: Make dismissable
 
 class PackageTile extends StatefulWidget {
   const PackageTile({super.key});

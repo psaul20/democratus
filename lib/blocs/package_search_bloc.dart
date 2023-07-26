@@ -35,8 +35,6 @@ final class ClearSearch extends PackageSearchEvent {}
 
 final class GetCollections extends PackageSearchEvent {}
 
-//TODO: Likely need to store readiness as a state variable
-//TODO: Handle no results retrieved
 enum PackageSearchStatus { initial, success, failure }
 
 class PackageSearchState extends Equatable {

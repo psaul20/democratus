@@ -6,7 +6,7 @@ class IconTextButton extends StatelessWidget {
   const IconTextButton({
     super.key,
     required this.onPressed,
-    this.iconSize = 45.0,
+    this.iconSize = 30.0,
     this.iconColor,
     required this.text,
     this.style,

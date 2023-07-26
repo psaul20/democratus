@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'filtered_packages_event.dart';
 part 'filtered_packages_state.dart';
 
-//TODO: Implement in UI
 class FilteredPackagesBloc
     extends Bloc<FilteredPackagesEvent, FilteredPackagesState> {
   FilteredPackagesBloc() : super(const FilteredPackagesInitial()) {

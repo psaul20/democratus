@@ -31,7 +31,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
           child: TextField(
             controller: controller,
             decoration:
-                const InputDecoration().copyWith(hintText: 'Keyword Search'),
+                const InputDecoration().copyWith(hintText: 'Keyword Filter'),
             onChanged: (_) => _onChanged(context),
           ),
         ),

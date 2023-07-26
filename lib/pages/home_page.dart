@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return BlocProvider(
               create: (context) =>
                   FilteredPackagesBloc()..add(InitPackages(state.packages)),
-              //TODO: Probably not optimal...
+              // Added to ensure that base packages are updated every time saved packages are updated
               child: BlocListener<SavedPackagesBloc, SavedPackagesState>(
                 listener: (context, state) {
                   context

@@ -39,7 +39,6 @@ class SearchDatePicker extends StatelessWidget {
         );
 
         if (picked != null) {
-          //TODO: Determine if this is actually an issue
           capturedContext.read<PackageSearchBloc>().add(isStartDate == true
               ? SelectStartDate(picked)
               : SelectEndDate(picked));

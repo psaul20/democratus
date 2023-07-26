@@ -1,4 +1,3 @@
-import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
 import 'package:democratus/blocs/saved_package_bloc.dart';
 import 'package:democratus/observers/bloc_observer.dart';
 import 'package:democratus/pages/home_page.dart';

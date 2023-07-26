@@ -1,4 +1,5 @@
 import 'package:democratus/theming/text_styles.dart';
+import 'package:democratus/widgets/generic/search_text_field.dart';
 import 'package:democratus/widgets/search_widgets/search_button_builder.dart';
 import 'package:democratus/widgets/search_widgets/search_date_picker.dart';
 import 'package:democratus/widgets/search_widgets/search_collection_dropdown.dart';
@@ -12,9 +13,9 @@ class PackageSearchBar extends StatelessWidget {
     return SliverAppBar(
       floating: true,
       title: const Text("Search Documents"),
-      //TODO: Figure out how to make this flexible size
+      //TODO: Figure out how to make this flexible size - or make it a drawer?
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(240),
+        preferredSize: const Size.fromHeight(260),
         child: Padding(
             padding: const EdgeInsets.all(10),
             child: Wrap(
@@ -46,6 +47,7 @@ class PackageSearchBar extends StatelessWidget {
                     const SearchDatePicker(isEndDate: true)
                   ],
                 ),
+                const SearchTextField(),
                 const Center(child: SearchButtonBuilder()),
               ],
             )),

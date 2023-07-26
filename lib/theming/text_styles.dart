@@ -12,7 +12,7 @@ class TextStyles {
       .copyWith(fontSize: 18, color: DemocScheme.scheme.secondary, height: 0);
   static TextStyle get expandedListTile =>
       const TextStyle().copyWith(fontSize: 12);
-  static TextStyle get iconText => const TextStyle().copyWith(fontSize: 10);
+  static TextStyle get iconText => const TextStyle().copyWith(fontSize: 8);
   static TextStyle get titleText =>
       const TextStyle().copyWith(fontSize: 24, fontWeight: FontWeight.bold);
   static TextStyle get listTileTitle => const TextStyle().copyWith(
