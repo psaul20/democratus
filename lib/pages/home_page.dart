@@ -1,6 +1,8 @@
+import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
 import 'package:democratus/blocs/saved_package_bloc.dart';
 import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:democratus/pages/search_packages_page.dart';
+import 'package:democratus/widgets/home_page_widgets/home_page_bar.dart';
 import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,18 +26,28 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: CustomScrollView(slivers: [
-        BlocBuilder<SavedPackagesBloc, SavedPackagesState>(
-            builder: (context, state) =>
-                PackageSliverList(packages: state.packages)),
-      ]),
-      bottomSheet: BottomSheet(
-          onClosing: () {},
-          builder: (context) {
-            return SizedBox.fromSize(
-              size: const Size.square(16),
-            );
-          }),
+
+      body: BlocBuilder<SavedPackagesBloc, SavedPackagesState>(
+        builder: (context, state) {
+          return BlocProvider(
+              create: (context) =>
+                  FilteredPackagesBloc()..add(InitPackages(state.packages)),
+              //TODO: Probably not optimal...
+              child: BlocListener<SavedPackagesBloc, SavedPackagesState>(
+                listener: (context, state) {
+                  context
+                      .read<FilteredPackagesBloc>()
+                      .add(InitPackages(state.packages));
+                },
+                child: const CustomScrollView(
+                  slivers: [
+                    HomePageBar(),
+                    FilterPackageSliverList(),
+                  ],
+                ),
+              ));
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

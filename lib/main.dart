@@ -1,3 +1,4 @@
+import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
 import 'package:democratus/blocs/saved_package_bloc.dart';
 import 'package:democratus/observers/bloc_observer.dart';
 import 'package:democratus/pages/home_page.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+
+//TODO: Enforce consistent format for blocs (status vs different states)
 
 Future<void> main() async {
   Bloc.observer = SimpleBlocObserver();

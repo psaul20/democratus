@@ -59,6 +59,7 @@ class Package extends Equatable {
   final String? congress;
 
   // Driven by app logic needs
+  //TODO: Convert to getters?
   final bool? hasHtml;
   final String displayTitle;
   final String? typeVerbose;
@@ -283,6 +284,13 @@ class Package extends Equatable {
   }
 
   String toJson() => json.encode(toMap());
+
+  String get searchText {
+    List<String> strings = [shortTitle?[0] ?? '', longTitle ?? '', branch ?? '', originChamber ?? '', session.toString(), currentChamber ?? '', typeVerbose ?? '', collectionCode ?? '', governmentAuthor1 ?? '', publisher ?? '', docClass, category ?? '', congress.toString(),];
+    final buffer = StringBuffer();
+    buffer.writeAll(strings, " ");
+    return buffer.toString();
+  }
 }
 
 // Defining type list based on https://www.govinfo.gov/help/bills#types
@@ -302,6 +310,7 @@ String getTypeVerbose(billType) {
   } else {
     return "Not Mapped";
   }
+
 }
 
 // TODO: Remove ChangeNotifier - convert to simply json getter class
