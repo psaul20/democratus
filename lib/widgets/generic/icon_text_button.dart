@@ -6,7 +6,7 @@ class IconTextButton extends StatelessWidget {
   const IconTextButton({
     super.key,
     required this.onPressed,
-    this.iconSize = 30.0,
+    this.iconSize = 40.0,
     this.iconColor,
     required this.text,
     this.style,
@@ -18,16 +18,17 @@ class IconTextButton extends StatelessWidget {
   final void Function()? onPressed;
   final String text;
   final TextStyle? style;
-  final Icon icon;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     iconColor ?? DemocScheme.scheme.onBackground;
     style ?? TextStyles.iconText;
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          icon: icon,
+          icon: Icon(icon),
           onPressed: onPressed,
           iconSize: iconSize,
           color: iconColor,

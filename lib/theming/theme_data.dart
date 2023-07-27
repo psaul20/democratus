@@ -1,15 +1,16 @@
 import 'package:democratus/theming/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DemocTheme {
-  static ThemeData get mainTheme =>
-      ThemeData(fontFamily: "RobotoSlab").copyWith(
-          colorScheme: DemocScheme.scheme,
-          useMaterial3: true,
-          inputDecorationTheme: WidgetThemes.inputTheme,
-          expansionTileTheme: const ExpansionTileThemeData().copyWith(
-            shape: Border.all(style: BorderStyle.none, width: 0),
-          ));
+  static ThemeData get mainTheme => ThemeData().copyWith(
+      textTheme: GoogleFonts.robotoSlabTextTheme(),
+      colorScheme: DemocScheme.scheme,
+      useMaterial3: true,
+      inputDecorationTheme: WidgetThemes.inputTheme,
+      expansionTileTheme: const ExpansionTileThemeData().copyWith(
+        shape: Border.all(style: BorderStyle.none, width: 0),
+      ));
 }
 
 class DemocScheme {

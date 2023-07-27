@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchButtonBuilder extends StatelessWidget {
-  const SearchButtonBuilder({super.key});
+  const SearchButtonBuilder({super.key, this.onSearch, this.onClear});
+  final void Function()? onSearch;
+  final void Function()? onClear;
 
   @override
   Widget build(BuildContext context) {
@@ -16,22 +18,26 @@ class SearchButtonBuilder extends StatelessWidget {
           {
             return state.isReady
                 ? IconTextButton(
-                    onPressed: () =>
-                        context.read<PackageSearchBloc>().add(SubmitSearch()),
+                    onPressed: () {
+                      onSearch?.call();
+                      context.read<PackageSearchBloc>().add(SubmitSearch());
+                    },
                     text: "Search",
-                    icon: const Icon(Icons.search_outlined))
+                    icon: Icons.search_outlined)
                 : const IconTextButton(
                     onPressed: null,
                     text: "Complete Fields",
-                    icon: Icon(Icons.search_outlined));
+                    icon: Icons.search_outlined);
           }
         case PackageSearchStatus.success:
           {
             return IconTextButton(
-                onPressed: () =>
-                    context.read<PackageSearchBloc>().add(ClearSearch()),
+                onPressed: () {
+                  onClear?.call();
+                  context.read<PackageSearchBloc>().add(ClearSearch());
+                },
                 text: "Clear Search",
-                icon: const Icon(Icons.remove_circle_outline_rounded));
+                icon: Icons.remove_circle_outline_rounded);
           }
         case PackageSearchStatus.failure:
           {

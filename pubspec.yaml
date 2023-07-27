@@ -49,6 +49,7 @@ dependencies:
   test: ^1.24.1
   hydrated_bloc: ^9.1.2
   path_provider: ^2.0.15
+  google_fonts: ^5.1.0
 
 dependency_overrides:
   flutter_svg: ^0.22.0
