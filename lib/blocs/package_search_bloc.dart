@@ -244,7 +244,7 @@ class PackageSearchBloc
   Future<List<Collection>> _fetchCollections() async {
     final response = await GovinfoApi().getCollections();
     if (response.statusCode == 200) {
-      return CollectionList.fromJson(response.body).asList;
+      return CollectionList.fromJson(response.body).subset;
     }
     throw Exception('Error fetching Collections');
   }

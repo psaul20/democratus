@@ -45,8 +45,14 @@ class SearchCollectionDropdownBuilder extends StatelessWidget {
             ));
       }
 
-      if (state.collections.isEmpty) {
-        return DropdownButton<String>(
+      Widget dropdownWidget;
+
+      if (state.collections.length == 1) {
+        return const SizedBox.shrink();
+      }
+
+      else if (state.collections.isEmpty) {
+        dropdownWidget = DropdownButton<String>(
           isExpanded: true,
           icon: fetchIcon,
           elevation: elevation,
@@ -62,7 +68,7 @@ class SearchCollectionDropdownBuilder extends StatelessWidget {
         Collection? selectedCollection =
             context.read<PackageSearchBloc>().state.selectedCollection;
 
-        return DropdownButton<String>(
+        dropdownWidget = DropdownButton<String>(
           isExpanded: true,
           value: selectedCollection!.collectionName,
           icon: loadedIcon,
@@ -78,6 +84,17 @@ class SearchCollectionDropdownBuilder extends StatelessWidget {
               collections.map<DropdownMenuItem<String>>(mapFunction).toList(),
         );
       }
+
+      return Column(
+        children: [
+          Text(
+            "Choose a Collection",
+            textAlign: TextAlign.left,
+            style: TextStyles.fieldTitle,
+          ),
+          dropdownWidget,
+        ],
+      );
     }));
   }
 }

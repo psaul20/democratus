@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 
+//TODO: Account for other documents besides bills? Link to HTML?
 class PackageReader extends StatelessWidget {
   const PackageReader({super.key});
   @override

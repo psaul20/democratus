@@ -17,7 +17,7 @@ void main() async {
   test('Collection retrieval test', () async {
     Response response = await GovinfoApi().getCollections();
     CollectionList collections = CollectionList.fromJson(response.body);
-    expect(collections.getCollectionNames().first, "Congressional Bills");
+    expect(collections.collectionNames.first, "Congressional Bills");
   });
 
   test('Package List Retrieval Test', () async {

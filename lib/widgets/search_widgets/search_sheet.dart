@@ -60,11 +60,6 @@ class SearchSheet extends StatelessWidget {
                     ),
                     Wrap(
                       children: [
-                        Text(
-                          "Choose a Collection",
-                          textAlign: TextAlign.left,
-                          style: TextStyles.fieldTitle,
-                        ),
                         const SearchCollectionDropdownBuilder(),
                         Padding(
                           padding: const EdgeInsets.only(right: 10.0),

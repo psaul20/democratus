@@ -11,7 +11,7 @@ class CollectionList {
 
   List<Collection> get asList => _collections;
 
-  List<String> getCollectionNames() {
+  List<String> get collectionNames {
     List<String> collectionNames = [];
     for (var element in _collections) {
       collectionNames.add(element.collectionName);
@@ -39,6 +39,15 @@ class CollectionList {
 
   factory CollectionList.fromJson(String source) =>
       CollectionList.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  // To be added onto if we implement functionality for other document types
+  List<Collection> get subset {
+    List<String> subsetNames = ['congressional bills'];
+    return _collections
+        .where((element) =>
+            subsetNames.contains(element.collectionName.toLowerCase()))
+        .toList();
+  }
 }
 
 class Collection {

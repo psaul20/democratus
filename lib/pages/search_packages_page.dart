@@ -2,6 +2,7 @@
 import 'dart:core';
 import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
 import 'package:democratus/blocs/package_search_bloc.dart';
+import 'package:democratus/widgets/generic/errors.dart';
 import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:democratus/widgets/search_widgets/package_search_bar.dart';
 import 'package:democratus/widgets/search_widgets/search_sheet.dart';
@@ -29,18 +30,29 @@ class SearchPackagesPage extends StatelessWidget {
           body: BlocProvider(
             create: (context) =>
                 FilteredPackagesBloc()..add(InitPackages(state.searchPackages)),
-            child: BlocListener<PackageSearchBloc, PackageSearchState>(
-              listener: (context, state) {
-                context.read<FilteredPackagesBloc>().add(InitPackages(
-                    context.read<PackageSearchBloc>().state.searchPackages));
-              },
-              child: const CustomScrollView(
-                slivers: [
-                  PackageSearchBar(),
-                  FilterPackageSliverList(),
-                ],
-              ),
-            ),
+            child: BlocConsumer<PackageSearchBloc, PackageSearchState>(
+                listener: (context, state) {
+              context.read<FilteredPackagesBloc>().add(InitPackages(
+                  context.read<PackageSearchBloc>().state.searchPackages));
+            }, builder: (context, state) {
+              switch (state.status) {
+                case PackageSearchStatus.failure:
+                  {
+                    return const Center(
+                      child: ErrorText(),
+                    );
+                  }
+                default:
+                  {
+                    return const CustomScrollView(
+                      slivers: [
+                        PackageSearchBar(),
+                        FilterPackageSliverList(),
+                      ],
+                    );
+                  }
+              }
+            }),
           ),
           bottomSheet: const SearchSheet(),
         );
