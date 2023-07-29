@@ -3,6 +3,8 @@ import 'package:democratus/widgets/generic/icon_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+//NOTE: Unused currently
+
 class SearchButtonBuilder extends StatelessWidget {
   const SearchButtonBuilder({super.key, this.onSearch, this.onClear});
   final void Function()? onSearch;

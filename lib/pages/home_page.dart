@@ -26,7 +26,6 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-
       body: BlocBuilder<SavedPackagesBloc, SavedPackagesState>(
         builder: (context, state) {
           return BlocProvider(
@@ -54,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
               context,
               MaterialPageRoute(
                 builder: (context) => BlocProvider<PackageSearchBloc>(
-                    create: (_) => PackageSearchBloc()..add(GetCollections()),
+                    create: (_) => PackageSearchBloc()..add(SubmitSearch()),
                     child: const SearchPackagesPage()),
               ));
         },

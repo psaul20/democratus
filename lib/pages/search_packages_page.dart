@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // TODO: Sort by last action date
+// TODO: Add filters by congress, collection type?
 
 class SearchPackagesPage extends StatelessWidget {
   const SearchPackagesPage({super.key});
@@ -25,6 +26,22 @@ class SearchPackagesPage extends StatelessWidget {
               style: const TextStyle()
                   .copyWith(color: Theme.of(context).colorScheme.onSecondary),
             ),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (ctx) => BlocProvider.value(
+                              value:
+                                  BlocProvider.of<PackageSearchBloc>(context),
+                              child: const SearchDialog(),
+                            ));
+                  },
+                  icon: Icon(
+                    Icons.filter_list,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  )),
+            ],
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           body: BlocProvider(
@@ -54,7 +71,6 @@ class SearchPackagesPage extends StatelessWidget {
               }
             }),
           ),
-          bottomSheet: const SearchSheet(),
         );
       },
     );

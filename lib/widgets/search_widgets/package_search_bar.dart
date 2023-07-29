@@ -1,6 +1,8 @@
 import 'package:democratus/widgets/generic/search_text_field.dart';
 import 'package:flutter/material.dart';
 
+//NOTE: Unused currently
+
 class PackageSearchBar extends StatelessWidget {
   const PackageSearchBar({super.key});
 

@@ -5,6 +5,8 @@ import 'package:democratus/theming/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+//NOTE: Unused currently
+
 class SearchCollectionDropdownBuilder extends StatelessWidget {
   const SearchCollectionDropdownBuilder({super.key});
 

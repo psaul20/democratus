@@ -25,9 +25,9 @@ class SearchDatePicker extends StatelessWidget {
         DateTime? lastDate;
         DateTime? firstDate;
 
-        if (isStartDate == true && state.endDate != null) {
+        if (isStartDate == true) {
           lastDate = state.endDate;
-        } else if (isEndDate == true && state.startDate != null) {
+        } else if (isEndDate == true) {
           firstDate = state.startDate;
         }
 
@@ -45,9 +45,10 @@ class SearchDatePicker extends StatelessWidget {
         }
       }
 
-      return ElevatedButton(
+      return TextButton.icon(
+          icon: const Icon(Icons.calendar_month),
           onPressed: () => selectDate(context),
-          child: Builder(builder: (context) {
+          label: Builder(builder: (context) {
             if (selectedDate != null) {
               return Text(DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY)
                   .format(selectedDate));

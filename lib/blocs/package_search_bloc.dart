@@ -35,25 +35,31 @@ final class ClearSearch extends PackageSearchEvent {}
 
 final class GetCollections extends PackageSearchEvent {}
 
+final class AddMultiple extends PackageSearchEvent {}
+
+final class RemoveMultiple extends PackageSearchEvent {}
+
 enum PackageSearchStatus { initial, success, failure }
 
 class PackageSearchState extends Equatable {
-  final DateTime? startDate;
-  final DateTime? endDate;
+  final DateTime startDate;
+  final DateTime endDate;
   final List<Collection> collections;
   final Collection? selectedCollection;
   final PackageSearchStatus status;
   final List<Package> searchPackages;
   final bool isReady;
 
-  const PackageSearchState(
-      {this.startDate,
-      this.endDate,
-      this.collections = const <Collection>[],
-      this.selectedCollection,
-      this.status = PackageSearchStatus.initial,
-      this.isReady = false,
-      this.searchPackages = const <Package>[]});
+  PackageSearchState({
+    startDate,
+    endDate,
+    this.collections = const <Collection>[],
+    this.selectedCollection,
+    this.status = PackageSearchStatus.initial,
+    this.isReady = false,
+    this.searchPackages = const <Package>[],
+  })  : startDate = startDate ?? DateTime(1776, 7, 4),
+        endDate = endDate ?? DateTime.now();
 
   @override
   List<Object?> get props => [
@@ -81,8 +87,8 @@ class PackageSearchState extends Equatable {
     bool? isReady,
   }) {
     return PackageSearchState(
-        startDate: startDate,
-        endDate: endDate,
+        startDate: startDate ?? this.startDate,
+        endDate: endDate ?? this.endDate,
         collections: collections ?? this.collections,
         selectedCollection: selectedCollection ?? this.selectedCollection,
         status: status ?? this.status,
@@ -92,12 +98,8 @@ class PackageSearchState extends Equatable {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    if (startDate != null) {
-      map['startDate'] = startDate!.millisecondsSinceEpoch;
-    }
-    if (startDate != null) {
-      map['endDate'] = endDate!.millisecondsSinceEpoch;
-    }
+    map['startDate'] = startDate.millisecondsSinceEpoch;
+    map['endDate'] = endDate.millisecondsSinceEpoch;
     map['collections'] = collections.map((x) => x.toMap()).toList();
     map['selectedCollection'] = selectedCollection?.toMap();
     map['searchPackages'] = searchPackages.map((x) => x.toMap()).toList();
@@ -107,7 +109,7 @@ class PackageSearchState extends Equatable {
 
   factory PackageSearchState.fromMap(Map<String, dynamic> map) {
     if (map.isEmpty) {
-      return const PackageSearchState();
+      return PackageSearchState();
     } else {
       List<Package> searchPackages = List<Package>.from(
           (map['searchPackages'] as List<dynamic>).map<Package>(
@@ -144,15 +146,18 @@ class PackageSearchState extends Equatable {
       PackageSearchState.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
+const int numSearchPackages = 1000;
+
 class PackageSearchBloc
     extends HydratedBloc<PackageSearchEvent, PackageSearchState> {
-  PackageSearchBloc() : super(const PackageSearchState()) {
+  PackageSearchBloc() : super(PackageSearchState()) {
     on<SelectCollection>(
       (event, emit) {
         if (event.collection != state.selectedCollection) {
           emit(state.copyWith(
             selectedCollection: event.collection,
           ));
+          if (state.isReady) add(SubmitSearch());
         } else {
           log("Collection hasn't changed, bypassing event");
         }
@@ -161,11 +166,13 @@ class PackageSearchBloc
     on<SelectStartDate>(
       (event, emit) {
         emit(state.copyWith(startDate: event.startDate));
+        if (state.isReady) add(SubmitSearch());
       },
     );
     on<SelectEndDate>(
       (event, emit) {
         emit(state.copyWith(endDate: event.endDate));
+        if (state.isReady) add(SubmitSearch());
       },
     );
     on<ClearSearch>(
@@ -208,10 +215,10 @@ class PackageSearchBloc
 
   Future<List<Package>> _fetchPackageSearch() async {
     Response response = await GovinfoApi().searchPackages(
-        startDate: state.startDate ?? DateTime(1776, 7, 4),
-        endDate: state.endDate ?? DateTime.now(),
-        size: 100,
-        collectionCodes: [state.selectedCollection!.collectionCode]);
+        startDate: state.startDate,
+        endDate: state.endDate,
+        size: numSearchPackages,
+        collectionCodes: [state.selectedCollection?.collectionCode ?? 'BILLS']);
     if (response.statusCode == 200) {
       log("Search query successful");
       Map body = jsonDecode(response.body) as Map<String, dynamic>;
@@ -225,7 +232,7 @@ class PackageSearchBloc
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to retrieve package');
+      throw Exception('Failed to retrieve packages');
     }
   }
 
@@ -235,7 +242,10 @@ class PackageSearchBloc
       final collections = await _fetchCollections();
       emit(state.copyWith(
           collections: collections,
-          selectedCollection: state.selectedCollection ?? collections.first));
+          selectedCollection: state.selectedCollection ??
+              // To be updated if we extend beyond Bills
+              collections.singleWhere(
+                  (element) => element.collectionCode == 'BILLS')));
     } catch (_) {
       emit(state.copyWith(status: PackageSearchStatus.failure));
     }
