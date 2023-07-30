@@ -1,19 +1,14 @@
 import 'package:democratus/theming/theme_data.dart';
-import 'package:democratus/widgets/search_widgets/search_collection_dropdown.dart';
 import 'package:democratus/widgets/search_widgets/search_date_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-//TODO: Implement congressional hearings
-
-class SearchDialog extends StatelessWidget {
-  const SearchDialog({super.key});
+class SearchFilterDialog extends StatelessWidget {
+  const SearchFilterDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: 16),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
@@ -36,7 +31,7 @@ class SearchDialog extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text('Date published',
+              Text('DATE PUBLISHED',
                   style: Theme.of(context).textTheme.bodyLarge),
               Row(
                 children: [

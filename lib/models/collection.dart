@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 // See https://api.govinfo.gov/collections?api_key=DEMO_KEY for example
-//TODO: Eliminate need for CollectionList?
 class CollectionList {
   List<Collection> _collections;
   CollectionList({

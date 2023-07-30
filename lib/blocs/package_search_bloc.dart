@@ -226,7 +226,6 @@ class PackageSearchBloc
       if (count > 0) {
         return PackageList.fromJson(response.body).packages;
       } else {
-        //TODO: Fix search package retriever widget to handle no results retrieved
         throw Exception("No results retrieved");
       }
     } else {

@@ -4,13 +4,13 @@ import 'package:democratus/models/package.dart';
 import 'package:democratus/theming/text_styles.dart';
 import 'package:democratus/widgets/generic/fetch_circle.dart';
 import 'package:democratus/widgets/package_widgets/package_details.dart';
-import 'package:democratus/widgets/save_button.dart';
+import 'package:democratus/widgets/home_page_widgets/save_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-//TODO: Account for other documents besides bills? Link to HTML?
-//TODO: Convert to just refer people to govinfo's website
+//NOTE: No longer used
+
 class PackageReader extends StatelessWidget {
   const PackageReader({super.key});
   @override
@@ -50,7 +50,6 @@ class PackageReader extends StatelessWidget {
                     ],
                   ),
                 ),
-                //TODO: Convert to Bloc?
                 FutureBuilder(
                     future: GovinfoApi().getHtml(package),
                     builder: (context, snapshot) {
