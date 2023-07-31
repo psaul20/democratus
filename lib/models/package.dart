@@ -6,6 +6,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
+import 'collection.dart';
+
 class Package extends Equatable {
   const Package({
     this.originChamber,
@@ -31,7 +33,6 @@ class Package extends Equatable {
     this.congress,
     this.hasHtml,
     required this.displayTitle,
-    this.typeVerbose,
     this.hasDetails = false,
     this.isSaved = false,
   });
@@ -62,9 +63,12 @@ class Package extends Equatable {
   //TODO: Convert to getters?
   final bool? hasHtml;
   final String displayTitle;
-  final String? typeVerbose;
   final bool hasDetails;
   final bool isSaved;
+
+  String? get typeVerbose {
+    return Collection.getTypeVerbose(collectionCode!, billType ?? docClass);
+  }
 
   //TODO: Probably a better place for this
   List<Widget> getTextWidgets({TextStyle? style}) {
@@ -85,7 +89,7 @@ class Package extends Equatable {
         style: style,
       ),
       Text(
-        "Type: ${typeVerbose ?? billType ?? "Unknown"}",
+        "Type: ${typeVerbose ?? "Unknown"}",
         textAlign: TextAlign.start,
         style: style,
       ),
@@ -181,8 +185,6 @@ class Package extends Equatable {
       displayTitle: map.containsKey('displayTitle')
           ? map['displayTitle']
           : map['shortTitle']?[0]['title'] ?? map['title'],
-      typeVerbose:
-          map['billType'] != null ? getTypeVerbose(map['billType']) : null,
     );
   }
 
@@ -217,7 +219,6 @@ class Package extends Equatable {
     bool? hasHtml,
     bool? hasDetails,
     String? displayTitle,
-    String? typeVerbose,
   }) {
     return Package(
       originChamber: originChamber ?? this.originChamber,
@@ -243,7 +244,6 @@ class Package extends Equatable {
       congress: congress ?? this.congress,
       hasHtml: hasHtml ?? this.hasHtml,
       displayTitle: displayTitle ?? this.displayTitle,
-      typeVerbose: typeVerbose ?? this.typeVerbose,
       hasDetails: hasDetails ?? this.hasDetails,
       isSaved: isSaved ?? this.isSaved,
     );
@@ -277,7 +277,6 @@ class Package extends Equatable {
       'congress': congress,
       'hasHtml': hasHtml,
       'displayTitle': displayTitle,
-      'typeVerbose': typeVerbose,
       'hasDetails': hasDetails,
       'isSaved': isSaved,
     };
@@ -286,31 +285,26 @@ class Package extends Equatable {
   String toJson() => json.encode(toMap());
 
   String get searchText {
-    List<String> strings = [shortTitle?[0] ?? '', longTitle ?? '', displayTitle, branch ?? '', originChamber ?? '', session.toString(), currentChamber ?? '', typeVerbose ?? '', collectionCode ?? '', governmentAuthor1 ?? '', publisher ?? '', docClass, category ?? '', congress.toString(),];
+    List<String> strings = [
+      shortTitle?[0] ?? '',
+      longTitle ?? '',
+      displayTitle,
+      branch ?? '',
+      originChamber ?? '',
+      session.toString(),
+      currentChamber ?? '',
+      typeVerbose ?? '',
+      collectionCode ?? '',
+      governmentAuthor1 ?? '',
+      publisher ?? '',
+      docClass,
+      category ?? '',
+      congress.toString(),
+    ];
     final buffer = StringBuffer();
     buffer.writeAll(strings, " ");
     return buffer.toString();
   }
-}
-
-// Defining type list based on https://www.govinfo.gov/help/bills#types
-String getTypeVerbose(billType) {
-  Map typeList = {
-    'hr': 'House Bill',
-    's': 'Senate Bill',
-    'hjres': 'House Joint Resolution',
-    'sjres': 'Senate Joint Resolution',
-    'hconres': 'House Concurrent Resolution',
-    'sconres': 'Senate Concurrent Resolution',
-    'hres': 'House Simple Resolution',
-    'sres': 'Senate Simple Resolution',
-  };
-  if (typeList.keys.contains(billType)) {
-    return typeList[billType];
-  } else {
-    return "Not Mapped";
-  }
-
 }
 
 // TODO: Remove ChangeNotifier - convert to simply json getter class

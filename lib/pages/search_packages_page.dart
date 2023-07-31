@@ -5,7 +5,7 @@ import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:democratus/widgets/generic/errors.dart';
 import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:democratus/widgets/search_widgets/package_search_bar.dart';
-import 'package:democratus/widgets/search_widgets/search_filter_dialog.dart';
+import 'package:democratus/widgets/search_widgets/search_filter_widgets/search_filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,6 +14,7 @@ class SearchPackagesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: Optimize with Buildwhens
     return BlocBuilder<PackageSearchBloc, PackageSearchState>(
       builder: (context, state) {
         return Scaffold(
@@ -28,9 +29,18 @@ class SearchPackagesPage extends StatelessWidget {
                   onPressed: () {
                     showDialog(
                         context: context,
-                        builder: (ctx) => BlocProvider.value(
-                              value:
-                                  BlocProvider.of<PackageSearchBloc>(context),
+                        useRootNavigator: false,
+                        builder: (ctx) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: BlocProvider.of<PackageSearchBloc>(
+                                      context),
+                                ),
+                                BlocProvider.value(
+                                  value: BlocProvider.of<FilteredPackagesBloc>(
+                                      context),
+                                ),
+                              ],
                               child: const SearchFilterDialog(),
                             ));
                   },
@@ -41,33 +51,29 @@ class SearchPackagesPage extends StatelessWidget {
             ],
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
-          body: BlocProvider(
-            create: (context) =>
-                FilteredPackagesBloc()..add(InitPackages(state.searchPackages)),
-            child: BlocConsumer<PackageSearchBloc, PackageSearchState>(
-                listener: (context, state) {
-              context.read<FilteredPackagesBloc>().add(InitPackages(
-                  context.read<PackageSearchBloc>().state.searchPackages));
-            }, builder: (context, state) {
-              switch (state.status) {
-                case PackageSearchStatus.failure:
-                  {
-                    return const Center(
-                      child: ErrorText(),
-                    );
-                  }
-                default:
-                  {
-                    return const CustomScrollView(
-                      slivers: [
-                        PackageSearchBar(),
-                        FilterPackageSliverList(),
-                      ],
-                    );
-                  }
-              }
-            }),
-          ),
+          body: BlocConsumer<PackageSearchBloc, PackageSearchState>(
+              listener: (context, state) {
+            context.read<FilteredPackagesBloc>().add(InitPackages(
+                context.read<PackageSearchBloc>().state.searchPackages));
+          }, builder: (context, state) {
+            switch (state.status) {
+              case PackageSearchStatus.failure:
+                {
+                  return const Center(
+                    child: ErrorText(),
+                  );
+                }
+              default:
+                {
+                  return const CustomScrollView(
+                    slivers: [
+                      PackageSearchBar(),
+                      FilterPackageSliverList(),
+                    ],
+                  );
+                }
+            }
+          }),
         );
       },
     );

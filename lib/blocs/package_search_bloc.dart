@@ -241,10 +241,8 @@ class PackageSearchBloc
       final collections = await _fetchCollections();
       emit(state.copyWith(
           collections: collections,
-          selectedCollection: state.selectedCollection ??
-              // To be updated if we extend beyond Bills
-              collections.singleWhere(
-                  (element) => element.collectionCode == 'BILLS')));
+          selectedCollection: collections
+              .singleWhere((element) => element.collectionCode == 'BILLS')));
     } catch (_) {
       emit(state.copyWith(status: PackageSearchStatus.failure));
     }

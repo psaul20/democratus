@@ -9,12 +9,12 @@ class FilteredPackagesState extends Equatable {
     required this.initList,
   });
 
-  final Map<FilterType, FilterCriterion> appliedCriteria;
+  final Map<FilterType, dynamic> appliedCriteria;
   final List<Package> filteredList;
   final List<Package> initList;
 
   FilteredPackagesState copyWith({
-    Map<FilterType, FilterCriterion>? appliedCriteria,
+    Map<FilterType, dynamic>? appliedCriteria,
     List<Package>? filteredList,
     List<Package>? initList,
   }) {
@@ -31,7 +31,10 @@ class FilteredPackagesState extends Equatable {
 
 class FilteredPackagesInitial extends FilteredPackagesState {
   const FilteredPackagesInitial({
-    super.appliedCriteria = const <FilterType, FilterCriterion>{},
+    super.appliedCriteria = const <FilterType, dynamic>{
+      FilterType.packageType: <String>[],
+      FilterType.text: '',
+    },
     super.filteredList = const <Package>[],
     super.initList = const <Package>[],
   });

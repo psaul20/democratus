@@ -1,5 +1,4 @@
 import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
-import 'package:democratus/models/filter_criteria.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +15,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
   void _onChanged(BuildContext context) {
     context
         .read<FilteredPackagesBloc>()
-        .add(AddFilter(criterion: TextFilter(data: controller.text)));
+        .add(UpdateTextFilter(text: controller.text));
   }
 
   @override

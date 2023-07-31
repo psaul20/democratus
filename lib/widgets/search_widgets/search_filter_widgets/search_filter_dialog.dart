@@ -1,5 +1,6 @@
 import 'package:democratus/theming/theme_data.dart';
 import 'package:democratus/widgets/search_widgets/search_date_picker.dart';
+import 'package:democratus/widgets/search_widgets/search_filter_widgets/type_filter_list.dart';
 import 'package:flutter/material.dart';
 
 class SearchFilterDialog extends StatelessWidget {
@@ -17,7 +18,7 @@ class SearchFilterDialog extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "Filter By",
+                  "Search Filters",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
@@ -43,6 +44,8 @@ class SearchFilterDialog extends StatelessWidget {
                   const SearchDatePicker(isEndDate: true),
                 ],
               ),
+              Text('TYPE', style: Theme.of(context).textTheme.bodyLarge),
+              const TypeFilterList(),
               Center(
                 child: TextButton(
                     onPressed: () {

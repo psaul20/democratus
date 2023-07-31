@@ -4,10 +4,24 @@ part of 'filtered_packages_bloc.dart';
 @immutable
 abstract class FilteredPackagesEvent {}
 
-final class AddFilter extends FilteredPackagesEvent {
-  final FilterCriterion criterion;
-  AddFilter({
-    required this.criterion,
+final class UpdateTextFilter extends FilteredPackagesEvent {
+  final String text;
+  UpdateTextFilter({
+    required this.text,
+  });
+}
+
+class AddTypeFilter extends FilteredPackagesEvent {
+  final String type;
+  AddTypeFilter({
+    required this.type,
+  });
+}
+
+class RemoveTypeFilter extends FilteredPackagesEvent {
+  final String type;
+  RemoveTypeFilter({
+    required this.type,
   });
 }
 
@@ -16,6 +30,3 @@ final class InitPackages extends FilteredPackagesEvent {
 
   InitPackages(this.packages);
 }
-
-//TODO: Implement removefilters
-final class RemoveFilters extends FilteredPackagesEvent {}

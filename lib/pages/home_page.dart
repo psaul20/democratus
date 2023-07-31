@@ -52,9 +52,13 @@ class _MyHomePageState extends State<MyHomePage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BlocProvider<PackageSearchBloc>(
-                    create: (_) => PackageSearchBloc()..add(SubmitSearch()),
-                    child: const SearchPackagesPage()),
+                builder: (context) => MultiBlocProvider(providers: [
+                  BlocProvider(
+                      create: (_) => PackageSearchBloc()
+                        ..add(SubmitSearch())
+                        ..add(GetCollections())),
+                  BlocProvider(create: (_) => FilteredPackagesBloc())
+                ], child: const SearchPackagesPage()),
               ));
         },
         tooltip: 'Add Package',

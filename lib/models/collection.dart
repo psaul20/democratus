@@ -61,6 +61,28 @@ class Collection {
     this.granuleCount,
   });
 
+  // Defining type list based on https://www.govinfo.gov/help/bills#types
+  static String? getTypeVerbose(String collectionCode, String typeCode) {
+    if (collectionTypes.keys.contains(collectionCode)) {
+      return collectionTypes[collectionCode][typeCode];
+    } else {
+      return null;
+    }
+  }
+
+  static Map billTypes = {
+    'hr': 'House Bill',
+    's': 'Senate Bill',
+    'hjres': 'House Joint Resolution',
+    'sjres': 'Senate Joint Resolution',
+    'hconres': 'House Concurrent Resolution',
+    'sconres': 'Senate Concurrent Resolution',
+    'hres': 'House Simple Resolution',
+    'sres': 'Senate Simple Resolution',
+  };
+
+  static Map collectionTypes = {'BILLS': billTypes};
+
   static List<Collection> listFromMap(Map<String, dynamic> map) {
     return List<Collection>.from(
       (map['collections'] as List).map<Collection>(
