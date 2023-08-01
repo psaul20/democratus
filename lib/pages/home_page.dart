@@ -7,6 +7,8 @@ import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+//TODO: Fix no added packages view + searching view
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
     Key? key,

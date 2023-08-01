@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SimpleBlocObserver extends BlocObserver {

@@ -29,17 +29,25 @@ class SelectEndDate extends PackageSearchEvent {
   SelectEndDate(this.endDate);
 }
 
+class AddDocClass extends PackageSearchEvent {
+  final String docClass;
+
+  AddDocClass(this.docClass);
+}
+
+class RemoveDocClass extends PackageSearchEvent {
+  final String docClass;
+
+  RemoveDocClass(this.docClass);
+}
+
 final class SubmitSearch extends PackageSearchEvent {}
 
 final class ClearSearch extends PackageSearchEvent {}
 
 final class GetCollections extends PackageSearchEvent {}
 
-final class AddMultiple extends PackageSearchEvent {}
-
-final class RemoveMultiple extends PackageSearchEvent {}
-
-enum PackageSearchStatus { initial, success, failure }
+enum PackageSearchStatus { initial, searching, success, failure }
 
 class PackageSearchState extends Equatable {
   final DateTime startDate;
@@ -48,7 +56,7 @@ class PackageSearchState extends Equatable {
   final Collection? selectedCollection;
   final PackageSearchStatus status;
   final List<Package> searchPackages;
-  final bool isReady;
+  final List<String> docClasses;
 
   PackageSearchState({
     startDate,
@@ -56,8 +64,8 @@ class PackageSearchState extends Equatable {
     this.collections = const <Collection>[],
     this.selectedCollection,
     this.status = PackageSearchStatus.initial,
-    this.isReady = false,
     this.searchPackages = const <Package>[],
+    this.docClasses = const <String>[],
   })  : startDate = startDate ?? DateTime(1776, 7, 4),
         endDate = endDate ?? DateTime.now();
 
@@ -68,8 +76,8 @@ class PackageSearchState extends Equatable {
         startDate,
         endDate,
         status,
-        isReady,
         searchPackages,
+        docClasses
       ];
 
   // List<Object?> get reqFields => [
@@ -84,16 +92,17 @@ class PackageSearchState extends Equatable {
     Collection? selectedCollection,
     PackageSearchStatus? status,
     List<Package>? searchPackages,
-    bool? isReady,
+    List<String>? docClasses,
   }) {
     return PackageSearchState(
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
-        collections: collections ?? this.collections,
-        selectedCollection: selectedCollection ?? this.selectedCollection,
-        status: status ?? this.status,
-        searchPackages: searchPackages ?? this.searchPackages,
-        isReady: isReady ?? this.isReady);
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      collections: collections ?? this.collections,
+      selectedCollection: selectedCollection ?? this.selectedCollection,
+      status: status ?? this.status,
+      searchPackages: searchPackages ?? this.searchPackages,
+      docClasses: docClasses ?? this.docClasses,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -102,8 +111,7 @@ class PackageSearchState extends Equatable {
     map['endDate'] = endDate.millisecondsSinceEpoch;
     map['collections'] = collections.map((x) => x.toMap()).toList();
     map['selectedCollection'] = selectedCollection?.toMap();
-    // map['searchPackages'] = searchPackages.map((x) => x.toMap()).toList();
-    map['isReady'] = isReady;
+    map['docClasses'] = docClasses;
     return map;
   }
 
@@ -111,10 +119,6 @@ class PackageSearchState extends Equatable {
     if (map.isEmpty) {
       return PackageSearchState();
     } else {
-      // List<Package> searchPackages = List<Package>.from(
-      //     (map['searchPackages'] as List<dynamic>).map<Package>(
-      //   (x) => Package.fromMap(x as Map<String, dynamic>),
-      // ));
       return PackageSearchState(
         startDate: map['startDate'] != null
             ? DateTime.fromMillisecondsSinceEpoch(map['startDate'])
@@ -132,7 +136,7 @@ class PackageSearchState extends Equatable {
                 map['selectedCollection'] as Map<String, dynamic>)
             : null,
         status: PackageSearchStatus.initial,
-        isReady: map['isReady'] as bool,
+        docClasses: map['docClasses'] as List<String>,
       );
     }
   }
@@ -154,8 +158,8 @@ class PackageSearchState extends Equatable {
     string.write('$endDate, ');
     string.write('$status, ');
     string.write('$collections, ');
-    string.write('$isReady, ');
-    string.write("SearchPackages Length: ${searchPackages.length}");
+    string.write("SearchPackages Length: ${searchPackages.length}, ");
+    string.write('$docClasses');
     return string.toString();
   }
 }
@@ -171,7 +175,6 @@ class PackageSearchBloc
           emit(state.copyWith(
             selectedCollection: event.collection,
           ));
-          if (state.isReady) add(SubmitSearch());
         } else {
           log("Collection hasn't changed, bypassing event");
         }
@@ -180,13 +183,11 @@ class PackageSearchBloc
     on<SelectStartDate>(
       (event, emit) {
         emit(state.copyWith(startDate: event.startDate));
-        if (state.isReady) add(SubmitSearch());
       },
     );
     on<SelectEndDate>(
       (event, emit) {
         emit(state.copyWith(endDate: event.endDate));
-        if (state.isReady) add(SubmitSearch());
       },
     );
     on<ClearSearch>(
@@ -198,42 +199,45 @@ class PackageSearchBloc
             status: PackageSearchStatus.initial));
       },
     );
-    on<SubmitSearch>(_submitSearch);
-    on<GetCollections>(_getCollections);
-    on<PackageSearchEvent>(
+    on<AddDocClass>(
       (event, emit) {
-        emit(state.copyWith(isReady: _checkReady()));
+        List<String> newClasses = List.from(state.docClasses);
+        newClasses.add(event.docClass);
+        emit(state.copyWith(docClasses: newClasses));
       },
     );
-  }
-
-  bool _checkReady() {
-    return true;
-    // return state.reqFields.contains(null) ? false : true;
+    on<RemoveDocClass>(
+      (event, emit) {
+        List<String> newClasses = List.from(state.docClasses);
+        newClasses.remove(event.docClass);
+        emit(state.copyWith(docClasses: newClasses));
+      },
+    );
+    on<SubmitSearch>(_submitSearch);
+    on<GetCollections>(_getCollections);
   }
 
   Future<void> _submitSearch(event, emit) async {
-    if (state.isReady) {
-      try {
-        List<Package> packages = await _fetchPackageSearch();
-        emit(state.copyWith(
-          searchPackages: packages,
-          status: PackageSearchStatus.success,
-        ));
-      } catch (_) {
-        emit(state.copyWith(status: PackageSearchStatus.failure));
-      }
-    } else {
-      throw Exception('Search not Ready');
+    emit(state.copyWith(status: PackageSearchStatus.searching));
+    try {
+      List<Package> packages = await _fetchPackageSearch();
+      emit(state.copyWith(
+        searchPackages: packages,
+        status: PackageSearchStatus.success,
+      ));
+    } catch (_) {
+      emit(state.copyWith(status: PackageSearchStatus.failure));
     }
   }
 
   Future<List<Package>> _fetchPackageSearch() async {
     Response response = await GovinfoApi().searchPackages(
-        startDate: state.startDate,
-        endDate: state.endDate,
-        size: numSearchPackages,
-        collectionCodes: [state.selectedCollection?.collectionCode ?? 'BILLS']);
+      startDate: state.startDate,
+      endDate: state.endDate,
+      size: numSearchPackages,
+      collectionCodes: [state.selectedCollection?.collectionCode ?? 'BILLS'],
+      docClasses: state.docClasses,
+    );
     if (response.statusCode == 200) {
       log("Search query successful");
       Map body = jsonDecode(response.body) as Map<String, dynamic>;
@@ -254,6 +258,7 @@ class PackageSearchBloc
       PackageSearchEvent event, Emitter<PackageSearchState> emit) async {
     try {
       final collections = await _fetchCollections();
+      //TODO: Have to update this if we provide functionality for more than bills
       emit(state.copyWith(
           collections: collections,
           selectedCollection: collections
