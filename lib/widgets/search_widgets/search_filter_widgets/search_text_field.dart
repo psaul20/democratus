@@ -20,6 +20,10 @@ class _SearchTextFieldState extends State<SearchTextField> {
 
   @override
   Widget build(BuildContext context) {
+    controller.text = context
+        .read<FilteredPackagesBloc>()
+        .state
+        .appliedCriteria[FilterType.text];
     return Row(
       children: [
         const Icon(Icons.search),

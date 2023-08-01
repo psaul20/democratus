@@ -47,11 +47,9 @@ class TypeFilterListItem extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.appliedCriteria != current.appliedCriteria,
       builder: (context, state) {
-        bool isFiltered =
-            (state.appliedCriteria[FilterType.packageType] as List<String>)
-                    .contains(typeCode)
-                ? true
-                : false;
+        List<String> appliedTypeFilters =
+            state.appliedCriteria[FilterType.packageType] ?? [];
+        bool isFiltered = appliedTypeFilters.contains(typeCode) ? true : false;
         toggleFilter() {
           isFiltered
               ? context

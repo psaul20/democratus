@@ -72,10 +72,10 @@ class PackageSearchState extends Equatable {
         searchPackages,
       ];
 
-  List<Object?> get reqFields => [
-        collections,
-        selectedCollection,
-      ];
+  // List<Object?> get reqFields => [
+  //       collections,
+  //       selectedCollection,
+  //     ];
 
   PackageSearchState copyWith({
     DateTime? startDate,
@@ -102,7 +102,7 @@ class PackageSearchState extends Equatable {
     map['endDate'] = endDate.millisecondsSinceEpoch;
     map['collections'] = collections.map((x) => x.toMap()).toList();
     map['selectedCollection'] = selectedCollection?.toMap();
-    map['searchPackages'] = searchPackages.map((x) => x.toMap()).toList();
+    // map['searchPackages'] = searchPackages.map((x) => x.toMap()).toList();
     map['isReady'] = isReady;
     return map;
   }
@@ -111,10 +111,10 @@ class PackageSearchState extends Equatable {
     if (map.isEmpty) {
       return PackageSearchState();
     } else {
-      List<Package> searchPackages = List<Package>.from(
-          (map['searchPackages'] as List<dynamic>).map<Package>(
-        (x) => Package.fromMap(x as Map<String, dynamic>),
-      ));
+      // List<Package> searchPackages = List<Package>.from(
+      //     (map['searchPackages'] as List<dynamic>).map<Package>(
+      //   (x) => Package.fromMap(x as Map<String, dynamic>),
+      // ));
       return PackageSearchState(
         startDate: map['startDate'] != null
             ? DateTime.fromMillisecondsSinceEpoch(map['startDate'])
@@ -131,10 +131,7 @@ class PackageSearchState extends Equatable {
             ? Collection.fromMap(
                 map['selectedCollection'] as Map<String, dynamic>)
             : null,
-        status: searchPackages.isNotEmpty
-            ? PackageSearchStatus.success
-            : PackageSearchStatus.initial,
-        searchPackages: searchPackages.isNotEmpty ? searchPackages : [],
+        status: PackageSearchStatus.initial,
         isReady: map['isReady'] as bool,
       );
     }
@@ -144,6 +141,23 @@ class PackageSearchState extends Equatable {
 
   factory PackageSearchState.fromJson(String source) =>
       PackageSearchState.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  bool get stringify => true;
+
+  @override
+  String toString() {
+    StringBuffer string = StringBuffer();
+    string.write('Collections Length: ${collections.length}, ');
+    string.write('$selectedCollection, ');
+    string.write('$startDate, ');
+    string.write('$endDate, ');
+    string.write('$status, ');
+    string.write('$collections, ');
+    string.write('$isReady, ');
+    string.write("SearchPackages Length: ${searchPackages.length}");
+    return string.toString();
+  }
 }
 
 const int numSearchPackages = 1000;
@@ -194,7 +208,8 @@ class PackageSearchBloc
   }
 
   bool _checkReady() {
-    return state.reqFields.contains(null) ? false : true;
+    return true;
+    // return state.reqFields.contains(null) ? false : true;
   }
 
   Future<void> _submitSearch(event, emit) async {

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SimpleBlocObserver extends BlocObserver {
@@ -23,7 +24,7 @@ class SimpleBlocObserver extends BlocObserver {
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    log('${bloc.runtimeType} $transition'.substring(0, 100));
+    log('${bloc.runtimeType} $transition');
     super.onTransition(bloc, transition);
   }
 }

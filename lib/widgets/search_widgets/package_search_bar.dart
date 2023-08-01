@@ -1,4 +1,4 @@
-import 'package:democratus/widgets/generic/search_text_field.dart';
+import 'package:democratus/widgets/search_widgets/search_filter_widgets/search_text_field.dart';
 import 'package:flutter/material.dart';
 
 //NOTE: Unused currently

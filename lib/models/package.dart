@@ -67,7 +67,11 @@ class Package extends Equatable {
   final bool isSaved;
 
   String? get typeVerbose {
-    return Collection.getTypeVerbose(collectionCode!, billType ?? docClass);
+    if (collectionCode != null) {
+      return Collection.getTypeVerbose(collectionCode!, billType ?? docClass);
+    } else {
+      return null;
+    }
   }
 
   //TODO: Probably a better place for this

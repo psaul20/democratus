@@ -29,8 +29,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: BlocBuilder<SavedPackagesBloc, SavedPackagesState>(
         builder: (context, state) {
           return BlocProvider(
-              create: (context) =>
-                  FilteredPackagesBloc()..add(InitPackages(state.packages)),
+              create: (context) => FilteredPackagesBloc(blocId: 'saved')
+                ..add(InitPackages(state.packages)),
               // Added to ensure that base packages are updated every time saved packages are updated
               child: BlocListener<SavedPackagesBloc, SavedPackagesState>(
                 listener: (context, state) {
@@ -57,7 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       create: (_) => PackageSearchBloc()
                         ..add(SubmitSearch())
                         ..add(GetCollections())),
-                  BlocProvider(create: (_) => FilteredPackagesBloc())
+                  BlocProvider(
+                      create: (_) => FilteredPackagesBloc(blocId: 'search'))
                 ], child: const SearchPackagesPage()),
               ));
         },
