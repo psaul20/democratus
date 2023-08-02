@@ -1,16 +1,17 @@
+import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
 import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:democratus/theming/theme_data.dart';
-import 'package:democratus/widgets/search_widgets/search_date_picker.dart';
-import 'package:democratus/widgets/search_widgets/search_filter_widgets/type_filter_list.dart';
+import 'package:democratus/widgets/search_widgets/search_filter_widgets/search_date_picker.dart';
+import 'package:democratus/widgets/search_widgets/search_filter_widgets/docclass_filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchFilterDialog extends StatelessWidget {
   const SearchFilterDialog({super.key});
-
   @override
   Widget build(BuildContext context) {
-    PackageSearchState initState = context.read<PackageSearchBloc>().state;
+    FilteredPackagesState initState =
+        context.read<FilteredPackagesBloc>().state;
     return Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 16),
         child: Padding(
@@ -21,7 +22,7 @@ class SearchFilterDialog extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "Search Filters",
+                  "FILTERS",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
@@ -48,19 +49,19 @@ class SearchFilterDialog extends StatelessWidget {
                 ],
               ),
               Text('TYPE', style: Theme.of(context).textTheme.bodyLarge),
-              const TypeFilterList(
-                filterLevel: FilterLevel.search,
-              ),
+              const DocClassFilterList(),
               Center(
                 child: TextButton(
                     onPressed: () {
-                      PackageSearchState newState =
-                          context.read<PackageSearchBloc>().state;
-                      Navigator.pop(context);
-                      // If packagesearch state changed, submit search
+                      FilteredPackagesState newState =
+                          context.read<FilteredPackagesBloc>().state;
+                      // If filter state changed, submit search
                       if (newState != initState) {
-                        context.read<PackageSearchBloc>().add(SubmitSearch());
+                        try {
+                          context.read<PackageSearchBloc>().add(SubmitSearch());
+                        } catch (_) {}
                       }
+                      Navigator.pop(context);
                     },
                     child: const Text('DONE')),
               )

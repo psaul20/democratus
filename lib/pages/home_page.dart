@@ -4,6 +4,7 @@ import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:democratus/pages/search_packages_page.dart';
 import 'package:democratus/widgets/home_page_widgets/home_page_bar.dart';
 import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
+import 'package:democratus/widgets/search_widgets/search_filter_widgets/search_filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,31 +24,40 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    context
+        .read<FilteredPackagesBloc>()
+        .add(InitPackages(context.read<SavedPackagesBloc>().state.packages));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    useRootNavigator: false,
+                    builder: (ctx) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value: BlocProvider.of<FilteredPackagesBloc>(
+                                  context),
+                            ),
+                          ],
+                          child: const SearchFilterDialog(),
+                        ));
+              },
+              icon: Icon(
+                Icons.filter_list,
+                color: Theme.of(context).colorScheme.onBackground,
+              )),
+        ],
       ),
-      body: BlocBuilder<SavedPackagesBloc, SavedPackagesState>(
-        builder: (context, state) {
-          return BlocProvider(
-              create: (context) => FilteredPackagesBloc(blocId: 'saved')
-                ..add(InitPackages(state.packages)),
-              // Added to ensure that base packages are updated every time saved packages are updated
-              child: BlocListener<SavedPackagesBloc, SavedPackagesState>(
-                listener: (context, state) {
-                  context
-                      .read<FilteredPackagesBloc>()
-                      .add(InitPackages(state.packages));
-                },
-                child: const CustomScrollView(
-                  slivers: [
-                    HomePageBar(),
-                    FilterPackageSliverList(),
-                  ],
-                ),
-              ));
-        },
+      body: const CustomScrollView(
+        slivers: [
+          HomePageBar(),
+          FilterPackageSliverList(),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

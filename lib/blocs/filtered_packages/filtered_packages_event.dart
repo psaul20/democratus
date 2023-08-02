@@ -11,18 +11,28 @@ final class UpdateTextFilter extends FilteredPackagesEvent {
   });
 }
 
-class AddTypeFilter extends FilteredPackagesEvent {
-  final String type;
-  AddTypeFilter({
-    required this.type,
+class AddDocClassFilter extends FilteredPackagesEvent {
+  final String docClass;
+  AddDocClassFilter({
+    required this.docClass,
   });
 }
 
-class RemoveTypeFilter extends FilteredPackagesEvent {
-  final String type;
-  RemoveTypeFilter({
-    required this.type,
+class RemoveDocClassFilter extends FilteredPackagesEvent {
+  final String docClass;
+  RemoveDocClassFilter({
+    required this.docClass,
   });
+}
+
+class UpdateStartDateFilter extends FilteredPackagesEvent {
+  final DateTime date;
+  UpdateStartDateFilter(this.date);
+}
+
+class UpdateEndDateFilter extends FilteredPackagesEvent {
+  final DateTime date;
+  UpdateEndDateFilter(this.date);
 }
 
 final class InitPackages extends FilteredPackagesEvent {

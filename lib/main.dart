@@ -1,3 +1,4 @@
+import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
 import 'package:democratus/blocs/saved_package_bloc.dart';
 import 'package:democratus/observers/bloc_observer.dart';
 import 'package:democratus/pages/home_page.dart';
@@ -25,13 +26,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SavedPackagesBloc(),
-      child: MaterialApp(
-        title: 'DEMOCRATUS',
-        theme: DemocTheme.mainTheme,
-        home: const MyHomePage(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SavedPackagesBloc(),
+        ),
+        BlocProvider(
+          create: (context) => FilteredPackagesBloc(blocId: 'saved'),
+        ),
+      ],
+      child: BlocListener<SavedPackagesBloc, SavedPackagesState>(
+        listener: (context, state) {
+          context
+              .read<FilteredPackagesBloc>()
+              .add(InitPackages(state.packages));
+        },
+        child: MaterialApp(
           title: 'DEMOCRATUS',
+          theme: DemocTheme.mainTheme,
+          home: const MyHomePage(
+            title: 'MY BILLS',
+          ),
         ),
       ),
     );

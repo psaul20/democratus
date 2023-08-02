@@ -62,15 +62,20 @@ class Collection {
   });
 
   // Defining type list based on https://www.govinfo.gov/help/bills#types
-  static String? getTypeVerbose(String collectionCode, String typeCode) {
-    if (collectionTypes.keys.contains(collectionCode)) {
-      return collectionTypes[collectionCode][typeCode];
+  static String? getDocClassVerbose(
+      String collectionCode, String docClassCode) {
+    if (collectionDocClasses.keys.contains(collectionCode)) {
+      return collectionDocClasses[collectionCode]![docClassCode];
     } else {
       return null;
     }
   }
 
-  static Map billTypes = {
+  static final collectionDocClasses = <String, Map<String, String>>{
+    'BILLS': billTypes
+  };
+
+  static final billTypes = <String, String>{
     'hr': 'House Bill',
     's': 'Senate Bill',
     'hjres': 'House Joint Resolution',
@@ -81,7 +86,13 @@ class Collection {
     'sres': 'Senate Simple Resolution',
   };
 
-  static Map collectionTypes = {'BILLS': billTypes};
+  static Map<String, String>? docClassesByCollection(String collectionCode) {
+    if (collectionDocClasses.keys.contains(collectionCode)) {
+      return collectionDocClasses[collectionCode];
+    } else {
+      throw UnimplementedError('Collection DocClasses Not Found');
+    }
+  }
 
   static List<Collection> listFromMap(Map<String, dynamic> map) {
     return List<Collection>.from(

@@ -20,25 +20,28 @@ class _SearchTextFieldState extends State<SearchTextField> {
 
   @override
   Widget build(BuildContext context) {
-    controller.text = context
-        .read<FilteredPackagesBloc>()
-        .state
-        .appliedCriteria[FilterType.text];
-    return Row(
-      children: [
-        const Icon(Icons.search),
-        const SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: TextField(
-            controller: controller,
-            decoration:
-                const InputDecoration().copyWith(hintText: 'Keyword Filter'),
-            onChanged: (_) => _onChanged(context),
-          ),
-        ),
-      ],
+    controller.text = context.read<FilteredPackagesBloc>().state.textFilter;
+    return BlocBuilder<FilteredPackagesBloc, FilteredPackagesState>(
+      buildWhen: (previous, current) =>
+          previous.textFilter != current.textFilter,
+      builder: (context, state) {
+        return Row(
+          children: [
+            const Icon(Icons.search),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: TextField(
+                controller: controller,
+                decoration: const InputDecoration()
+                    .copyWith(hintText: 'Keyword Filter'),
+                onChanged: (_) => _onChanged(context),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

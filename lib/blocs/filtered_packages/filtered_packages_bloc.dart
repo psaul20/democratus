@@ -1,16 +1,14 @@
 import 'dart:convert';
 import 'package:democratus/models/package.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'filtered_packages_event.dart';
 part 'filtered_packages_state.dart';
 
-enum FilterType { text, packageType }
+//TODO: Reverse checkbox logic on docClassFilter
 
 class FilteredPackagesBloc
     extends HydratedBloc<FilteredPackagesEvent, FilteredPackagesState> {
@@ -20,36 +18,35 @@ class FilteredPackagesBloc
   String get id => blocId;
 
   FilteredPackagesBloc({required this.blocId})
-      : super(const FilteredPackagesState()) {
+      : super(FilteredPackagesState()) {
     on<UpdateTextFilter>(
       (event, emit) {
-        Map<FilterType, dynamic> newCriteria = Map.from(state.appliedCriteria);
-        newCriteria[FilterType.text] = event.text;
-        emit(state.copyWith(appliedCriteria: newCriteria));
+        emit(state.copyWith(textFilter: event.text));
       },
     );
-    on<AddTypeFilter>(
+    on<AddDocClassFilter>(
       (event, emit) {
-        Map<FilterType, dynamic> newCriteria = Map.from(state.appliedCriteria);
-        List<String> newTypes = List.from(
-            (newCriteria[FilterType.packageType] as List<String>?) ?? []);
-        newTypes.add(event.type);
-        newCriteria[FilterType.packageType] = newTypes;
-        emit(state.copyWith(appliedCriteria: newCriteria));
+        List<String> newDocClasses = [...state.docClassFilter, event.docClass];
+        emit(state.copyWith(docClassFilter: newDocClasses));
       },
     );
-    on<RemoveTypeFilter>(
+    on<RemoveDocClassFilter>(
       (event, emit) {
-        Map<FilterType, dynamic> newCriteria = Map.from(state.appliedCriteria);
-        List<String> newTypes = List.from(
-            (newCriteria[FilterType.packageType] as List<String>?) ?? []);
-        newTypes.remove(event.type);
-        newCriteria[FilterType.packageType] = newTypes;
-        emit(state.copyWith(appliedCriteria: newCriteria));
+        List<String> newDocClasses = [
+          for (final docClass in state.docClassFilter)
+            if (docClass != event.docClass) docClass
+        ];
+        emit(state.copyWith(docClassFilter: newDocClasses));
       },
     );
     on<InitPackages>(
       (event, emit) => emit(state.copyWith(initList: event.packages)),
+    );
+    on<UpdateStartDateFilter>(
+      (event, emit) => emit(state.copyWith(startDateFilter: event.date)),
+    );
+    on<UpdateEndDateFilter>(
+      (event, emit) => emit(state.copyWith(endDateFilter: event.date)),
     );
     // Every event will run the apply filters
     on<FilteredPackagesEvent>(_applyFilters);
@@ -58,31 +55,22 @@ class FilteredPackagesBloc
   void _applyFilters(
       FilteredPackagesEvent event, Emitter<FilteredPackagesState> emit) {
     List<Package> newFilterPackages = state.initList;
-
-    for (var criterion in state.appliedCriteria.entries) {
-      switch (criterion.key) {
-        case FilterType.text:
-          {
-            String filterString = criterion.value as String;
-            filterString = filterString.toLowerCase();
-            if (filterString != '') {
-              newFilterPackages = newFilterPackages
-                  .where((package) =>
-                      package.searchText.toLowerCase().contains(filterString))
-                  .toList();
-            }
-          }
-        case FilterType.packageType:
-          {
-            List<String> types = criterion.value as List<String>;
-            if (types.isNotEmpty) {
-              newFilterPackages = newFilterPackages
-                  .where((package) =>
-                      types.contains(package.billType ?? package.docClass))
-                  .toList();
-            }
-          }
+    String filterString = state.textFilter.toLowerCase();
+    if (filterString != '') {
+      newFilterPackages = newFilterPackages
+          .where((package) =>
+              package.searchText.toLowerCase().contains(filterString))
+          .toList();
+      if (state.docClassFilter.isNotEmpty) {
+        newFilterPackages = newFilterPackages
+            .where((package) => state.docClassFilter.contains(package.docClass))
+            .toList();
       }
+      newFilterPackages = newFilterPackages
+          .where((package) =>
+              package.dateIssued.isAfter(state.startDateFilter) &&
+              package.dateIssued.isBefore(state.endDateFilter))
+          .toList();
     }
     emit(state.copyWith(filteredList: newFilterPackages));
   }

@@ -20,7 +20,7 @@ class SearchPackagesPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              "Legislation Search",
+              "BILL SEARCH",
               style: const TextStyle()
                   .copyWith(color: Theme.of(context).colorScheme.onSecondary),
             ),
