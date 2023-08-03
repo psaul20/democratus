@@ -58,6 +58,7 @@ class DocClassFilterListItem extends StatelessWidget {
         bool isFiltered =
             state.docClassFilter.contains(docClassCode) ? true : false;
         toggleFilter() {
+                    //TODO: Implement repository to tie these events together
           isFiltered
               ? context
                   .read<FilteredPackagesBloc>()
@@ -65,7 +66,7 @@ class DocClassFilterListItem extends StatelessWidget {
               : context
                   .read<FilteredPackagesBloc>()
                   .add(AddDocClassFilter(docClass: docClassCode));
-          //TODO: Implement repository to tie these events together
+
           try {
             isFiltered
                 ? context
