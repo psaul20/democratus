@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
 import 'package:democratus/blocs/package_search_bloc.dart';
 import 'package:democratus/widgets/generic/errors.dart';
+import 'package:democratus/widgets/generic/fetch_circle.dart';
 import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
 import 'package:democratus/widgets/search_widgets/package_search_bar.dart';
 import 'package:democratus/widgets/search_widgets/search_filter_widgets/search_filter_dialog.dart';
@@ -15,52 +16,66 @@ class SearchPackagesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //TODO: Optimize with Buildwhens
-    return BlocBuilder<PackageSearchBloc, PackageSearchState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              "BILL SEARCH",
-              style: const TextStyle()
-                  .copyWith(color: Theme.of(context).colorScheme.onSecondary),
-            ),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        useRootNavigator: false,
-                        builder: (ctx) => MultiBlocProvider(
-                              providers: [
-                                BlocProvider.value(
-                                  value: BlocProvider.of<PackageSearchBloc>(
-                                      context),
-                                ),
-                                BlocProvider.value(
-                                  value: BlocProvider.of<FilteredPackagesBloc>(
-                                      context),
-                                ),
-                              ],
-                              child: const SearchFilterDialog(),
-                            ));
-                  },
-                  icon: Icon(
-                    Icons.filter_list,
-                    color: Theme.of(context).colorScheme.onSecondary,
-                  )),
-            ],
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-          body: BlocConsumer<PackageSearchBloc, PackageSearchState>(
-              listener: (context, state) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "BILL SEARCH",
+          style: const TextStyle()
+              .copyWith(color: Theme.of(context).colorScheme.onSecondary),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    useRootNavigator: false,
+                    builder: (ctx) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value:
+                                  BlocProvider.of<PackageSearchBloc>(context),
+                            ),
+                            BlocProvider.value(
+                              value: BlocProvider.of<FilteredPackagesBloc>(
+                                  context),
+                            ),
+                          ],
+                          child: const SearchFilterDialog(),
+                        ));
+              },
+              icon: Icon(
+                Icons.filter_list,
+                color: Theme.of(context).colorScheme.onSecondary,
+              )),
+        ],
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+      ),
+      body: BlocConsumer<PackageSearchBloc, PackageSearchState>(
+          buildWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
             context.read<FilteredPackagesBloc>().add(InitPackages(
                 context.read<PackageSearchBloc>().state.searchPackages));
-          }, builder: (context, state) {
+          },
+          builder: (context, state) {
             switch (state.status) {
+              case PackageSearchStatus.searching:
+                {
+                  return const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      FetchCircle(),
+                    ],
+                  );
+                }
               case PackageSearchStatus.failure:
                 {
-                  return const Center(
-                    child: ErrorText(),
+                  return const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ErrorText(),
+                    ],
                   );
                 }
               default:
@@ -74,8 +89,6 @@ class SearchPackagesPage extends StatelessWidget {
                 }
             }
           }),
-        );
-      },
     );
   }
 }
