@@ -35,8 +35,6 @@ class _PackageTileState extends State<PackageTile> {
     }
 
     return BlocBuilder<PackageBloc, PackageState>(
-        // Specifying to avoid state weirdness
-        // bloc: widget.packageBloc,
         builder: (context, state) {
       if (state.status == PackageStatus.failure) {
         return const Card(child: ErrorText());

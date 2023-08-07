@@ -1,8 +1,8 @@
 import 'package:democratus/blocs/package_bloc.dart';
-import 'package:democratus/pages/package_reader.dart';
 import 'package:democratus/theming/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReadMoreButton extends StatelessWidget {
   const ReadMoreButton({super.key});
@@ -10,13 +10,26 @@ class ReadMoreButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PackageBloc, PackageState>(builder: (context, state) {
-      readMore(BuildContext ctx) {
-        Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) {
-          return BlocProvider.value(
-            value: BlocProvider.of<PackageBloc>(context),
-            child: const PackageReader(),
-          );
-        }));
+      readMore(BuildContext ctx) async {
+        Uri url = Uri.parse(state.package.detailsLink ?? '');
+
+        if (await canLaunchUrl(url)) {
+          await launchUrl(url);
+        } else {
+          throw 'Could not launch $url';
+        }
+
+        // Not currently using PackageReader view
+        // Navigator.of(ctx).push(
+        //   MaterialPageRoute(
+        //     builder: (ctx) {
+        //       return BlocProvider.value(
+        //         value: BlocProvider.of<PackageBloc>(context),
+        //         child: const PackageReader(),
+        //       );
+        //     },
+        //   ),
+        // );
       }
 
       if (state.package.hasHtml == true) {
@@ -32,7 +45,7 @@ class ReadMoreButton extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.chrome_reader_mode_outlined),
+                    const Icon(Icons.arrow_outward),
                     Text(
                       "Read More",
                       textAlign: TextAlign.center,
