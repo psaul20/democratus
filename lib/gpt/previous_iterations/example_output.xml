@@ -1,0 +1,40 @@
+<Law>
+  <Title>Affordable Care Act (ACA)</Title>
+  <Who>Enacted by the United States Congress and signed into law by President Barack Obama</Who>
+  <Context>Aimed to expand access to affordable health insurance, improve healthcare quality, and reduce costs</Context>
+  <MainPoints>
+    <Point>
+      <Title>Individual Mandate</Title>
+      <Description>Required most individuals to have health insurance coverage or face a penalty</Description>
+    </Point>
+    <Point>
+      <Title>Insurance Marketplaces</Title>
+      <Description>Established state-based or federally facilitated exchanges for individuals and small businesses to compare and purchase health insurance plans</Description>
+    </Point>
+    <Point>
+      <Title>Medicaid Expansion</Title>
+      <Description>Expanded Medicaid eligibility to cover more low-income individuals and families</Description>
+    </Point>
+    <Point>
+      <Title>Insurance Reforms</Title>
+      <Description>
+        <SubBullet>Prohibited insurance companies from denying coverage or charging higher premiums based on pre-existing conditions</SubBullet>
+        <SubBullet>Set limits on age-based premium variations</SubBullet>
+      </Description>
+    </Point>
+    <Point>
+      <Title>Essential Health Benefits</Title>
+      <Description>Defined a set of essential health benefits that insurance plans must cover</Description>
+    </Point>
+    <Point>
+      <Title>Subsidies and Tax Credits</Title>
+      <Description>Provided financial assistance to lower-income individuals and families to help them afford insurance premiums</Description>
+    </Point>
+  </MainPoints>
+  <Outcomes>
+    <Outcome>Increased insurance coverage</Outcome>
+    <Outcome>Protection for individuals with pre-existing conditions</Outcome>
+    <Outcome>Improved preventive care</Outcome>
+    <Outcome>Efforts to contain healthcare costs</Outcome>
+  </Outcomes>
+</Law>

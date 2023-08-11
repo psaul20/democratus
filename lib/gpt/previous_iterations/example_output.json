@@ -1,0 +1,40 @@
+{
+    "title": "Affordable Care Act (ACA)",
+    "who": "Enacted by the United States Congress and signed into law by President Barack Obama",
+    "context": "Aimed to expand access to affordable health insurance, improve healthcare quality, and reduce costs",
+    "mainPoints": [
+      {
+        "title": "Individual Mandate",
+        "description": "Required most individuals to have health insurance coverage or face a penalty"
+      },
+      {
+        "title": "Insurance Marketplaces",
+        "description": "Established state-based or federally facilitated exchanges for individuals and small businesses to compare and purchase health insurance plans"
+      },
+      {
+        "title": "Medicaid Expansion",
+        "description": "Expanded Medicaid eligibility to cover more low-income individuals and families"
+      },
+      {
+        "title": "Insurance Reforms",
+        "description": [
+          "Prohibited insurance companies from denying coverage or charging higher premiums based on pre-existing conditions",
+          "Set limits on age-based premium variations"
+        ]
+      },
+      {
+        "title": "Essential Health Benefits",
+        "description": "Defined a set of essential health benefits that insurance plans must cover"
+      },
+      {
+        "title": "Subsidies and Tax Credits",
+        "description": "Provided financial assistance to lower-income individuals and families to help them afford insurance premiums"
+      }
+    ],
+    "outcomes": [
+      "Increased insurance coverage",
+      "Protection for individuals with pre-existing conditions",
+      "Improved preventive care",
+      "Efforts to contain healthcare costs"
+    ]
+  }
