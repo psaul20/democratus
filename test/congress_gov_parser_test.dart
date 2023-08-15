@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:csv/csv.dart';
 import 'package:csv/csv_settings_autodetection.dart';
@@ -10,27 +11,31 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-void main() async {
-  // Uri testUri = CongressGovApi.getSearchUri(getCsv: false, congresses: [
-  //   118
-  // ], policyAreas: [
-  //   'Health',
-  //   'Armed Forces and National Security',
-  // ]);
-  Uri testUri = CongressGovApi.getSearchUri();
-  log(testUri.toString());
+void main() {
+  group('Testing Congress.Gov search parsing', () {
+    test('Testing well-formed HTTPS request to Congress.gov', () async {
+      Uri testUri = CongressGovApi.getSearchUri();
 
-  //write a method which takes in the parameters of the example URL, submits an http request, and returns the response
-  Response response = await http.get(testUri);
-  test('Testing well-formed HTTPS request to Congress.gov', () {
-    expect(response.statusCode, 200);
-    expect(response.body.isNotEmpty, true);
+      Response response = await http.get(testUri);
+      expect(response.statusCode, 200);
+      expect(response.body.isNotEmpty, true);
+    });
+
+    // test CongressGovApi.parseCsv method
+    test('Testing parsing of CSV response from Congress.gov', () async {
+      Uri testUri = CongressGovApi.getSearchUri(getCsv: true, congresses: [
+        100
+      ], policyAreas: [
+        'Health',
+        'Armed Forces and National Security',
+      ]);
+
+      Response response = await http.get(testUri);
+      expect(response.statusCode, 200);
+      expect(response.body.isNotEmpty, true);
+      List<Map<String, dynamic>> csvData =
+          CongressGovApi.parseCsv(response.body);
+      expect(csvData[0]['Legislation Number'], 'H.R. 5560');
+    });
   });
-
-  List<List<dynamic>> csvData =
-      const CsvToListConverter().convert(response.body);
-
-  // write csv data to file
-  File('test.csv').writeAsString(response.body);
-  log(csvData.first.toString());
 }
