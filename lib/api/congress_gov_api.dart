@@ -89,9 +89,9 @@ class CongressGovApi {
     List<String> legislationTypes = const <String>[
       'hr',
       'hjres',
+      'hamdt',
       's',
       'sjres',
-      'hamdt',
       'samdt',
     ],
     bool public = true,
@@ -192,10 +192,6 @@ class CongressGovApi {
       queryParameters['fieldsToInclude'] =
           'latestTitle,amendsBill,sponsor,dateOffered,dateOfIntroduction,numberOfCosponsors,dateSubmitted,dateProposed,committees,latestAction,latestActionDate,cosponsors,subjects,relatedBillsCount,relatedBill,latestSummary';
     }
-
-    https: //www.congress.gov/advanced-search/legislation?congresses%5B%5D=118&legislationNumbers&restrictionType=includeBillText&restrictionFields%5B%5D=allBillTitles&restrictionFields%5B%5D=summary&summaryField=billSummary&enterTerms&wordVariants=true&legislationTypes%5B%5D=hr&legislationTypes%5B%5D=hjres&legislationTypes%5B%5D=s&legislationTypes%5B%5D=sjres&legislationTypes%5B%5D=hamdt&legislationTypes%5B%5D=samdt&public=true&private=true&chamber=all&actionTerms&legislativeActionWordVariants=true&dateOfActionOperator=equal&dateOfActionStartDate&dateOfActionEndDate&dateOfActionIsOptions=yesterday&dateOfActionToggle=multi&legislativeAction=Any&sponsorState=One&member&sponsorTypes%5B%5D=sponsor&sponsorTypeBool=OR&dateOfSponsorshipOperator=equal&dateOfSponsorshipStartDate&dateOfSponsorshipEndDate&dateOfSponsorshipIsOptions=yesterday&committeeActivity%5B%5D=0&committeeActivity%5B%5D=3&committeeActivity%5B%5D=11&committeeActivity%5B%5D=12&committeeActivity%5B%5D=4&committeeActivity%5B%5D=2&committeeActivity%5B%5D=5&committeeActivity%5B%5D=9&search&submitted=Submitted&satellite=%5B%5D
-
-    https: //www.congress.gov/advanced-search/legislation?congresses%5B%5D=118&legislationNumbers=&restrictionType=field&restrictionFields%5B%5D=allBillTitles&restrictionFields%5B%5D=summary&summaryField=billSummary&enterTerms=&wordVariants=true&legislationTypes%5B%5D=hr&legislationTypes%5B%5D=hjres&legislationTypes%5B%5D=hamdt&legislationTypes%5B%5D=s&legislationTypes%5B%5D=sjres&legislationTypes%5B%5D=samdt&public=true&private=true&chamber=all&actionTerms=&legislativeActionWordVariants=true&dateOfActionOperator=equal&dateOfActionStartDate=&dateOfActionEndDate=&dateOfActionIsOptions=yesterday&dateOfActionToggle=multi&legislativeAction=Any&sponsorState=One&member=&sponsorTypes%5B%5D=sponsor&sponsorTypeBool=OR&dateOfSponsorshipOperator=equal&dateOfSponsorshipStartDate=&dateOfSponsorshipEndDate=&dateOfSponsorshipIsOptions=yesterday&committeeActivity%5B%5D=0&committeeActivity%5B%5D=3&committeeActivity%5B%5D=11&committeeActivity%5B%5D=12&committeeActivity%5B%5D=4&committeeActivity%5B%5D=2&committeeActivity%5B%5D=5&committeeActivity%5B%5D=9&satellite=%5B%5D&search=&submitted=Submitted
 
     return Uri.parse(baseUrl).replace(queryParameters: queryParameters);
   }

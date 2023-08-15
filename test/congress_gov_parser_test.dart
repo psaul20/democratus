@@ -11,12 +11,13 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 void main() async {
-  Uri testUri = CongressGovApi.getSearchUri(getCsv: false, congresses: [
-    118
-  ], policyAreas: [
-    'Health',
-    'Armed Forces and National Security',
-  ]);
+  // Uri testUri = CongressGovApi.getSearchUri(getCsv: false, congresses: [
+  //   118
+  // ], policyAreas: [
+  //   'Health',
+  //   'Armed Forces and National Security',
+  // ]);
+  Uri testUri = CongressGovApi.getSearchUri();
   log(testUri.toString());
 
   //write a method which takes in the parameters of the example URL, submits an http request, and returns the response
