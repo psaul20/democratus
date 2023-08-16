@@ -1,12 +1,7 @@
-//create uri from the example url
-
-import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:csv/csv.dart';
-import 'package:csv/csv_settings_autodetection.dart';
 import 'package:democratus/api/congress_gov_api.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -36,6 +31,21 @@ void main() {
       List<Map<String, dynamic>> csvData =
           CongressGovApi.parseCsv(response.body);
       expect(csvData[0]['Legislation Number'], 'H.R. 5560');
+    });
+    test('Testing consolidation of duplicated fields', () {
+      // read in example bills.csv file
+      String csv = File('test/example_bills.csv').readAsStringSync();
+      List<Map<String, dynamic>> csvData =
+          CongressGovApi.parseCsv(csv);
+      // check that the list of maps only has one key for each key that was duplicated in the csv
+      List<String> duplicatedKeys = ['Cosponsor','Subject','Related Bill'];
+      for (String key in duplicatedKeys) {
+        for (Map<String, dynamic> row in csvData) {
+          expect(row.keys.where((element) => element == key).length, 1);
+          expect(row[key].runtimeType, List);
+        }
+      }
+
     });
   });
 }

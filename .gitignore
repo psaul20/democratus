@@ -10,6 +10,7 @@
 .svn/
 migrate_working_dir/
 .env
+lib/z_prototyping/
 
 # IntelliJ related
 *.iml

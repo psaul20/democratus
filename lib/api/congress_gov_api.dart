@@ -1,8 +1,8 @@
 import 'package:csv/csv.dart';
 
 class CongressGovApi {
-
   static Uri getSearchUri({
+    // REMEMBER THAT THESE FIELDS AND THEIR VALUES MUST BE IN THE SAME ORDER AS THEY APPEAR WHEN USING THE CONGRESS.GOV ADVANCED SEARCH
     List<int> congresses = const <int>[118, 117, 116],
     String legislationNumbers = '',
     String restrictionType = 'includeBillText',
@@ -129,17 +129,32 @@ class CongressGovApi {
         const CsvToListConverter(eol: '\n').convert(csv);
     //Remove the first 3 lines of the csvData
     csvData.removeRange(0, 3);
-
-    // convert the csvData to a list of maps, skipping the first row
+    // Get the headers
+    List<String> headers = csvData[0].map((e) => e.toString()).toList();
+    //Remove headers row
+    csvData.removeAt(0);
+    // check for duplicated headers
+    List<String> duplicatedHeaders = [];
+    for (String header in headers) {
+      if (headers.where((element) => element == header).length > 1) {
+        duplicatedHeaders.add(header);
+      }
+    }
+    // convert the csvData to a list of maps, converting the duplicated headers to a list of values under one key of the same name
     List<Map<String, dynamic>> csvDataAsMaps = [];
     for (List<dynamic> row in csvData) {
       Map<String, dynamic> rowAsMap = {};
       for (int i = 0; i < row.length; i++) {
-        rowAsMap[csvData[0][i]] = row[i];
+        if (duplicatedHeaders.contains(headers[i])) {
+          rowAsMap[headers[i]] = row[i].toString().split(', ');
+        } else {
+          rowAsMap[headers[i]] = row[i];
+        }
       }
       csvDataAsMaps.add(rowAsMap);
     }
-    csvDataAsMaps.removeAt(0);
     return csvDataAsMaps;
   }
+
+
 }

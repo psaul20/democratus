@@ -108,6 +108,64 @@ class Bill extends Equatable {
     };
   }
 
+  factory Bill.fromMap(Map<String, dynamic> map) {
+    return Bill(
+      actions: map['actions'],
+      amendments: map['amendments'],
+      cboCostEstimates: map['cboCostEstimates'],
+      committeeReports: map['committeeReports'],
+      committees: map['committees'],
+      congress: map['congress'],
+      constitutionalAuthorityStatement: map['contitutionalAuthorityStatement'],
+      cosponsors: map['cosponsors'],
+      introducedDate: DateTime.parse(map['introducedDate']),
+      latestAction: map['latestAction'],
+      laws: map['laws'],
+      number: map['number'],
+      originChamber: map['originChamber'],
+      policyArea: map['policyArea'],
+      relatedBills: map['relatedBills'],
+      sponsors: map['sponsors'],
+      subjects: map['subjects'],
+      summaries: map['summaries'],
+      title: map['title'],
+      titles: map['titles'],
+      type: map['type'],
+      updatedDate: DateTime.parse(map['updatedDate']),
+      updatedDateIncludingText: DateTime.parse(map['updatedDateIncludingText']),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'actions': actions,
+      'amendments': amendments,
+      'cboCostEstimates': cboCostEstimates,
+      'committeeReports': committeeReports,
+      'committees': committees,
+      'congress': congress,
+      'contitutionalAuthorityStatement': constitutionalAuthorityStatement,
+      'cosponsors': cosponsors,
+      'introducedDate': introducedDate.toIso8601String(),
+      'latestAction': latestAction,
+      'laws': laws,
+      'number': number,
+      'originChamber': originChamber,
+      'policyArea': policyArea,
+      'relatedBills': relatedBills,
+      'sponsors': sponsors,
+      'subjects': subjects,
+      'summaries': summaries,
+      'title': title,
+      'titles': titles,
+      'type': type,
+      'updatedDate': updatedDate.toIso8601String(),
+      'updatedDateIncludingText': updatedDateIncludingText.toIso8601String(),
+    };
+  }
+
+  
+
   @override
   List<Object?> get props => [
         actions,
