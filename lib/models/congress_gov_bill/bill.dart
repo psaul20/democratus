@@ -4,15 +4,15 @@ class Bill extends Equatable {
   final Map<String, dynamic> actions;
   final Map<String, dynamic> amendments;
   final List<Map<String, dynamic>> cboCostEstimates;
-  final List<Map<String, String>> committeeReports;
+  final List<Map<String, dynamic>> committeeReports;
   final Map<String, dynamic> committees;
   final int congress;
-  final String constitutionalAuthorityStatement;
+  final String constitutionalAuthorityStatementText;
   final Map<String, dynamic> cosponsors;
   final DateTime introducedDate;
   final Map<String, dynamic> latestAction;
   final List laws;
-  final String number;
+  final int number;
   final String originChamber;
   final Map<String, String> policyArea;
   final Map<String, dynamic> relatedBills;
@@ -22,8 +22,8 @@ class Bill extends Equatable {
   final String title;
   final Map<String, dynamic> titles;
   final String type;
-  final DateTime updatedDate;
-  final DateTime updatedDateIncludingText;
+  final DateTime updateDate;
+  final DateTime updateDateIncludingText;
 
   const Bill({
     required this.actions,
@@ -32,7 +32,7 @@ class Bill extends Equatable {
     required this.committeeReports,
     required this.committees,
     required this.congress,
-    required this.constitutionalAuthorityStatement,
+    required this.constitutionalAuthorityStatementText,
     required this.cosponsors,
     required this.introducedDate,
     required this.latestAction,
@@ -47,36 +47,38 @@ class Bill extends Equatable {
     required this.title,
     required this.titles,
     required this.type,
-    required this.updatedDate,
-    required this.updatedDateIncludingText,
+    required this.updateDate,
+    required this.updateDateIncludingText,
   });
 
   factory Bill.fromJson(Map<String, dynamic> json) {
     return Bill(
       actions: json['actions'],
       amendments: json['amendments'],
-      cboCostEstimates: json['cboCostEstimates'],
-      committeeReports: json['committeeReports'],
+      cboCostEstimates:
+          List<Map<String, dynamic>>.from(json['cboCostEstimates']),
+      committeeReports:
+          List<Map<String, dynamic>>.from(json['committeeReports']),
       committees: json['committees'],
       congress: json['congress'],
-      constitutionalAuthorityStatement: json['contitutionalAuthorityStatement'],
+      constitutionalAuthorityStatementText:
+          json['constitutionalAuthorityStatementText'],
       cosponsors: json['cosponsors'],
       introducedDate: DateTime.parse(json['introducedDate']),
       latestAction: json['latestAction'],
       laws: json['laws'],
-      number: json['number'],
+      number: int.parse(json['number']),
       originChamber: json['originChamber'],
-      policyArea: json['policyArea'],
+      policyArea: Map<String, String>.from(json['policyArea']),
       relatedBills: json['relatedBills'],
-      sponsors: json['sponsors'],
+      sponsors: List<Map<String, dynamic>>.from(json['sponsors']),
       subjects: json['subjects'],
       summaries: json['summaries'],
       title: json['title'],
       titles: json['titles'],
       type: json['type'],
-      updatedDate: DateTime.parse(json['updatedDate']),
-      updatedDateIncludingText:
-          DateTime.parse(json['updatedDateIncludingText']),
+      updateDate: DateTime.parse(json['updateDate']),
+      updateDateIncludingText: DateTime.parse(json['updateDateIncludingText']),
     );
   }
 
@@ -88,7 +90,7 @@ class Bill extends Equatable {
       'committeeReports': committeeReports,
       'committees': committees,
       'congress': congress,
-      'contitutionalAuthorityStatement': constitutionalAuthorityStatement,
+      'contitutionalAuthorityStatement': constitutionalAuthorityStatementText,
       'cosponsors': cosponsors,
       'introducedDate': introducedDate.toIso8601String(),
       'latestAction': latestAction,
@@ -103,8 +105,8 @@ class Bill extends Equatable {
       'title': title,
       'titles': titles,
       'type': type,
-      'updatedDate': updatedDate.toIso8601String(),
-      'updatedDateIncludingText': updatedDateIncludingText.toIso8601String(),
+      'updateDate': updateDate.toIso8601String(),
+      'updateDateIncludingText': updateDateIncludingText.toIso8601String(),
     };
   }
 
@@ -116,7 +118,8 @@ class Bill extends Equatable {
       committeeReports: map['committeeReports'],
       committees: map['committees'],
       congress: map['congress'],
-      constitutionalAuthorityStatement: map['contitutionalAuthorityStatement'],
+      constitutionalAuthorityStatementText:
+          map['constitutionalAuthorityStatementText'],
       cosponsors: map['cosponsors'],
       introducedDate: DateTime.parse(map['introducedDate']),
       latestAction: map['latestAction'],
@@ -131,10 +134,12 @@ class Bill extends Equatable {
       title: map['title'],
       titles: map['titles'],
       type: map['type'],
-      updatedDate: DateTime.parse(map['updatedDate']),
-      updatedDateIncludingText: DateTime.parse(map['updatedDateIncludingText']),
+      updateDate: DateTime.parse(map['updateDate']),
+      updateDateIncludingText: DateTime.parse(map['updateDateIncludingText']),
     );
   }
+
+  // Factory constructor that takes a map output from congress_gov_api.dart's parseCsv() method and returns a list of Bill objects
 
   Map<String, dynamic> toMap() {
     return {
@@ -144,7 +149,8 @@ class Bill extends Equatable {
       'committeeReports': committeeReports,
       'committees': committees,
       'congress': congress,
-      'contitutionalAuthorityStatement': constitutionalAuthorityStatement,
+      'constitutionalAuthorityStatementText':
+          constitutionalAuthorityStatementText,
       'cosponsors': cosponsors,
       'introducedDate': introducedDate.toIso8601String(),
       'latestAction': latestAction,
@@ -159,12 +165,10 @@ class Bill extends Equatable {
       'title': title,
       'titles': titles,
       'type': type,
-      'updatedDate': updatedDate.toIso8601String(),
-      'updatedDateIncludingText': updatedDateIncludingText.toIso8601String(),
+      'updateDate': updateDate.toIso8601String(),
+      'updateDateIncludingText': updateDateIncludingText.toIso8601String(),
     };
   }
-
-  
 
   @override
   List<Object?> get props => [
@@ -174,7 +178,7 @@ class Bill extends Equatable {
         committeeReports,
         committees,
         congress,
-        constitutionalAuthorityStatement,
+        constitutionalAuthorityStatementText,
         cosponsors,
         introducedDate,
         latestAction,
@@ -189,7 +193,7 @@ class Bill extends Equatable {
         title,
         titles,
         type,
-        updatedDate,
-        updatedDateIncludingText,
+        updateDate,
+        updateDateIncludingText,
       ];
 }

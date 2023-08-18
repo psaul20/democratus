@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:democratus/api/congress_gov_api.dart';
+import 'package:democratus/api/congress_gov_search.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,7 +12,7 @@ class RedirectButton extends StatelessWidget {
     return ElevatedButton(
       child: const Text('Press'),
       onPressed: () {
-        Uri uri = CongressGovApi.getSearchUri();
+        Uri uri = CongressGovSearch.getSearchUri();
         log(uri.toString());
         launchUrl(uri);
       },
