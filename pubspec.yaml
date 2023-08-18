@@ -33,7 +33,6 @@ dependencies:
   http: ^1.0.0
   json_annotation: ^4.8.1
   provider: ^6.0.5
-  webview_flutter_wkwebview: ^2.9.5
   flutter_html: ^2.2.1
   flutter_math_fork: ^0.7.1
   equatable: ^2.0.5
