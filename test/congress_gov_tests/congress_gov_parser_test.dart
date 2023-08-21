@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:democratus/api/congress_gov_search.dart';
@@ -10,6 +12,7 @@ void main() {
   group('Testing Congress.Gov search parsing', () {
     test('Testing well-formed HTTPS request to Congress.gov', () async {
       Uri testUri = CongressGovSearch.getSearchUri();
+      log(testUri.toString());
 
       Response response = await http.get(testUri);
       expect(response.statusCode, 200);
@@ -31,6 +34,11 @@ void main() {
       List<Map<String, dynamic>> csvData =
           CongressGovSearch.parseCsvToMaps(response.body);
       expect(csvData[0]['Legislation Number'], 'H.R. 5560');
+      log('Writing example data');
+      //write 5 rows of the csvDataAsMaps to a json file for reference with the keys in double quotes
+      String jsonData = jsonEncode(csvData.sublist(0, 5));
+      File('test/congress_gov_tests/ref/csvDataAsMaps.json')
+          .writeAsStringSync(jsonData);
     });
     test('Testing consolidation of duplicated fields', () {
       // read in example bills.csv file

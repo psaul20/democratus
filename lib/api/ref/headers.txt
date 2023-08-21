@@ -1,1 +1,0 @@
-[Legislation Number, URL, Congress, Title, Amends Bill, Sponsor, Date Offered, Date of Introduction, Number of Cosponsors, Date Submitted, Date Proposed, Committees, Latest Action, Latest Action Date, Cosponsor, Subject, Number of Related Bills, Related Bill, Latest Summary]

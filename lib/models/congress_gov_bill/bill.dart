@@ -71,15 +71,14 @@ class Bill extends Equatable {
 
   factory Bill.fromCongressGovSearch(Map<String, dynamic> map) {
     //List of string replacement words
-    List<String> removeStrings = ['st, nd, rd, th'];
     String typeString = map['Legislation Number'].toString().split(' ')[0];
     int number = int.parse(map['Legislation Number'].toString().split(' ')[1]);
     String congressString = map['Congress'];
-    //Remove all the strings in removeStrings from congressString
+
+    //Separate out congress number
     String intString = congressString.split(' ')[0];
-    for (var element in removeStrings) {
-      intString = intString.replaceAll(element, '');
-    }
+    intString = intString.substring(0, intString.length - 2);
+
     int congress = int.parse(intString);
     return Bill(
         type: typeString.billTypeFromCodeFormatted,
