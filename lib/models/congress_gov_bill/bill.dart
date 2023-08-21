@@ -1,173 +1,94 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:democratus/enums/bill_type.dart';
 import 'package:equatable/equatable.dart';
 
+enum BillSource {
+  congressGovSearch,
+  congressGovAPI,
+}
+
 class Bill extends Equatable {
-  final Map<String, dynamic> actions;
-  final Map<String, dynamic> amendments;
-  final List<Map<String, dynamic>> cboCostEstimates;
-  final List<Map<String, dynamic>> committeeReports;
-  final Map<String, dynamic> committees;
+  //From CongressGov API
+  final Map<String, dynamic>? actions;
+  final Map<String, dynamic>? amendments;
+  final List<Map<String, dynamic>>? cboCostEstimates;
+  final List<Map<String, dynamic>>? committeeReports;
+  final Map<String, dynamic>? committees;
   final int congress;
-  final String constitutionalAuthorityStatementText;
-  final Map<String, dynamic> cosponsors;
-  final DateTime introducedDate;
-  final Map<String, dynamic> latestAction;
-  final List laws;
+  final String? constitutionalAuthorityStatementText;
+  final Map<String, dynamic>? cosponsors;
+  final DateTime? introducedDate;
+  final Map<String, dynamic>? latestAction;
+  final List<Map<String, String>>? laws;
   final int number;
-  final String originChamber;
-  final Map<String, String> policyArea;
-  final Map<String, dynamic> relatedBills;
-  final List<Map<String, dynamic>> sponsors;
-  final Map<String, dynamic> subjects;
-  final Map<String, dynamic> summaries;
+  final String? originChamber;
+  final Map<String, String>? policyArea;
+  final Map<String, dynamic>? relatedBills;
+  final List<Map<String, dynamic>>? sponsors;
+  final Map<String, dynamic>? subjects;
+  final Map<String, dynamic>? summaries;
   final String title;
-  final Map<String, dynamic> titles;
-  final String type;
-  final DateTime updateDate;
-  final DateTime updateDateIncludingText;
+  final Map<String, dynamic>? titles;
+  final BillType type;
+  final DateTime? updateDate;
+  final DateTime? updateDateIncludingText;
+  final BillSource? source;
+  //From CSV
+  final String? congressString;
+  final Uri? url;
 
   const Bill({
-    required this.actions,
-    required this.amendments,
-    required this.cboCostEstimates,
-    required this.committeeReports,
-    required this.committees,
-    required this.congress,
-    required this.constitutionalAuthorityStatementText,
-    required this.cosponsors,
-    required this.introducedDate,
-    required this.latestAction,
-    required this.laws,
-    required this.number,
-    required this.originChamber,
-    required this.policyArea,
-    required this.relatedBills,
-    required this.sponsors,
-    required this.subjects,
-    required this.summaries,
-    required this.title,
-    required this.titles,
     required this.type,
-    required this.updateDate,
-    required this.updateDateIncludingText,
+    required this.number,
+    required this.title,
+    required this.congress,
+    this.source,
+    this.actions,
+    this.amendments,
+    this.cboCostEstimates,
+    this.committeeReports,
+    this.committees,
+    this.constitutionalAuthorityStatementText,
+    this.cosponsors,
+    this.introducedDate,
+    this.latestAction,
+    this.laws,
+    this.originChamber,
+    this.policyArea,
+    this.relatedBills,
+    this.sponsors,
+    this.subjects,
+    this.summaries,
+    this.titles,
+    this.updateDate,
+    this.updateDateIncludingText,
+    this.congressString,
+    this.url,
   });
 
-  factory Bill.fromJson(Map<String, dynamic> json) {
+  factory Bill.fromCongressGovSearch(Map<String, dynamic> map) {
+    //List of string replacement words
+    List<String> removeStrings = ['st, nd, rd, th'];
+    String typeString = map['Legislation Number'].toString().split(' ')[0];
+    int number = int.parse(map['Legislation Number'].toString().split(' ')[1]);
+    String congressString = map['Congress'];
+    //Remove all the strings in removeStrings from congressString
+    String intString = congressString.split(' ')[0];
+    for (var element in removeStrings) {
+      intString = intString.replaceAll(element, '');
+    }
+    int congress = int.parse(intString);
     return Bill(
-      actions: json['actions'],
-      amendments: json['amendments'],
-      cboCostEstimates:
-          List<Map<String, dynamic>>.from(json['cboCostEstimates']),
-      committeeReports:
-          List<Map<String, dynamic>>.from(json['committeeReports']),
-      committees: json['committees'],
-      congress: json['congress'],
-      constitutionalAuthorityStatementText:
-          json['constitutionalAuthorityStatementText'],
-      cosponsors: json['cosponsors'],
-      introducedDate: DateTime.parse(json['introducedDate']),
-      latestAction: json['latestAction'],
-      laws: json['laws'],
-      number: int.parse(json['number']),
-      originChamber: json['originChamber'],
-      policyArea: Map<String, String>.from(json['policyArea']),
-      relatedBills: json['relatedBills'],
-      sponsors: List<Map<String, dynamic>>.from(json['sponsors']),
-      subjects: json['subjects'],
-      summaries: json['summaries'],
-      title: json['title'],
-      titles: json['titles'],
-      type: json['type'],
-      updateDate: DateTime.parse(json['updateDate']),
-      updateDateIncludingText: DateTime.parse(json['updateDateIncludingText']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'actions': actions,
-      'amendments': amendments,
-      'cboCostEstimates': cboCostEstimates,
-      'committeeReports': committeeReports,
-      'committees': committees,
-      'congress': congress,
-      'contitutionalAuthorityStatement': constitutionalAuthorityStatementText,
-      'cosponsors': cosponsors,
-      'introducedDate': introducedDate.toIso8601String(),
-      'latestAction': latestAction,
-      'laws': laws,
-      'number': number,
-      'originChamber': originChamber,
-      'policyArea': policyArea,
-      'relatedBills': relatedBills,
-      'sponsors': sponsors,
-      'subjects': subjects,
-      'summaries': summaries,
-      'title': title,
-      'titles': titles,
-      'type': type,
-      'updateDate': updateDate.toIso8601String(),
-      'updateDateIncludingText': updateDateIncludingText.toIso8601String(),
-    };
-  }
-
-  factory Bill.fromMap(Map<String, dynamic> map) {
-    return Bill(
-      actions: map['actions'],
-      amendments: map['amendments'],
-      cboCostEstimates: map['cboCostEstimates'],
-      committeeReports: map['committeeReports'],
-      committees: map['committees'],
-      congress: map['congress'],
-      constitutionalAuthorityStatementText:
-          map['constitutionalAuthorityStatementText'],
-      cosponsors: map['cosponsors'],
-      introducedDate: DateTime.parse(map['introducedDate']),
-      latestAction: map['latestAction'],
-      laws: map['laws'],
-      number: map['number'],
-      originChamber: map['originChamber'],
-      policyArea: map['policyArea'],
-      relatedBills: map['relatedBills'],
-      sponsors: map['sponsors'],
-      subjects: map['subjects'],
-      summaries: map['summaries'],
-      title: map['title'],
-      titles: map['titles'],
-      type: map['type'],
-      updateDate: DateTime.parse(map['updateDate']),
-      updateDateIncludingText: DateTime.parse(map['updateDateIncludingText']),
-    );
-  }
-
-  // Factory constructor that takes a map output from congress_gov_api.dart's parseCsv() method and returns a list of Bill objects
-
-  Map<String, dynamic> toMap() {
-    return {
-      'actions': actions,
-      'amendments': amendments,
-      'cboCostEstimates': cboCostEstimates,
-      'committeeReports': committeeReports,
-      'committees': committees,
-      'congress': congress,
-      'constitutionalAuthorityStatementText':
-          constitutionalAuthorityStatementText,
-      'cosponsors': cosponsors,
-      'introducedDate': introducedDate.toIso8601String(),
-      'latestAction': latestAction,
-      'laws': laws,
-      'number': number,
-      'originChamber': originChamber,
-      'policyArea': policyArea,
-      'relatedBills': relatedBills,
-      'sponsors': sponsors,
-      'subjects': subjects,
-      'summaries': summaries,
-      'title': title,
-      'titles': titles,
-      'type': type,
-      'updateDate': updateDate.toIso8601String(),
-      'updateDateIncludingText': updateDateIncludingText.toIso8601String(),
-    };
+        type: typeString.billTypeFromCodeFormatted,
+        number: number,
+        title: map['Title'],
+        congress: congress,
+        source: BillSource.congressGovSearch,
+        congressString: congressString,
+        url: Uri.parse(map['URL']));
   }
 
   @override
@@ -195,5 +116,119 @@ class Bill extends Equatable {
         type,
         updateDate,
         updateDateIncludingText,
+        source,
       ];
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'actions': actions,
+      'amendments': amendments,
+      'cboCostEstimates': cboCostEstimates,
+      'committeeReports': committeeReports,
+      'committees': committees,
+      'congress': congress,
+      'constitutionalAuthorityStatementText':
+          constitutionalAuthorityStatementText,
+      'cosponsors': cosponsors,
+      'introducedDate': introducedDate?.toIso8601String(),
+      'latestAction': latestAction,
+      'laws': laws,
+      'number': number,
+      'originChamber': originChamber,
+      'policyArea': policyArea,
+      'relatedBills': relatedBills,
+      'sponsors': sponsors,
+      'subjects': subjects,
+      'summaries': summaries,
+      'title': title,
+      'titles': titles,
+      'type': type.typeCode.toString(),
+      'updateDate': updateDate?.toIso8601String(),
+      'updateDateIncludingText': updateDateIncludingText?.toIso8601String(),
+      'source': source?.toString(),
+      'congressString': congressString,
+      'url': url?.toString(),
+    };
+  }
+
+  factory Bill.fromMap(Map<String, dynamic> map) {
+    return Bill(
+      actions: map['actions'] != null
+          ? Map<String, dynamic>.from((map['actions'] as Map<String, dynamic>))
+          : null,
+      amendments: map['amendments'] != null
+          ? Map<String, dynamic>.from(
+              (map['amendments'] as Map<String, dynamic>))
+          : null,
+      cboCostEstimates: map['cboCostEstimates'] != null
+          ? List<Map<String, dynamic>>.from(map['cboCostEstimates'])
+          : null,
+      committeeReports: map['committeeReports'] != null
+          ? List<Map<String, dynamic>>.from(map['committeeReports'])
+          : null,
+      committees: map['committees'] != null
+          ? Map<String, dynamic>.from((map['committees']))
+          : null,
+      congress: map['congress'] as int,
+      constitutionalAuthorityStatementText:
+          map['constitutionalAuthorityStatementText'] != null
+              ? map['constitutionalAuthorityStatementText'] as String
+              : null,
+      cosponsors: map['cosponsors'] != null
+          ? Map<String, dynamic>.from((map['cosponsors']))
+          : null,
+      introducedDate: map['introducedDate'] != null
+          ? DateTime.parse(map['introducedDate'] as String)
+          : null,
+      latestAction: map['latestAction'] != null
+          ? Map<String, dynamic>.from((map['latestAction']))
+          : null,
+      laws: map['laws'] != null
+          ? List<Map<String, String>>.from(
+              map['laws'].map((e) => Map<String, String>.from(e)).toList())
+          : null,
+      number: int.parse(map['number'].toString()),
+      originChamber:
+          map['originChamber'] != null ? map['originChamber'] as String : null,
+      policyArea: map['policyArea'] != null
+          ? Map<String, String>.from((map['policyArea']))
+          : null,
+      relatedBills: map['relatedBills'] != null
+          ? Map<String, dynamic>.from((map['relatedBills']))
+          : null,
+      sponsors: map['sponsors'] != null
+          ? List<Map<String, dynamic>>.from(map['sponsors'])
+          : null,
+      subjects: map['subjects'] != null
+          ? Map<String, dynamic>.from((map['subjects']))
+          : null,
+      summaries: map['summaries'] != null
+          ? Map<String, dynamic>.from((map['summaries']))
+          : null,
+      title: map['title'] as String,
+      titles: map['titles'] != null
+          ? Map<String, dynamic>.from((map['titles']))
+          : null,
+      type: map['type'].toString().toLowerCase().billTypeFromCode,
+      updateDate: map['updateDate'] != null
+          ? DateTime.parse(map['updateDate'] as String)
+          : null,
+      updateDateIncludingText: map['updateDateIncludingText'] != null
+          ? DateTime.parse(map['updateDateIncludingText'] as String)
+          : null,
+      source: map['source'] != null
+          ? BillSource.values.firstWhere((element) =>
+              element.toString() == map['source'].toString().toLowerCase())
+          : null,
+      congressString: map['congressString'] != null
+          ? map['congressString'] as String
+          : null,
+      url: map['url'] != null ? Uri.parse(map['url'].toString()) : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Bill.fromJson(String source) =>
+      Bill.fromMap(json.decode(source) as Map<String, dynamic>);
 }
