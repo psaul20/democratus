@@ -1,4 +1,3 @@
-import 'package:democratus/models/congress_gov_bill/bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 

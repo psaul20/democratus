@@ -1,16 +1,13 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_import
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:democratus/enums/bill_source.dart';
 import 'package:democratus/enums/bill_type.dart';
 import 'package:equatable/equatable.dart';
 
-enum BillSource {
-  congressGovSearch,
-  congressGovAPI,
-}
-
-class Bill extends Equatable {
+//TODO: Conform to Bill class
+class CongressGovBill extends Equatable {
   //From CongressGov API
   final Map<String, dynamic>? actions;
   final Map<String, dynamic>? amendments;
@@ -40,7 +37,7 @@ class Bill extends Equatable {
   final String? congressString;
   final Uri? url;
 
-  const Bill({
+  const CongressGovBill({
     required this.type,
     required this.number,
     required this.title,
@@ -69,7 +66,7 @@ class Bill extends Equatable {
     this.url,
   });
 
-  factory Bill.fromCongressGovSearch(Map<String, dynamic> map) {
+  factory CongressGovBill.fromCongressGovSearch(Map<String, dynamic> map) {
     //List of string replacement words
     String typeString = map['Legislation Number'].toString().split(' ')[0];
     int number = int.parse(map['Legislation Number'].toString().split(' ')[1]);
@@ -80,7 +77,7 @@ class Bill extends Equatable {
     intString = intString.substring(0, intString.length - 2);
 
     int congress = int.parse(intString);
-    return Bill(
+    return CongressGovBill(
         type: typeString.billTypeFromCodeFormatted,
         number: number,
         title: map['Title'],
@@ -150,8 +147,8 @@ class Bill extends Equatable {
     };
   }
 
-  factory Bill.fromMap(Map<String, dynamic> map) {
-    return Bill(
+  factory CongressGovBill.fromMap(Map<String, dynamic> map) {
+    return CongressGovBill(
       actions: map['actions'] != null
           ? Map<String, dynamic>.from((map['actions'] as Map<String, dynamic>))
           : null,
@@ -228,6 +225,6 @@ class Bill extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory Bill.fromJson(String source) =>
-      Bill.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory CongressGovBill.fromJson(String source) =>
+      CongressGovBill.fromMap(json.decode(source) as Map<String, dynamic>);
 }

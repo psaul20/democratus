@@ -1,8 +1,9 @@
-import 'dart:convert';
+// ignore_for_file: unused_import
+
 import 'dart:io';
 import 'dart:developer';
 import 'package:csv/csv.dart';
-import 'package:democratus/models/congress_gov_bill/bill.dart';
+import 'package:democratus/models/bill_models/congress_gov_bill.dart';
 
 class CongressGovSearch {
   static Uri getSearchUri({
@@ -193,9 +194,9 @@ class CongressGovSearch {
   }
 
   //Convert the list of maps to a list of Bill objects
-  static List<Bill> convertCsvDataToBills(String csv) {
-    List<Map<String, dynamic>> csvDataAsMaps = parseCsvToMaps(csv);
-    List<Bill> bills = [];
-    return bills;
-  }
+  // static List<CongressGovBill> convertCsvDataToBills(String csv) {
+  //   List<Map<String, dynamic>> csvDataAsMaps = parseCsvToMaps(csv);
+  //   List<CongressGovBill> bills = [];
+  //   return bills;
+  // }
 }
