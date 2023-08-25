@@ -47,5 +47,16 @@ void main() {
       expect(jsonResponse['status'], 'OK');
       expect(jsonExample.keys, jsonResponse.keys);
     });
+    test('Testing Bill retrieval by keyword', () async {
+      http.Response response =
+          await ProPublicaApi.getBillByKeyword(keyword: 'megahertz', client: client);
+      expect(response.statusCode, 200);
+      Map<String, dynamic> jsonExample = jsonDecode(
+          File('test/pro_publica_tests/ref/bill_search_example.json')
+              .readAsStringSync());
+      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      expect(jsonResponse['status'], 'OK');
+      expect(jsonExample.keys, jsonResponse.keys);
+    });
   });
 }

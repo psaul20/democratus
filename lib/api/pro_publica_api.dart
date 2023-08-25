@@ -2,10 +2,13 @@
 
 import 'package:democratus/api/bills_provider.dart';
 import 'package:democratus/enums/bill_type.dart';
+import 'package:democratus/enums/pro_publica_params.dart';
 import 'package:democratus/models/bill_models/congress_gov_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'api_usage.dart';
+
+
 
 class ProPublicaApi {
   static String apiKey = dotenv.env['PRO_PUBLICA_API_KEY'] ?? '';
@@ -37,6 +40,13 @@ class ProPublicaApi {
       int congress, BillType type, int number, http.Client client) async {
     String url =
         '$baseUrl/${congress.toString()}/bills/${type.typeCode}${number.toString()}.json';
+    return client.get(Uri.parse(url), headers: headers);
+  }
+
+// Get bill by keyword https://api.propublica.org/congress/v1/bills/search.json?query={query}
+  static Future<http.Response> getBillByKeyword(
+      {required String keyword, required http.Client client, ProPublicaSort sort = ProPublicaSort.relevance}) async {
+    String url = '$baseUrl/bills/search.json?query=${keyword.toLowerCase()},&sort=${sort.sortCode}';
     return client.get(Uri.parse(url), headers: headers);
   }
 }
