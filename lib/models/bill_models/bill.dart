@@ -2,15 +2,13 @@
 import 'dart:convert';
 
 import 'package:democratus/enums/bill_source.dart';
+import 'package:democratus/enums/bill_type.dart';
 import 'package:democratus/models/bill_models/bill_action.dart';
 import 'package:democratus/models/bill_models/committee.dart';
 import 'package:democratus/models/bill_models/sponsor.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../enums/bill_type.dart';
-
 class Bill extends Equatable {
-  final String billId;
   final List<BillAction>? actions;
   final List<Map<String, dynamic>>? amendments;
   final List<Committee>? committees;
@@ -32,9 +30,13 @@ class Bill extends Equatable {
   final Uri? congressGovUrl;
   final Uri? govtrackUrl;
   final Uri? gpoUrl;
+  final bool hasDetails;
+  final bool isSaved;
+
+  String get billId =>
+      '${congress.toString()}-${type.typeCode}-${number.toString()}';
 
   const Bill({
-    required this.billId,
     this.actions,
     this.amendments,
     this.committees,
@@ -56,6 +58,8 @@ class Bill extends Equatable {
     this.congressGovUrl,
     this.govtrackUrl,
     this.gpoUrl,
+    this.hasDetails = false,
+    this.isSaved = false,
   });
 
   @override
@@ -64,6 +68,7 @@ class Bill extends Equatable {
         congress,
         number,
         lastUpdateDate,
+        hasDetails,
       ];
 
   Bill copyWith({
@@ -89,9 +94,10 @@ class Bill extends Equatable {
     Uri? congressGovUrl,
     Uri? govtrackUrl,
     Uri? gpoUrl,
+    bool? hasDetails,
+    bool? isSaved,
   }) {
     return Bill(
-      billId: billId ?? this.billId,
       actions: actions ?? this.actions,
       amendments: amendments ?? this.amendments,
       committees: committees ?? this.committees,
@@ -113,12 +119,13 @@ class Bill extends Equatable {
       congressGovUrl: congressGovUrl ?? this.congressGovUrl,
       govtrackUrl: govtrackUrl ?? this.govtrackUrl,
       gpoUrl: gpoUrl ?? this.gpoUrl,
+      hasDetails: hasDetails ?? this.hasDetails,
+      isSaved: isSaved ?? this.isSaved,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'billId': billId,
       'actions': actions,
       'amendments': amendments,
       'committees': committees,
@@ -140,12 +147,13 @@ class Bill extends Equatable {
       'congressGovUrl': congressGovUrl?.toString(),
       'govtrackUrl': govtrackUrl?.toString(),
       'gpoUrl': gpoUrl?.toString(),
+      'hasDetails': hasDetails,
+      'isSaved': isSaved,
     };
   }
 
   factory Bill.fromMap(Map<String, dynamic> map) {
     return Bill(
-      billId: map['billId'] as String,
       actions:
           map['actions'] != null ? List<BillAction>.from(map['actions']) : null,
       amendments: map['amendments'] != null
@@ -192,6 +200,8 @@ class Bill extends Equatable {
       govtrackUrl:
           map['govtrackUrl'] != null ? Uri.parse(map['govtrackUrl']) : null,
       gpoUrl: map['gpoUrl'] != null ? Uri.parse(map['gpoUrl']) : null,
+      hasDetails: map['hasDetails'] as bool,
+      isSaved: map['isSaved'] as bool,
     );
   }
 

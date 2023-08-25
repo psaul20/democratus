@@ -11,7 +11,6 @@ import 'package:democratus/models/bill_models/sponsor.dart';
 class ProPublicaBill extends Bill {
   ProPublicaBill.fromMap(Map<String, dynamic> map)
       : super(
-          billId: map['bill_id'],
           actions: map['actions'] != null
               ? List<BillAction>.from(
                   (map['actions'] as List)
@@ -72,6 +71,11 @@ class ProPublicaBill extends Bill {
   factory ProPublicaBill.fromJson(String json) {
     Map<String, dynamic> map = jsonDecode(json);
     return ProPublicaBill.fromMap(map);
+  }
+
+  factory ProPublicaBill.fromResponseBody(String responseBody) {
+    Map<String, dynamic> map = jsonDecode(responseBody);
+    return ProPublicaBill.fromMap(map['results'][0]);
   }
 
   static ProPublicaBill fromExample() {

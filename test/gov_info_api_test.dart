@@ -1,13 +1,16 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/models/collection.dart';
 import 'package:democratus/models/package.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 
 void main() async {
   String testID = 'BILLS-116hr809ih';
+  setUpAll(() => dotenv.testLoad(fileInput: File('.env').readAsStringSync()));
   test('Get Package by ID Test', () async {
     Response response = await GovinfoApi().getPackageById(testID);
     Package testPackage = Package.fromJson(response.body);

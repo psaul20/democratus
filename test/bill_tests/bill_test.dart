@@ -10,8 +10,8 @@ void main() {
       String billString = File('test/pro_publica_tests/ref/bill_example.json')
           .readAsStringSync();
       ProPublicaBill bill =
-          ProPublicaBill.fromMap(jsonDecode(billString)['results'][0]);
-      expect(bill.billId, 'hr502-116');
+          ProPublicaBill.fromResponseBody(billString);
+      expect(bill.billId, '116-hr-502');
       expect(bill.congress, 116);
     });
 
@@ -25,7 +25,7 @@ void main() {
         bills.add(ProPublicaBill.fromMap(bill));
       }
       expect(bills.length, 20);
-      expect(bills[0].billId, 's1706-115');
+      expect(bills[0].billId, '115-s-1706');
     });
   });
 }
