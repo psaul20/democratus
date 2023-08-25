@@ -5,9 +5,6 @@ import 'package:democratus/enums/bill_type.dart';
 import 'package:democratus/models/bill_models/congress_gov_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
 import 'api_usage.dart';
 
 class ProPublicaApi {

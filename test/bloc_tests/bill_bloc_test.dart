@@ -1,12 +1,9 @@
 import 'dart:io';
 
-import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/blocs/bloc/bill_bloc.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/testing.dart';
 import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +14,6 @@ void main() {
   setUpAll(() => dotenv.testLoad(fileInput: File('.env').readAsStringSync()));
 
   group('Bill Bloc Tests', () {
-    final client = mock.MockClient();
     late BillBloc billBloc;
     setUp(() {
       billBloc = BillBloc(ProPublicaBill.fromExample());
