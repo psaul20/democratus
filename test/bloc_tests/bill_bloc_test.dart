@@ -1,13 +1,11 @@
 import 'dart:io';
-
-import 'package:democratus/blocs/bloc/bill_bloc.dart';
+import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mockito/annotations.dart';
 import 'package:test/test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:http/http.dart' as http;
-import 'bill_bloc_test.mocks.dart' as mock;
 
 @GenerateMocks([http.Client])
 void main() {
