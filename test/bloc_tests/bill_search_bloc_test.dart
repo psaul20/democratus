@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
@@ -46,6 +44,25 @@ void main() {
                 List<Bill>.from(ProPublicaBill.fromExampleKeywordSearch())),
       ],
       verify: (bloc) => bloc.state.searchBills.isNotEmpty,
+    );
+    //bloctest for failure case
+    blocTest(
+      'emits [BillSearchState(status: BillSearchStatus.searching),'
+      'BillSearchState(status: BillSearchStatus.failure, searchBills: [])]'
+      'when KeywordSearch is added',
+      build: () {
+        when(client.get(any, headers: anyNamed('headers')))
+            .thenAnswer((_) async => http.Response('error', 404));
+        return BillSearchBloc(client: client);
+      },
+      act: (bloc) => bloc.add(KeywordSearch('climate')),
+      expect: () => <BillSearchState>[
+        const BillSearchState(
+            status: BillSearchStatus.searching, keyword: 'climate'),
+        const BillSearchState(
+            status: BillSearchStatus.failure, keyword: 'climate'),
+      ],
+      verify: (bloc) => bloc.state.searchBills.isEmpty,
     );
   });
 }

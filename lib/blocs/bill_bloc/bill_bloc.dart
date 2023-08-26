@@ -14,7 +14,9 @@ part 'bill_state.dart';
 enum BillStatus { success, loading, failure }
 
 class BillBloc extends Bloc<BillEvent, BillState> {
-  BillBloc(bill) : super(BillState(bill: bill)) {
+  http.Client client;
+  BillBloc({required bill, required this.client})
+      : super(BillState(bill: bill)) {
     on<UpdateBill>((event, emit) => emit(state.copyWith(
           bill: event.bill,
           status: BillStatus.success,
@@ -43,7 +45,6 @@ class BillBloc extends Bloc<BillEvent, BillState> {
   }
 
   Future<Bill> _fetchBill() async {
-    http.Client client = http.Client();
     http.Response response = await ProPublicaApi.getBillById(
         state.bill.congress, state.bill.type, state.bill.number, client);
     if (response.statusCode == 200) {
