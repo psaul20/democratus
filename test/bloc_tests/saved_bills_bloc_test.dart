@@ -9,10 +9,8 @@ import '../mocks.dart';
 void main() {
   group('Saved Bills Bloc Tests', () {
     List<Bill> bills = ProPublicaBill.fromExampleSubjectSearch();
-    late SavedBillsBloc savedBillsBloc;
     setUpAll(() async {
       initHydratedStorage();
-      savedBillsBloc = SavedBillsBloc();
     });
     blocTest(
       'emits [SavedBillsState(bills: bills)] when replaceBills is added',
