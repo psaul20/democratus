@@ -44,8 +44,11 @@ class ProPublicaBill extends Bill {
               int.parse(map['bill_id'].toString().split('-')[1]),
           introducedDate: DateTime.parse(map['introduced_date']),
           latestAction: map['latest_major_action'],
-          number: int.parse(
-              map['bill_slug'].toString().replaceAll(RegExp(r'[^0-9]'), '')),
+          number: int.tryParse(map['bill_slug']
+                  .toString()
+                  .replaceAll(RegExp(r'[^0-9]'), '')) ??
+              int.parse(
+                  map['number'].toString().replaceAll(RegExp(r'[^0-9]'), '')),
           sponsors: [
             BillSponsor(
                 sponsorId: map['sponsor_id'],
@@ -78,6 +81,26 @@ class ProPublicaBill extends Bill {
     return ProPublicaBill.fromMap(map['results'][0]);
   }
 
+  static List<ProPublicaBill> fromResponseBodyList(String responseBody) {
+    Map<String, dynamic> map = jsonDecode(responseBody);
+    //Changes depending on type of search
+    List<Map<String, dynamic>> billResults =
+        List<Map<String, dynamic>>.from(map['results']);
+    billResults =
+        billResults.where((element) => element.containsKey('bills')).isEmpty
+            ? billResults
+            : List.from(Map<String, dynamic>.from(
+                billResults.firstWhere(
+                  (element) => element.containsKey('bills'),
+                ),
+              )['bills']);
+    List<ProPublicaBill> bills = [];
+    for (final Map<String, dynamic> bill in billResults) {
+      bills.add(ProPublicaBill.fromMap(bill));
+    }
+    return bills;
+  }
+
   static ProPublicaBill fromExample() {
     String billString =
         File('test/pro_publica_tests/ref/bill_example.json').readAsStringSync();
@@ -88,10 +111,13 @@ class ProPublicaBill extends Bill {
     String billString =
         File('test/pro_publica_tests/ref/bills_by_subject_example.json')
             .readAsStringSync();
-    List<ProPublicaBill> bills = [];
-    for (final Map<String, dynamic> bill in jsonDecode(billString)['results']) {
-      bills.add(ProPublicaBill.fromMap(bill));
-    }
-    return bills;
+    return fromResponseBodyList(billString);
+  }
+
+  static List<ProPublicaBill> fromExampleKeywordSearch() {
+    String billString =
+        File('test/pro_publica_tests/ref/bill_search_example.json')
+            .readAsStringSync();
+    return fromResponseBodyList(billString);
   }
 }

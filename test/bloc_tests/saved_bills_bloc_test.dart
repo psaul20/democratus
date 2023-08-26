@@ -1,15 +1,8 @@
-import 'package:democratus/api/pro_publica_api.dart';
-import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:mockito/mockito.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../mocks.dart';
 

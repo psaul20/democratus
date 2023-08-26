@@ -8,8 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'api_usage.dart';
 
-
-
 class ProPublicaApi {
   static String apiKey = dotenv.env['PRO_PUBLICA_API_KEY'] ?? '';
   static String baseUrl = 'https://api.propublica.org/congress/v1';
@@ -45,8 +43,11 @@ class ProPublicaApi {
 
 // Get bill by keyword https://api.propublica.org/congress/v1/bills/search.json?query={query}
   static Future<http.Response> getBillByKeyword(
-      {required String keyword, required http.Client client, ProPublicaSort sort = ProPublicaSort.relevance}) async {
-    String url = '$baseUrl/bills/search.json?query=${keyword.toLowerCase()},&sort=${sort.sortCode}';
+      {required String keyword,
+      required http.Client client,
+      ProPublicaSort sort = ProPublicaSort.relevance}) async {
+    String url =
+        '$baseUrl/bills/search.json?query=${keyword.toLowerCase()}&sort=${sort.sortCode}';
     return client.get(Uri.parse(url), headers: headers);
   }
 }
