@@ -1,13 +1,20 @@
 import 'dart:io';
 
+import 'package:democratus/api/pro_publica_api.dart';
+import 'package:democratus/globals/enums/bill_type.dart';
+import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart';
 
 void main() {
+  Client client = Client();
   group('Testing Pro Publica Bill', () {
+    setUpAll(() => dotenv.testLoad(fileInput: File('.env').readAsStringSync()));
     test('Testing Pro Publica Bill creation from JSON', () {
-      String billString = File('test/pro_publica_tests/ref/bill_example.json')
-          .readAsStringSync();
+      String billString =
+          File('${Strings.billFilePath}/bill_example.json').readAsStringSync();
       ProPublicaBill bill = ProPublicaBill.fromResponseBody(billString);
       expect(bill.billId, '116-hr-502');
       expect(bill.congress, 116);
@@ -15,7 +22,7 @@ void main() {
 
     test('Testing Pro Publica Bill creation from bill by subject result', () {
       String billString =
-          File('test/pro_publica_tests/ref/bills_by_subject_example.json')
+          File('${Strings.billFilePath}/bills_by_subject_example.json')
               .readAsStringSync();
       List<ProPublicaBill> bills =
           ProPublicaBill.fromResponseBodyList(billString);
@@ -25,12 +32,20 @@ void main() {
 
     test('Testing Pro Publica Bill creation from bill search result', () {
       String billString =
-          File('test/pro_publica_tests/ref/bill_search_example.json')
+          File('${Strings.billFilePath}/bill_search_example.json')
               .readAsStringSync();
       List<ProPublicaBill> bills =
           ProPublicaBill.fromResponseBodyList(billString);
       expect(bills.length, 10);
       expect(bills[0].billId, '113-hr-2739');
+    });
+
+    test('Testing Pro Publica Bill Creation from API response', () async {
+      // https://www.govtrack.us/congress/bills/118/hr5204
+      Response response =
+          await ProPublicaApi.getBillById(118, BillType.hr, 5204, client);
+      ProPublicaBill bill = ProPublicaBill.fromResponseBody(response.body);
+      expect(bill.billId, '118-hr-5204');
     });
   });
 }

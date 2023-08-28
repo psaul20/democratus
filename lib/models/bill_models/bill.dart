@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:democratus/enums/bill_source.dart';
-import 'package:democratus/enums/bill_type.dart';
+import 'package:democratus/globals/enums/bill_source.dart';
+import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/models/bill_models/bill_action.dart';
 import 'package:democratus/models/bill_models/committee.dart';
 import 'package:democratus/models/bill_models/sponsor.dart';
@@ -35,6 +35,8 @@ class Bill extends Equatable {
 
   String get billId =>
       '${congress.toString()}-${type.typeCode}-${number.toString()}';
+
+  String get displayTitle => shortTitle ?? title;
 
   const Bill({
     this.actions,

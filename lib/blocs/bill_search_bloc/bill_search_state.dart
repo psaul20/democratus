@@ -6,12 +6,12 @@ enum BillSearchStatus { initial, searching, success, failure }
 class BillSearchState extends Equatable {
   final BillSearchStatus status;
   final List<Bill> searchBills;
-  final String? keyword;
+  final String keyword;
 
   const BillSearchState({
     this.status = BillSearchStatus.initial,
     this.searchBills = const <Bill>[],
-    this.keyword,
+    this.keyword = '',
   });
 
   @override

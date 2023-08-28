@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
+import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,9 +16,8 @@ import 'bill_search_bloc_test.mocks.dart';
 @GenerateMocks([http.Client])
 void main() {
   late MockClient client;
-  String exampleJson =
-      File('test/pro_publica_tests/ref/bill_search_example.json')
-          .readAsStringSync();
+  String exampleJson = File('${Strings.billFilePath}/bill_search_example.json')
+      .readAsStringSync();
   group('Bill_Search_Bloc tests', () {
     setUp(() {
       initHydratedStorage();
@@ -33,7 +33,7 @@ void main() {
             .thenAnswer((_) async => http.Response(exampleJson, 200));
         return BillSearchBloc(client: client);
       },
-      act: (bloc) => bloc.add(KeywordSearch('climate')),
+      act: (bloc) => bloc.add(KeywordSearch(keyword: 'climate')),
       expect: () => <BillSearchState>[
         const BillSearchState(
             status: BillSearchStatus.searching, keyword: 'climate'),
@@ -55,7 +55,7 @@ void main() {
             .thenAnswer((_) async => http.Response('error', 404));
         return BillSearchBloc(client: client);
       },
-      act: (bloc) => bloc.add(KeywordSearch('climate')),
+      act: (bloc) => bloc.add(KeywordSearch(keyword: 'climate')),
       expect: () => <BillSearchState>[
         const BillSearchState(
             status: BillSearchStatus.searching, keyword: 'climate'),
@@ -65,4 +65,21 @@ void main() {
       verify: (bloc) => bloc.state.searchBills.isEmpty,
     );
   });
+  //bloctest for keyword empty
+  blocTest(
+    'emits [BillSearchState(status: BillSearchStatus.initial,'
+    'searchBills: [])]'
+    'when KeywordSearch is added',
+    build: () {
+      when(client.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response('', 200));
+      return BillSearchBloc(client: client);
+    },
+    act: (bloc) => bloc.add(KeywordSearch(keyword: '')),
+    expect: () => <BillSearchState>[
+      const BillSearchState(
+          status: BillSearchStatus.initial, keyword: ''),
+    ],
+    verify: (bloc) => bloc.state.searchBills.isEmpty,
+  );
 }

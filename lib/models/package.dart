@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_import
 import 'dart:convert';
-import 'package:democratus/converters/date_converters.dart';
-import 'package:democratus/converters/string_converters.dart';
+import 'package:democratus/globals/converters/date_converters.dart';
+import 'package:democratus/globals/converters/string_converters.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';

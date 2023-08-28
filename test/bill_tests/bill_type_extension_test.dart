@@ -1,4 +1,4 @@
-import 'package:democratus/enums/bill_type.dart';
+import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

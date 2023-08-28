@@ -3,7 +3,7 @@
 // - getting a list of bills by search query including: published date range, collection codes, document classes, and size
 // - printing a log of the response from the API
 
-import 'package:democratus/enums/bill_type.dart';
+import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:http/http.dart';
 
 //TODO: define this class to act as a consistent interface for all bills providers

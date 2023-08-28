@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:democratus/api/api_usage.dart';
-import 'package:democratus/errors/data_fetch_errors.dart';
+import 'package:democratus/globals/errors/data_fetch_errors.dart';
 import 'package:democratus/models/package.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;

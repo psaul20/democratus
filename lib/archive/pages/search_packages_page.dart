@@ -1,12 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:core';
-import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
-import 'package:democratus/blocs/package_search_bloc.dart';
+import 'package:democratus/archive/bloc/filtered_packages/filtered_packages_bloc.dart';
+import 'package:democratus/archive/bloc/package_search_bloc.dart';
+import 'package:democratus/archive/widgets/search_filter_widgets/package_search_bar.dart';
+import 'package:democratus/globals/enums/errors.dart';
 import 'package:democratus/widgets/generic/errors.dart';
 import 'package:democratus/widgets/generic/fetch_circle.dart';
-import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
-import 'package:democratus/widgets/search_widgets/package_search_bar.dart';
-import 'package:democratus/widgets/search_widgets/search_filter_widgets/search_filter_dialog.dart';
+import 'package:democratus/archive/widgets/package_widgets/package_sliver_list.dart';
+import 'package:democratus/widgets/search_widgets/bill_search_bar.dart';
+import 'package:democratus/archive/widgets/search_filter_widgets/search_filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -74,7 +76,7 @@ class SearchPackagesPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ErrorText(),
+                      ErrorText(error: Errors.dataFetchError),
                     ],
                   );
                 }

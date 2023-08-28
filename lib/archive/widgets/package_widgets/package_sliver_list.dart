@@ -1,7 +1,8 @@
-import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
-import 'package:democratus/blocs/package_bloc.dart';
+
+import 'package:democratus/archive/bloc/filtered_packages/filtered_packages_bloc.dart';
+import 'package:democratus/archive/bloc/package_bloc.dart';
 import 'package:democratus/models/package.dart';
-import 'package:democratus/widgets/package_widgets/package_tile.dart';
+import 'package:democratus/archive/widgets/package_widgets/package_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

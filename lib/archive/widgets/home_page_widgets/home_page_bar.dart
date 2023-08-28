@@ -1,3 +1,4 @@
+import 'package:democratus/archive/widgets/search_filter_widgets/search_text_field.dart';
 import 'package:flutter/material.dart';
 
 class HomePageBar extends StatelessWidget {
@@ -10,7 +11,9 @@ class HomePageBar extends StatelessWidget {
         child: Padding(
             padding: EdgeInsets.all(10),
             child: Wrap(
-              children: [],
+              children: [
+                SearchTextField(),
+              ],
             )),
       ),
     );

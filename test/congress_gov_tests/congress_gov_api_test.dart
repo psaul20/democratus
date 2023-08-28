@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:democratus/api/congress_gov_api.dart';
-import 'package:democratus/enums/bill_type.dart';
+import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/models/bill_models/congress_gov_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';

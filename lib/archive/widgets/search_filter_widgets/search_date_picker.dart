@@ -1,5 +1,6 @@
-import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
-import 'package:democratus/blocs/package_search_bloc.dart';
+
+import 'package:democratus/archive/bloc/filtered_packages/filtered_packages_bloc.dart';
+import 'package:democratus/archive/bloc/package_search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';

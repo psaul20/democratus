@@ -13,11 +13,21 @@ part 'bill_search_event.dart';
 part 'bill_search_state.dart';
 
 class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
-  final http.Client client;
-  BillSearchBloc({required this.client}) : super(const BillSearchState()) {
+  http.Client client;
+  BillSearchBloc({client})
+      : client = client ?? http.Client(),
+        super(const BillSearchState()) {
     on<KeywordSearch>(_onKeywordSearch);
   }
   _onKeywordSearch(KeywordSearch event, Emitter<BillSearchState> emit) async {
+    //TODO: Fix this if any other search events are added
+    if (event.keyword.isEmpty) {
+      emit(state.copyWith(
+          status: BillSearchStatus.initial,
+          keyword: event.keyword,
+          searchBills: []));
+      return;
+    }
     try {
       emit(state.copyWith(
           status: BillSearchStatus.searching, keyword: event.keyword));

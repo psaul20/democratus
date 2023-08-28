@@ -1,8 +1,8 @@
 // ignore_for_file: unused_import
 
 import 'package:democratus/api/bills_provider.dart';
-import 'package:democratus/enums/bill_type.dart';
-import 'package:democratus/enums/pro_publica_params.dart';
+import 'package:democratus/globals/enums/bill_type.dart';
+import 'package:democratus/globals/enums/pro_publica_params.dart';
 import 'package:democratus/models/bill_models/congress_gov_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;

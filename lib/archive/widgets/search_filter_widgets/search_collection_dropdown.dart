@@ -1,4 +1,5 @@
-import 'package:democratus/blocs/package_search_bloc.dart';
+
+import 'package:democratus/archive/bloc/package_search_bloc.dart';
 import 'package:democratus/models/collection.dart';
 import 'package:democratus/theming/text_styles.dart';
 import 'package:democratus/theming/theme_data.dart';

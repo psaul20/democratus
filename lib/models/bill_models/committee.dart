@@ -2,10 +2,10 @@
 import 'dart:convert';
 
 class Committee {
-  final String code;
+  final String? code;
   final String description;
   Committee({
-    required this.code,
+    this.code,
     required this.description,
   });
 
@@ -35,7 +35,8 @@ class Committee {
 
   String toJson() => json.encode(toMap());
 
-  factory Committee.fromJson(String source) => Committee.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Committee.fromJson(String source) =>
+      Committee.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() => 'Committee(code: $code, description: $description)';
@@ -43,10 +44,8 @@ class Committee {
   @override
   bool operator ==(covariant Committee other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.code == code &&
-      other.description == description;
+
+    return other.code == code && other.description == description;
   }
 
   @override

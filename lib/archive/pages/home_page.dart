@@ -1,10 +1,10 @@
-import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
-import 'package:democratus/blocs/saved_package_bloc.dart';
-import 'package:democratus/blocs/package_search_bloc.dart';
-import 'package:democratus/pages/search_packages_page.dart';
+import 'package:democratus/archive/bloc/filtered_packages/filtered_packages_bloc.dart';
+import 'package:democratus/archive/bloc/package_search_bloc.dart';
+import 'package:democratus/archive/bloc/saved_package_bloc.dart';
+import 'package:democratus/archive/pages/search_packages_page.dart';
 import 'package:democratus/widgets/home_page_widgets/home_page_bar.dart';
-import 'package:democratus/widgets/package_widgets/package_sliver_list.dart';
-import 'package:democratus/widgets/search_widgets/search_filter_widgets/search_filter_dialog.dart';
+import 'package:democratus/archive/widgets/package_widgets/package_sliver_list.dart';
+import 'package:democratus/archive/widgets/search_filter_widgets/search_filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,4 +1,5 @@
-import 'package:democratus/blocs/package_bloc.dart';
+
+import 'package:democratus/archive/bloc/package_bloc.dart';
 import 'package:democratus/theming/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

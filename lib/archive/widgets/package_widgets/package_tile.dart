@@ -1,10 +1,12 @@
-import 'package:democratus/blocs/package_bloc.dart';
-import 'package:democratus/blocs/saved_package_bloc.dart';
+
+import 'package:democratus/archive/bloc/package_bloc.dart';
+import 'package:democratus/archive/bloc/saved_package_bloc.dart';
+import 'package:democratus/globals/enums/errors.dart';
 import 'package:democratus/models/package.dart';
 import 'package:democratus/theming/text_styles.dart';
 import 'package:democratus/widgets/generic/errors.dart';
 import 'package:democratus/widgets/generic/fetch_circle.dart';
-import 'package:democratus/widgets/package_widgets/package_details.dart';
+import 'package:democratus/archive/widgets/package_widgets/package_details.dart';
 import 'package:democratus/widgets/reader_widgets/read_more_button.dart';
 import 'package:democratus/widgets/home_page_widgets/save_button.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +36,12 @@ class _PackageTileState extends State<PackageTile> {
       }
     }
 
-    return BlocBuilder<PackageBloc, PackageState>(
-        builder: (context, state) {
+    return BlocBuilder<PackageBloc, PackageState>(builder: (context, state) {
       if (state.status == PackageStatus.failure) {
-        return const Card(child: ErrorText());
+        return const Card(
+            child: ErrorText(
+          error: Errors.dataFetchError,
+        ));
       } else if (!state.package.isSaved) {
         checkSaved(state.package);
       }

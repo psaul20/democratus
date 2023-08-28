@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:democratus/enums/bill_source.dart';
-import 'package:democratus/enums/bill_type.dart';
+import 'package:democratus/globals/enums/bill_source.dart';
+import 'package:democratus/globals/enums/bill_type.dart';
+import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/bill_action.dart';
 import 'package:democratus/models/bill_models/committee.dart';
@@ -37,7 +38,9 @@ class ProPublicaBill extends Bill {
           committees: [
             Committee(
               description: map['committees'],
-              code: map['committee_codes'][0],
+              code: List<String>.from(map['committee_codes']).isNotEmpty
+                  ? List<String>.from(map['committee_codes'])[0]
+                  : null,
             )
           ],
           congress: int.tryParse(map['congress'] ?? '') ??
@@ -102,22 +105,20 @@ class ProPublicaBill extends Bill {
   }
 
   static ProPublicaBill fromExample() {
-    String billString =
-        File('test/pro_publica_tests/ref/bill_example.json').readAsStringSync();
+    String billpath = '${Strings.billFilePath}/bill_example.json';
+    String billString = File(billpath).readAsStringSync();
     return ProPublicaBill.fromMap(jsonDecode(billString)['results'][0]);
   }
 
   static List<ProPublicaBill> fromExampleSubjectSearch() {
-    String billString =
-        File('test/pro_publica_tests/ref/bills_by_subject_example.json')
-            .readAsStringSync();
+    String billpath = '${Strings.billFilePath}/bills_by_subject_example.json';
+    String billString = File(billpath).readAsStringSync();
     return fromResponseBodyList(billString);
   }
 
   static List<ProPublicaBill> fromExampleKeywordSearch() {
-    String billString =
-        File('test/pro_publica_tests/ref/bill_search_example.json')
-            .readAsStringSync();
+    String billpath = '${Strings.billFilePath}/bill_search_example.json';
+    String billString = File(billpath).readAsStringSync();
     return fromResponseBodyList(billString);
   }
 }

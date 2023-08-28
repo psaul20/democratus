@@ -2,8 +2,8 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:democratus/enums/bill_source.dart';
-import 'package:democratus/enums/bill_type.dart';
+import 'package:democratus/globals/enums/bill_source.dart';
+import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:equatable/equatable.dart';
 
 //TODO: Conform to Bill class

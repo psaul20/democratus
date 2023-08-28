@@ -10,9 +10,8 @@ sealed class BillSearchEvent extends Equatable {
 class KeywordSearch extends BillSearchEvent {
   final String keyword;
 
-  KeywordSearch(this.keyword);
+  KeywordSearch({required this.keyword});
 
   @override
   List<Object> get props => [keyword];
 }
-

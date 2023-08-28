@@ -1,8 +1,8 @@
-import 'package:democratus/blocs/filtered_packages/filtered_packages_bloc.dart';
-import 'package:democratus/blocs/package_search_bloc.dart';
+import 'package:democratus/archive/bloc/filtered_packages/filtered_packages_bloc.dart';
+import 'package:democratus/archive/bloc/package_search_bloc.dart';
 import 'package:democratus/theming/theme_data.dart';
-import 'package:democratus/widgets/search_widgets/search_filter_widgets/search_date_picker.dart';
-import 'package:democratus/widgets/search_widgets/search_filter_widgets/docclass_filter_list.dart';
+import 'package:democratus/archive/widgets/search_filter_widgets/search_date_picker.dart';
+import 'package:democratus/archive/widgets/search_filter_widgets/docclass_filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
