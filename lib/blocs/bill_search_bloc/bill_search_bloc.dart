@@ -1,4 +1,5 @@
 import 'package:democratus/api/pro_publica_api.dart';
+import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 // ignore_for_file: public_member_api_docs, sort_constructors_first

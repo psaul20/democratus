@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
+import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';

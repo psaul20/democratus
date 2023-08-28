@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'bill_search_bloc.dart';
 
-enum BillSearchStatus { initial, searching, success, failure }
+
 
 class BillSearchState extends Equatable {
   final BillSearchStatus status;

@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:core';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
+import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/globals/enums/errors.dart';
 import 'package:democratus/widgets/bill_sliver_list.dart';
 import 'package:democratus/widgets/generic/errors.dart';
-import 'package:democratus/widgets/generic/fetch_circle.dart';
 import 'package:democratus/widgets/search_widgets/bill_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +43,7 @@ class BillSearchPage extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          'Enter Keywords Above to Search Bills',
+                          BillSearchStatus.initial.statusFeedback,
                           style: Theme.of(context).textTheme.titleLarge,
                           textAlign: TextAlign.center,
                         ),

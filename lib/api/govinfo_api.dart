@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:democratus/api/api_usage.dart';
-import 'package:democratus/globals/errors/data_fetch_errors.dart';
 import 'package:democratus/models/package.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -63,7 +62,7 @@ class GovinfoApi {
         throw Exception('Failed to retrieve package text');
       }
     } else {
-      return Future.error(GetHtmlError("Html Link not found"));
+      return Future.error(Exception("Html Link not found"));
     }
   }
 }

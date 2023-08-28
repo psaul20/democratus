@@ -1,4 +1,5 @@
 import 'package:democratus/globals/enums/errors.dart';
+// ignore: unused_import
 import 'package:democratus/theming/text_styles.dart';
 import 'package:flutter/material.dart';
 
