@@ -15,3 +15,5 @@ class KeywordSearch extends BillSearchEvent {
   @override
   List<Object> get props => [keyword];
 }
+
+class ScrollSearchOffset extends BillSearchEvent {}

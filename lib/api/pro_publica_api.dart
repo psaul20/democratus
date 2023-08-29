@@ -45,9 +45,10 @@ class ProPublicaApi {
   static Future<http.Response> getBillByKeyword(
       {required String keyword,
       required http.Client client,
-      ProPublicaSort sort = ProPublicaSort.relevance}) async {
+      ProPublicaSort sort = ProPublicaSort.relevance,
+      int offset = 0}) async {
     String url =
-        '$baseUrl/bills/search.json?query=${keyword.toLowerCase()}&sort=${sort.sortCode}';
+        '$baseUrl/bills/search.json?query=${keyword.toLowerCase()}&sort=${sort.sortCode}&offset=$offset';
     return client.get(Uri.parse(url), headers: headers);
   }
 }
