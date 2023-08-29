@@ -76,7 +76,6 @@ class BillSearchPage extends StatelessWidget {
                 {
                   bodyWidget = BillSliverList(
                     billList: state.searchBills,
-                    client: Client(),
                   );
                 }
             }

@@ -1,6 +1,6 @@
 part of 'bill_search_bloc.dart';
 
-sealed class BillSearchEvent extends Equatable {
+class BillSearchEvent extends Equatable {
   @override
   List<Object> get props => [];
 }

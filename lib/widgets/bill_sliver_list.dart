@@ -7,11 +7,9 @@ import 'package:http/http.dart';
 
 class BillSliverList extends StatelessWidget {
   final List<Bill> billList;
-  final Client client;
   const BillSliverList({
     super.key,
     required this.billList,
-    required this.client,
   });
 
   @override
@@ -20,7 +18,7 @@ class BillSliverList extends StatelessWidget {
       itemBuilder: (context, index, animation) => BlocProvider<BillBloc>(
           key: ValueKey(billList[index].billId),
           create: (_) {
-            return BillBloc(bill: billList[index], client: client);
+            return BillBloc(bill: billList[index]);
           },
           child: const BillTile()),
       initialItemCount: billList.length,

@@ -1,7 +1,7 @@
 part of 'saved_bills_bloc.dart';
 
 @immutable
-sealed class SavedBillsEvent {}
+class SavedBillsEvent {}
 
 final class ReplaceBills extends SavedBillsEvent {
   final List<Bill> bills;

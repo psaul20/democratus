@@ -7,7 +7,6 @@ import 'package:democratus/globals/enums/errors.dart';
 import 'package:democratus/widgets/generic/errors.dart';
 import 'package:democratus/widgets/generic/fetch_circle.dart';
 import 'package:democratus/archive/widgets/package_widgets/package_sliver_list.dart';
-import 'package:democratus/widgets/search_widgets/bill_search_bar.dart';
 import 'package:democratus/archive/widgets/search_filter_widgets/search_filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

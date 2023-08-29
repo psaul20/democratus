@@ -15,8 +15,9 @@ enum BillStatus { success, loading, failure }
 
 class BillBloc extends Bloc<BillEvent, BillState> {
   http.Client client;
-  BillBloc({required bill, required this.client})
-      : super(BillState(bill: bill)) {
+  BillBloc({required bill, client})
+      : client = client ?? http.Client(),
+        super(BillState(bill: bill)) {
     on<UpdateBill>((event, emit) => emit(state.copyWith(
           bill: event.bill,
           status: BillStatus.success,
