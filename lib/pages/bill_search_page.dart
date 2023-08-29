@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_import
 import 'dart:core';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';

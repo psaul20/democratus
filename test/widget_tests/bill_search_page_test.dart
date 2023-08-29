@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
@@ -12,9 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import '../bloc_tests/bill_search_bloc_test.mocks.dart';
 import '../mocks.dart';
 
 Future<void> main() async {

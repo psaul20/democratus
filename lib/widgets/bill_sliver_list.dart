@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/widgets/bill_tile.dart';
