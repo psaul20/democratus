@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
+import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mockito/annotations.dart';
@@ -13,18 +14,21 @@ import 'bill_bloc_test.mocks.dart';
 @GenerateMocks([http.Client])
 void main() {
   late MockClient client;
+  late BillBloc billBloc;
   setUpAll(
     () {
       client = MockClient();
       dotenv.testLoad(fileInput: File('.env').readAsStringSync());
+      when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(
+              File('${Strings.billFilePath}/bill_example.json')
+                  .readAsStringSync(),
+              200));
+      billBloc = BillBloc(bill: ProPublicaBill.fromExample(), client: client);
     },
   );
 
   group('Bill Bloc Tests', () {
-    late BillBloc billBloc;
-    setUp(() {
-      billBloc = BillBloc(bill: ProPublicaBill.fromExample(), client: client);
-    });
     test('Initial state is correct', () {
       expect(billBloc.state, BillState(bill: ProPublicaBill.fromExample()));
     });
