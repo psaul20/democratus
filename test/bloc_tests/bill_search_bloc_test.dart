@@ -27,12 +27,12 @@ void main() {
   List<Bill> offsetBills = [];
   offsetBills.addAll(testBills + testBills);
   offsetBills.add(testBill);
-  group('Bill_Search_Bloc tests', () {
-    setUp(() {
-      initHydratedStorage();
-      dotenv.testLoad(fileInput: File('.env').readAsStringSync());
-      client = MockClient();
-    });
+  setUp(() {
+    initHydratedStorage();
+    dotenv.testLoad(fileInput: File('.env').readAsStringSync());
+    client = MockClient();
+  });
+  group('Bill_Search_Bloc Keyword tests', () {
     blocTest(
       'emits [BillSearchState(status: BillSearchStatus.searching),'
       'BillSearchState(status: BillSearchStatus.success, searchBills: [Bills])]'
@@ -80,7 +80,9 @@ void main() {
       build: () {
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response('', 200));
-        return BillSearchBloc(client: client);
+        return BillSearchBloc(
+            client: client,
+            initState: const BillSearchState(keyword: 'climate'));
       },
       act: (bloc) => bloc.add(KeywordSearch(keyword: '')),
       expect: () => <BillSearchState>[
@@ -88,12 +90,28 @@ void main() {
       ],
       verify: (bloc) => bloc.state.searchBills.isEmpty,
     );
-    //bloctest for scrollsearchoffset
+    //bloctest for same keyword added twice
     blocTest(
-      'emits [BillSearchState(status: BillSearchStatus.searching,'
-      'offset: 20),'
+      'emits [BillSearchState(status: BillSearchStatus.searching),'
       'BillSearchState(status: BillSearchStatus.success, searchBills: [Bills])]'
-      'when ScrollSearchOffset is added',
+      'when KeywordSearch is added',
+      build: () {
+        when(client.get(any, headers: anyNamed('headers')))
+            .thenAnswer((_) async => http.Response(searchBillJson, 200));
+        return BillSearchBloc(
+            client: client,
+            initState: BillSearchState(
+                status: BillSearchStatus.success,
+                searchBills: testBills,
+                keyword: 'climate'));
+      },
+      act: (bloc) => bloc.add(KeywordSearch(keyword: 'climate')),
+      expect: () => <BillSearchState>[],
+    );
+  });
+  group('BillSearch Bloc ScrollOffset Tests', () {
+    blocTest(
+      'ScrollSearchOffset adds more bills to searchBills',
       build: () {
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response(searchBillJson, 200));
@@ -101,14 +119,13 @@ void main() {
       },
       act: (bloc) => bloc.add(ScrollSearchOffset()),
       expect: () => <BillSearchState>[
-        const BillSearchState(status: BillSearchStatus.searching, offset: 20),
+        const BillSearchState(status: BillSearchStatus.offsetAdd, offset: 20),
         BillSearchState(
             status: BillSearchStatus.success,
             searchBills: testBills,
-            offset: 20),
+            offset: 20,
+            hasReachedMax: true),
       ],
-      verify: (bloc) =>
-          bloc.state.searchBills.isNotEmpty && bloc.state.hasReachedMax,
     );
     blocTest(
       'Search does not add more bills if hasReachedMax is true',
