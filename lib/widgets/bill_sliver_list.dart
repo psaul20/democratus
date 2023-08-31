@@ -16,14 +16,14 @@ class BillSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAnimatedList(
-      itemBuilder: (context, index, animation) => BlocProvider<BillBloc>(
+    return SliverList.builder(
+      itemBuilder: (context, index) => BlocProvider<BillBloc>(
           key: ValueKey(billList[index].billId),
           create: (_) {
             return BillBloc(bill: billList[index]);
           },
           child: const BillTile()),
-      initialItemCount: billList.length,
+      itemCount: billList.length,
     );
   }
 }

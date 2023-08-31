@@ -119,7 +119,7 @@ void main() {
       },
       act: (bloc) => bloc.add(ScrollSearchOffset()),
       expect: () => <BillSearchState>[
-        const BillSearchState(status: BillSearchStatus.offsetAdd, offset: 20),
+        const BillSearchState(status: BillSearchStatus.searching, offset: 20),
         BillSearchState(
             status: BillSearchStatus.success,
             searchBills: testBills,

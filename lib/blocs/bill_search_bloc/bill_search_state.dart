@@ -56,8 +56,8 @@ class BillSearchState extends Equatable {
     } else {
       return BillSearchState(
         keyword: map['keyword'],
-        status: BillSearchStatus.values.firstWhere(
-            (e) => e.toString() == 'BillSearchStatus.${map['status']}'),
+        status: BillSearchStatus.values
+            .firstWhere((element) => element.toString() == map['status']),
         offset: int.parse(map['offset']),
         hasReachedMax: map['hasReachedMax'] == 'true',
       );

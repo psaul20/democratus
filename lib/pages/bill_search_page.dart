@@ -10,14 +10,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 
-class BillSearchPage extends StatelessWidget {
-  const BillSearchPage({super.key, this.billSearchBloc});
-  final BillSearchBloc? billSearchBloc;
+class BillSearchPage extends StatefulWidget {
+  const BillSearchPage({super.key});
+
+  @override
+  State<BillSearchPage> createState() => _BillSearchPageState();
+}
+
+class _BillSearchPageState extends State<BillSearchPage> {
+  final ScrollController _scrollController = ScrollController();
+  double scrollOffset = 0;
+
+  void _onScrollEvent() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      context.read<BillSearchBloc>().add(ScrollSearchOffset());
+    }
+    scrollOffset = _scrollController.offset;
+  }
+
+  @override
+  void initState() {
+    _scrollController.addListener(_onScrollEvent);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScrollEvent);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    BillSearchBloc billSearchBloc =
-        this.billSearchBloc ?? context.read<BillSearchBloc>();
+    BillSearchBloc billSearchBloc = context.read<BillSearchBloc>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -30,11 +56,12 @@ class BillSearchPage extends StatelessWidget {
       body: BlocBuilder<BillSearchBloc, BillSearchState>(
           bloc: billSearchBloc,
           builder: (context, state) {
-            Widget bodyWidget;
+            _scrollController.jumpTo(scrollOffset);
+            Widget feedBackWidget;
             switch (state.status) {
               case BillSearchStatus.initial:
                 {
-                  bodyWidget = SliverFillRemaining(
+                  feedBackWidget = SliverFillRemaining(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -53,12 +80,12 @@ class BillSearchPage extends StatelessWidget {
                 }
               case BillSearchStatus.searching:
                 {
-                  bodyWidget = const SliverFillRemaining(
+                  feedBackWidget = const SliverFillRemaining(
                       child: Center(child: CircularProgressIndicator()));
                 }
               case BillSearchStatus.failure:
                 {
-                  bodyWidget = const SliverFillRemaining(
+                  feedBackWidget = const SliverFillRemaining(
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -74,17 +101,22 @@ class BillSearchPage extends StatelessWidget {
                 }
               case BillSearchStatus.success:
                 {
-                  bodyWidget = BillSliverList(
-                    billList: state.searchBills,
-                  );
+                  feedBackWidget =
+                      SliverList.list(children: const [SizedBox.shrink()]);
                 }
             }
             return Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: CustomScrollView(
+                controller: _scrollController,
                 slivers: [
                   const BillSearchBar(),
-                  bodyWidget,
+                  SliverSafeArea(
+                    sliver: BillSliverList(
+                      billList: state.searchBills,
+                    ),
+                  ),
+                  feedBackWidget,
                 ],
               ),
             );

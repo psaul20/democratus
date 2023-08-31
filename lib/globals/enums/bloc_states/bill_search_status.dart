@@ -13,10 +13,11 @@ extension BillSearchStatusExtension on BillSearchStatus {
         return 'failure';
     }
   }
+
   String get statusFeedback {
     switch (this) {
       case BillSearchStatus.initial:
-        return 'Enter Keywords Above to Search Bills';
+        return 'Enter keywords above to search Bills';
       case BillSearchStatus.searching:
         return 'Searching Bills';
       case BillSearchStatus.success:
