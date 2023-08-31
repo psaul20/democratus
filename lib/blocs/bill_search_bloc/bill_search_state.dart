@@ -6,6 +6,9 @@ class BillSearchState extends Equatable {
   final List<Bill> searchBills;
   final String keyword;
   final int offset;
+  bool get hasReachedMax =>
+      searchBills.isNotEmpty &&
+      (searchBills.length < 20 || searchBills.length % 20 != 0);
 
   const BillSearchState({
     this.status = BillSearchStatus.initial,

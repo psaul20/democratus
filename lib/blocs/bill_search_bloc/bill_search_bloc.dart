@@ -15,10 +15,12 @@ part 'bill_search_state.dart';
 
 class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
   http.Client client;
-  BillSearchBloc({client})
+  BillSearchState? initState;
+  BillSearchBloc({client, this.initState})
       : client = client ?? http.Client(),
-        super(const BillSearchState()) {
+        super(initState ?? const BillSearchState()) {
     on<KeywordSearch>(_onKeywordSearch);
+    on<ScrollSearchOffset>(_onScrollSearchOffset);
   }
   _onKeywordSearch(KeywordSearch event, Emitter<BillSearchState> emit) async {
     //TODO: Fix this if any other search events are added
@@ -44,8 +46,8 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
   }
 
   Future<List<Bill>> _fetchBillsByKeyword(String keyword) async {
-    http.Response response =
-        await ProPublicaApi.getBillByKeyword(keyword: keyword, client: client);
+    http.Response response = await ProPublicaApi.getBillByKeyword(
+        keyword: keyword, client: client, offset: state.offset);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -57,6 +59,32 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to retrieve bills');
+    }
+  }
+
+  _onScrollSearchOffset(
+      ScrollSearchOffset event, Emitter<BillSearchState> emit) async {
+    if (state.hasReachedMax) {
+      log("Reached max");
+      return;
+    }
+
+    try {
+      emit(state.copyWith(
+        status: BillSearchStatus.searching,
+        offset: state.offset + 20,
+      ));
+
+      final List<Bill> bills = [];
+      bills.addAll(await _fetchBillsByKeyword(state.keyword));
+      bills.addAll(state.searchBills);
+      emit(state.copyWith(
+        searchBills: bills,
+        status: BillSearchStatus.success,
+      ));
+    } catch (e) {
+      log("Exception: $e");
+      emit(state.copyWith(status: BillSearchStatus.failure));
     }
   }
 

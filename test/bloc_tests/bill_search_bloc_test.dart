@@ -17,8 +17,16 @@ import 'bill_search_bloc_test.mocks.dart';
 @GenerateMocks([http.Client])
 void main() {
   late MockClient client;
-  String exampleJson = File('${Strings.billFilePath}/bill_search_example.json')
-      .readAsStringSync();
+  String searchBillJson =
+      File('${Strings.billFilePath}/bill_search_example.json')
+          .readAsStringSync();
+  String billJson =
+      File('${Strings.billFilePath}/bill_example.json').readAsStringSync();
+  List<Bill> testBills = ProPublicaBill.fromExampleKeywordSearch();
+  Bill testBill = ProPublicaBill.fromExample();
+  List<Bill> offsetBills = [];
+  offsetBills.addAll(testBills + testBills);
+  offsetBills.add(testBill);
   group('Bill_Search_Bloc tests', () {
     setUp(() {
       initHydratedStorage();
@@ -31,7 +39,7 @@ void main() {
       'when KeywordSearch is added',
       build: () {
         when(client.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response(exampleJson, 200));
+            .thenAnswer((_) async => http.Response(searchBillJson, 200));
         return BillSearchBloc(client: client);
       },
       act: (bloc) => bloc.add(KeywordSearch(keyword: 'climate')),
@@ -41,8 +49,7 @@ void main() {
         BillSearchState(
             status: BillSearchStatus.success,
             keyword: 'climate',
-            searchBills:
-                List<Bill>.from(ProPublicaBill.fromExampleKeywordSearch())),
+            searchBills: testBills),
       ],
       verify: (bloc) => bloc.state.searchBills.isNotEmpty,
     );
@@ -65,22 +72,66 @@ void main() {
       ],
       verify: (bloc) => bloc.state.searchBills.isEmpty,
     );
+    //bloctest for keyword empty
+    blocTest(
+      'emits [BillSearchState(status: BillSearchStatus.initial,'
+      'searchBills: [])]'
+      'when KeywordSearch is added',
+      build: () {
+        when(client.get(any, headers: anyNamed('headers')))
+            .thenAnswer((_) async => http.Response('', 200));
+        return BillSearchBloc(client: client);
+      },
+      act: (bloc) => bloc.add(KeywordSearch(keyword: '')),
+      expect: () => <BillSearchState>[
+        const BillSearchState(status: BillSearchStatus.initial, keyword: ''),
+      ],
+      verify: (bloc) => bloc.state.searchBills.isEmpty,
+    );
+    //bloctest for scrollsearchoffset
+    blocTest(
+      'emits [BillSearchState(status: BillSearchStatus.searching,'
+      'offset: 20),'
+      'BillSearchState(status: BillSearchStatus.success, searchBills: [Bills])]'
+      'when ScrollSearchOffset is added',
+      build: () {
+        when(client.get(any, headers: anyNamed('headers')))
+            .thenAnswer((_) async => http.Response(searchBillJson, 200));
+        return BillSearchBloc(client: client);
+      },
+      act: (bloc) => bloc.add(ScrollSearchOffset()),
+      expect: () => <BillSearchState>[
+        const BillSearchState(status: BillSearchStatus.searching, offset: 20),
+        BillSearchState(
+            status: BillSearchStatus.success,
+            searchBills: testBills,
+            offset: 20),
+      ],
+      verify: (bloc) =>
+          bloc.state.searchBills.isNotEmpty && bloc.state.hasReachedMax,
+    );
+    blocTest(
+      'Search does not add more bills if hasReachedMax is true',
+      build: () {
+        when(client.get(any, headers: anyNamed('headers')))
+            .thenAnswer((_) async => http.Response(billJson, 200));
+
+        return BillSearchBloc(
+            client: client,
+            initState: BillSearchState(
+                status: BillSearchStatus.success,
+                searchBills: testBills + testBills,
+                offset: 0));
+      },
+      act: (bloc) {
+        bloc.add(ScrollSearchOffset());
+      },
+      expect: () => [isA<BillSearchState>(), isA<BillSearchState>()],
+      verify: (bloc) =>
+          bloc.state.searchBills.length == 21 &&
+          bloc.state.hasReachedMax &&
+          bloc.state.offset == 20 &&
+          bloc.state.status == BillSearchStatus.success,
+    );
   });
-  //bloctest for keyword empty
-  blocTest(
-    'emits [BillSearchState(status: BillSearchStatus.initial,'
-    'searchBills: [])]'
-    'when KeywordSearch is added',
-    build: () {
-      when(client.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response('', 200));
-      return BillSearchBloc(client: client);
-    },
-    act: (bloc) => bloc.add(KeywordSearch(keyword: '')),
-    expect: () => <BillSearchState>[
-      const BillSearchState(
-          status: BillSearchStatus.initial, keyword: ''),
-    ],
-    verify: (bloc) => bloc.state.searchBills.isEmpty,
-  );
 }
