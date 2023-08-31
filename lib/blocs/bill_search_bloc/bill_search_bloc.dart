@@ -23,11 +23,16 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
     on<ScrollSearchOffset>(_onScrollSearchOffset);
   }
   _onKeywordSearch(KeywordSearch event, Emitter<BillSearchState> emit) async {
-    //TODO: Fix this if any other search events are added
+    if (event.keyword == state.keyword) {
+      return;
+    }
+
     if (event.keyword.isEmpty) {
       emit(state.copyWith(
           status: BillSearchStatus.initial,
           keyword: event.keyword,
+          offset: 0,
+          hasReachedMax: false,
           searchBills: []));
       return;
     }
@@ -37,6 +42,7 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
       final List<Bill> bills = await _fetchBillsByKeyword(event.keyword);
       emit(state.copyWith(
         searchBills: bills,
+        hasReachedMax: false,
         status: BillSearchStatus.success,
       ));
     } catch (e) {
@@ -71,16 +77,18 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
 
     try {
       emit(state.copyWith(
-        status: BillSearchStatus.searching,
+        status: BillSearchStatus.offsetAdd,
         offset: state.offset + 20,
       ));
 
       final List<Bill> bills = [];
-      bills.addAll(await _fetchBillsByKeyword(state.keyword));
+      final List<Bill> newBills = await _fetchBillsByKeyword(state.keyword);
+      bills.addAll(newBills);
       bills.addAll(state.searchBills);
       emit(state.copyWith(
         searchBills: bills,
         status: BillSearchStatus.success,
+        hasReachedMax: newBills.length < 20,
       ));
     } catch (e) {
       log("Exception: $e");

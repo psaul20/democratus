@@ -6,15 +6,14 @@ class BillSearchState extends Equatable {
   final List<Bill> searchBills;
   final String keyword;
   final int offset;
-  bool get hasReachedMax =>
-      searchBills.isNotEmpty &&
-      (searchBills.length < 20 || searchBills.length % 20 != 0);
+  final bool hasReachedMax;
 
   const BillSearchState({
     this.status = BillSearchStatus.initial,
     this.searchBills = const <Bill>[],
     this.keyword = '',
     this.offset = 0,
+    this.hasReachedMax = false,
   });
 
   @override
@@ -23,6 +22,7 @@ class BillSearchState extends Equatable {
         searchBills,
         keyword,
         offset,
+        hasReachedMax,
       ];
 
   BillSearchState copyWith({
@@ -30,12 +30,14 @@ class BillSearchState extends Equatable {
     List<Bill>? searchBills,
     String? keyword,
     int? offset,
+    bool? hasReachedMax,
   }) {
     return BillSearchState(
       status: status ?? this.status,
       searchBills: searchBills ?? this.searchBills,
       keyword: keyword ?? this.keyword,
       offset: offset ?? this.offset,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
@@ -44,6 +46,7 @@ class BillSearchState extends Equatable {
     map['keyword'] = keyword;
     map['status'] = status.toString();
     map['offset'] = offset.toString();
+    map['hasReachedMax'] = hasReachedMax.toString();
     return map;
   }
 
@@ -56,6 +59,7 @@ class BillSearchState extends Equatable {
         status: BillSearchStatus.values.firstWhere(
             (e) => e.toString() == 'BillSearchStatus.${map['status']}'),
         offset: int.parse(map['offset']),
+        hasReachedMax: map['hasReachedMax'] == 'true',
       );
     }
   }
@@ -74,7 +78,8 @@ class BillSearchState extends Equatable {
     string.write('$status, ');
     string.write("Keyword: $keyword, ");
     string.write("SearchBills Length: ${searchBills.length}, ");
-    string.write("Offset: $offset");
+    string.write("Offset: $offset ");
+    string.write('hasReachedMax: $hasReachedMax');
     return string.toString();
   }
 }
