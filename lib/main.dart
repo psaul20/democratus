@@ -1,3 +1,4 @@
+import 'package:democratus/blocs/client_cubit/client_cubit.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/observers/bloc_observer.dart';
 import 'package:democratus/pages/home_page.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SavedBillsBloc(),
         ),
+        BlocProvider(
+          create: (context) => ClientCubit(),
+        )
       ],
       child: MaterialApp(
         title: 'DEMOCRATUS',

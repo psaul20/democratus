@@ -16,9 +16,8 @@ part 'bill_search_state.dart';
 class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
   http.Client client;
   BillSearchState? initState;
-  BillSearchBloc({client, this.initState})
-      : client = client ?? http.Client(),
-        super(initState ?? const BillSearchState()) {
+  BillSearchBloc({required this.client, this.initState})
+      : super(initState ?? const BillSearchState()) {
     on<KeywordSearch>(_onKeywordSearch);
     on<ScrollSearchOffset>(_onScrollSearchOffset);
   }

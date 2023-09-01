@@ -1,4 +1,5 @@
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
+import 'package:democratus/blocs/client_cubit/client_cubit.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/saved_bills_status.dart';
 import 'package:democratus/pages/bill_search_page.dart';
@@ -6,6 +7,7 @@ import 'package:democratus/widgets/bill_sliver_list.dart';
 import 'package:democratus/widgets/home_page_widgets/home_page_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 
 //TODO: Fix no added packages view + searching view
 
@@ -78,11 +80,12 @@ class _MyHomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Client client = BlocProvider.of<ClientCubit>(context).state.client;
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider(
-                create: (context) => BillSearchBloc(),
+                create: (context) => BillSearchBloc(client: client),
                 child: const BillSearchPage(),
               ),
             ),
