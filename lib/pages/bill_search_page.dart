@@ -26,7 +26,6 @@ class _BillSearchPageState extends State<BillSearchPage> {
         _scrollController.position.maxScrollExtent) {
       context.read<BillSearchBloc>().add(ScrollSearchOffset());
     }
-    scrollOffset = _scrollController.offset;
   }
 
   @override
@@ -56,7 +55,7 @@ class _BillSearchPageState extends State<BillSearchPage> {
       body: BlocBuilder<BillSearchBloc, BillSearchState>(
           bloc: billSearchBloc,
           builder: (context, state) {
-            _scrollController.jumpTo(scrollOffset);
+            // _scrollController.jumpTo(scrollOffset);
             Widget feedBackWidget;
             switch (state.status) {
               case BillSearchStatus.initial:
