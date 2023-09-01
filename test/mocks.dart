@@ -23,7 +23,8 @@ class FakeSavedBillsEvent extends Fake implements SavedBillsEvent {}
 
 class FakeSavedBillsState extends Fake implements SavedBillsState {}
 
-class MockClientCubit extends MockCubit<ClientState> implements ClientCubit {}
+class MockClientCubit extends MockCubit<ClientState> implements ClientCubit {
+}
 
 class FakeClientState extends Fake implements ClientState {}
 
