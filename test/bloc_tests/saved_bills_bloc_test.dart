@@ -3,6 +3,7 @@ import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:democratus/globals/enums/bloc_states/saved_bills_status.dart';
 
 import '../mocks.dart';
 

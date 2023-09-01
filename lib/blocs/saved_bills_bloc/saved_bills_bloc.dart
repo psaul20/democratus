@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:democratus/globals/enums/bloc_states/saved_bills_status.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';

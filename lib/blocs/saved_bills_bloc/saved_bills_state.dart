@@ -1,6 +1,5 @@
 part of 'saved_bills_bloc.dart';
 
-enum SavedBillsStatus { initial, success, failure }
 
 class SavedBillsState extends Equatable {
   const SavedBillsState({
