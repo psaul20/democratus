@@ -21,24 +21,13 @@ void main() {
         SavedBillsState(bills: bills, status: SavedBillsStatus.success),
       ],
     );
+    //test ToggleSave event
     blocTest(
-      'emits [SavedBillsState(bills: bills)] when saveBill is added',
+      'emits [SavedBillsState(bills: bills)] when ToggleSave is added',
       build: () => SavedBillsBloc(),
-      act: (bloc) => bloc.add(SaveBill(bill: bills[0])),
+      act: (bloc) => bloc.add(ToggleSave(bill: bills[0])),
       expect: () => <SavedBillsState>[
         SavedBillsState(bills: [bills[0]], status: SavedBillsStatus.success),
-      ],
-    );
-    blocTest(
-      'emits [SavedBillsState(bills: bills)] when removeBill is added',
-      build: () => SavedBillsBloc(),
-      act: (bloc) {
-        bloc.add(SaveBill(bill: bills[0]));
-        bloc.add(RemoveBill(bill: bills[0]));
-      },
-      expect: () => <SavedBillsState>[
-        SavedBillsState(bills: [bills[0]], status: SavedBillsStatus.success),
-        const SavedBillsState(bills: [], status: SavedBillsStatus.initial),
       ],
     );
   });

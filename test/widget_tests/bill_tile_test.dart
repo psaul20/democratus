@@ -7,10 +7,10 @@ import 'package:democratus/widgets/bill_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:democratus/globals/enums/bloc_states/bill_status.dart';
 
-import '../bloc_tests/bill_search_bloc_test.mocks.dart';
+
 import '../mocks.dart';
 
 void main() {
@@ -18,12 +18,10 @@ void main() {
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
   Bill bill = ProPublicaBill.fromExample();
-  late MockClient client;
   late MockBillBloc billBloc;
   late SavedBillsBloc savedBillsBloc;
   setUp(() {
     initHydratedStorage();
-    client = MockClient();
     billBloc = MockBillBloc();
     savedBillsBloc = SavedBillsBloc();
     savedBillsBloc.add(ReplaceBills(bills: [bill]));

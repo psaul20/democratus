@@ -7,6 +7,4 @@ final class UpdateBill extends BillEvent {
   UpdateBill(this.bill);
 }
 
-final class ToggleSave extends BillEvent {}
-
 final class GetBillDetails extends BillEvent {}

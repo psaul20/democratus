@@ -1,4 +1,3 @@
-
 import 'package:democratus/archive/bloc/package_bloc.dart';
 import 'package:democratus/theming/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +49,7 @@ class ReadMoreButton extends StatelessWidget {
                     Text(
                       "Read More",
                       textAlign: TextAlign.center,
-                      style: TextStyles.iconText,
+                      style: TextStyles(context).bodyStyle,
                     )
                   ],
                 ),

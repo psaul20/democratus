@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:democratus/api/pro_publica_api.dart';
+import 'package:democratus/globals/enums/bloc_states/bill_status.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:equatable/equatable.dart';
@@ -11,8 +12,6 @@ import 'package:http/http.dart' as http;
 part 'bill_event.dart';
 part 'bill_state.dart';
 
-enum BillStatus { success, loading, failure }
-
 class BillBloc extends Bloc<BillEvent, BillState> {
   http.Client client;
   BillBloc({required bill, required this.client})
@@ -21,10 +20,6 @@ class BillBloc extends Bloc<BillEvent, BillState> {
           bill: event.bill,
           status: BillStatus.success,
         )));
-    on<ToggleSave>(
-      (event, emit) => emit(state.copyWith(
-          bill: state.bill.copyWith(isSaved: !state.bill.isSaved))),
-    );
     on<GetBillDetails>(_onGetBill);
   }
 

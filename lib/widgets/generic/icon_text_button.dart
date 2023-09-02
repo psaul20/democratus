@@ -23,7 +23,7 @@ class IconTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     iconColor ?? DemocScheme.scheme.onBackground;
-    style ?? TextStyles.iconText;
+    style ?? TextStyles(context).bodyStyle;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

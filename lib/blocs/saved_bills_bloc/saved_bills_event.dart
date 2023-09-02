@@ -1,6 +1,6 @@
 part of 'saved_bills_bloc.dart';
 
-@immutable
+
 class SavedBillsEvent {}
 
 final class ReplaceBills extends SavedBillsEvent {
@@ -10,16 +10,9 @@ final class ReplaceBills extends SavedBillsEvent {
   });
 }
 
-final class SaveBill extends SavedBillsEvent {
+final class ToggleSave extends SavedBillsEvent {
   final Bill bill;
-  SaveBill({
-    required this.bill,
-  });
-}
-
-final class RemoveBill extends SavedBillsEvent {
-  final Bill bill;
-  RemoveBill({
+  ToggleSave({
     required this.bill,
   });
 }

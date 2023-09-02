@@ -37,6 +37,8 @@ class Bill extends Equatable {
       '${congress.toString()}-${type.typeCode}-${number.toString()}';
 
   String get displayTitle => shortTitle ?? title;
+  String get displayNumber => '${type.typeCodeFormatted.toUpperCase()} $number';
+  List get datesForDisplay => [introducedDate, lastUpdateDate];
 
   const Bill({
     this.actions,

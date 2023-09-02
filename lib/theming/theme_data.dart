@@ -1,4 +1,3 @@
-import 'package:democratus/theming/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,6 +22,5 @@ class WidgetThemes {
           contentPadding: const EdgeInsets.only(bottom: 0),
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: DemocScheme.scheme.onBackground)),
-          fillColor: DemocScheme.scheme.onBackground,
-          hintStyle: TextStyles.hintStyle);
+          fillColor: DemocScheme.scheme.onBackground);
 }

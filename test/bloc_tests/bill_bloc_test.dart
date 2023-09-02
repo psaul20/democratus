@@ -8,6 +8,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:democratus/globals/enums/bloc_states/bill_status.dart';
 
 import 'bill_bloc_test.mocks.dart';
 
@@ -33,17 +34,6 @@ void main() {
       expect(billBloc.state, BillState(bill: ProPublicaBill.fromExample()));
     });
     blocTest<BillBloc, BillState>(
-      'emits [BillState(bill: bill.copyWith(isSaved: !bill.isSaved))]'
-      'when ToggleSave is added',
-      build: () => BillBloc(bill: ProPublicaBill.fromExample(), client: client),
-      act: (bloc) => bloc.add(ToggleSave()),
-      expect: () => <BillState>[
-        BillState(
-            bill: ProPublicaBill.fromExample().copyWith(isSaved: true),
-            status: BillStatus.success),
-      ],
-    );
-    blocTest<BillBloc, BillState>(
         'emits [BillState(bill: bill.copyWith(hasDetails: true),'
         'status: BillStatus.success)] when GetBillDetails is added',
         build: () =>
@@ -68,7 +58,6 @@ void main() {
                   bill: ProPublicaBill.fromExample(),
                   status: BillStatus.success),
             ]);
-    //TODO: Figure out how to test for failure case
     blocTest<BillBloc, BillState>(
       'emits [BillState(status: BillStatus.failure,'
       'except: e as Exception)] when GetBillDetails is added',
