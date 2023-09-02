@@ -5,7 +5,6 @@ class TextStyles {
   BuildContext context;
   TextStyles(this.context);
 
-  
   TextStyle get headerStyle =>
       Theme.of(context).textTheme.headlineSmall ?? const TextStyle();
   TextStyle get bodyStyle =>

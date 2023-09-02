@@ -6,7 +6,7 @@ extension BillStatusX on BillStatus {
       case BillStatus.success:
         return "Success";
       case BillStatus.loading:
-        return "Loading";
+        return "Loading Details";
       case BillStatus.failure:
         return "Something went wrong. Please try again later.";
     }

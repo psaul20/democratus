@@ -4,7 +4,7 @@ import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/globals/enums/errors.dart';
 import 'package:democratus/widgets/bill_sliver_list.dart';
-import 'package:democratus/widgets/generic/errors.dart';
+import 'package:democratus/widgets/generic/feedback_widgets.dart';
 import 'package:democratus/widgets/search_widgets/bill_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,24 +79,17 @@ class _BillSearchPageState extends State<BillSearchPage> {
                 }
               case BillSearchStatus.searching:
                 {
-                  feedBackWidget = const SliverFillRemaining(
-                      child: Center(child: CircularProgressIndicator()));
+                  feedBackWidget = SliverFillRemaining(
+                      child: LoadingFeedback(
+                          loadingTxt:
+                              BillSearchStatus.searching.statusFeedback));
                 }
               case BillSearchStatus.failure:
                 {
-                  feedBackWidget = const SliverFillRemaining(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      ErrorText(
-                        error: Errors.dataFetchError,
-                      ),
-                    ],
-                  ));
+                  feedBackWidget = SliverFillRemaining(
+                      child: ErrorFeedback(
+                          errorMessage:
+                              BillSearchStatus.failure.statusFeedback));
                 }
               case BillSearchStatus.success:
                 {

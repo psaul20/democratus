@@ -1,11 +1,10 @@
 import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_status.dart';
-import 'package:democratus/globals/enums/errors.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/pages/bill_reader_page.dart';
 import 'package:democratus/theming/text_styles.dart';
-import 'package:democratus/widgets/generic/errors.dart';
+import 'package:democratus/widgets/generic/feedback_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,10 +28,9 @@ class BillTile extends StatelessWidget {
         bloc: billBloc,
         builder: (context, state) {
           if (state.status == BillStatus.failure) {
-            return const Card(
-                child: ErrorText(
-              error: Errors.dataFetchError,
-            ));
+            return Card(
+                child: ErrorFeedback(
+                    errorMessage: BillStatus.failure.statusFeedback));
           } else if (!state.bill.isSaved) {
             checkSaved(state.bill);
           }

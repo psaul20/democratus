@@ -27,7 +27,7 @@ class SaveButton extends StatelessWidget {
 
     return BlocBuilder<SavedBillsBloc, SavedBillsState>(
       builder: (context, state) {
-        return FloatingActionButton.large(
+        return FloatingActionButton(
           onPressed: () => saveTap(bill),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
