@@ -35,7 +35,7 @@ void main() {
     blocTest<BillBloc, BillState>(
       'emits [BillState(bill: bill.copyWith(isSaved: !bill.isSaved))]'
       'when ToggleSave is added',
-      build: () => billBloc,
+      build: () => BillBloc(bill: ProPublicaBill.fromExample(), client: client),
       act: (bloc) => bloc.add(ToggleSave()),
       expect: () => <BillState>[
         BillState(
@@ -46,9 +46,9 @@ void main() {
     blocTest<BillBloc, BillState>(
         'emits [BillState(bill: bill.copyWith(hasDetails: true),'
         'status: BillStatus.success)] when GetBillDetails is added',
-        build: () => billBloc,
+        build: () =>
+            BillBloc(bill: ProPublicaBill.fromExample(), client: client),
         act: (bloc) => bloc.add(GetBillDetails()),
-        wait: const Duration(seconds: 1),
         expect: () => <BillState>[
               BillState(
                   bill: ProPublicaBill.fromExample(),
@@ -60,7 +60,8 @@ void main() {
     blocTest<BillBloc, BillState>(
         'emits [BillState(bill: event.bill,'
         'status: BillStatus.success)] when UpdateBill is added',
-        build: () => billBloc,
+        build: () =>
+            BillBloc(bill: ProPublicaBill.fromExample(), client: client),
         act: (bloc) => bloc.add(UpdateBill(ProPublicaBill.fromExample())),
         expect: () => <BillState>[
               BillState(
@@ -74,10 +75,9 @@ void main() {
       build: () {
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response('error', 404));
-        return billBloc;
+        return BillBloc(bill: ProPublicaBill.fromExample(), client: client);
       },
       act: (bloc) => bloc.add(GetBillDetails()),
-      wait: const Duration(seconds: 1),
       verify: (bloc) =>
           bloc.state.status == BillStatus.failure &&
           bloc.state.except is Exception,

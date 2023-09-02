@@ -1,16 +1,11 @@
 import 'dart:io';
-import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/blocs/client_cubit/client_cubit.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
-import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/globals/enums/bloc_states/saved_bills_status.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
-import 'package:democratus/pages/bill_search_page.dart';
 import 'package:democratus/pages/home_page.dart';
-import 'package:democratus/widgets/bill_sliver_list.dart';
 import 'package:democratus/widgets/bill_tile.dart';
 import 'package:democratus/widgets/home_page_widgets/home_page_bar.dart';
-import 'package:democratus/widgets/search_widgets/bill_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

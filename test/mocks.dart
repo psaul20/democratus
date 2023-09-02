@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/blocs/client_cubit/client_cubit.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
@@ -27,6 +28,12 @@ class MockClientCubit extends MockCubit<ClientState> implements ClientCubit {
 }
 
 class FakeClientState extends Fake implements ClientState {}
+
+class MockBillBloc extends MockBloc<BillEvent, BillState> implements BillBloc {}
+
+class FakeBillEvent extends Fake implements BillEvent {}
+
+class FakeBillState extends Fake implements BillState {}
 
 late Storage hydratedStorage;
 

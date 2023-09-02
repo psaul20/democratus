@@ -8,16 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BillTile extends StatelessWidget {
-  const BillTile({super.key, this.savedBillsBloc, this.billBloc});
-  // Dependency injection for testing
-  final SavedBillsBloc? savedBillsBloc;
-  final BillBloc? billBloc;
+  const BillTile({super.key});
 
   @override
   Widget build(BuildContext context) {
-    BillBloc billBloc = this.billBloc ?? context.read<BillBloc>();
-    SavedBillsBloc savedBillsBloc =
-        this.savedBillsBloc ?? context.read<SavedBillsBloc>();
+    BillBloc billBloc = context.read<BillBloc>();
+    SavedBillsBloc savedBillsBloc = context.read<SavedBillsBloc>();
     List<String> savedIds = [
       for (final bill in savedBillsBloc.state.bills) bill.billId
     ];

@@ -1,6 +1,6 @@
 part of 'bill_bloc.dart';
 
-sealed class BillEvent {}
+class BillEvent {}
 
 final class UpdateBill extends BillEvent {
   final Bill bill;
