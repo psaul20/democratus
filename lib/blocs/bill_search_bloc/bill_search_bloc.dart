@@ -54,7 +54,7 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
   }
 
   Future<List<Bill>> _fetchBillsByKeyword(String keyword) async {
-    http.Response response = await ProPublicaApi.getBillByKeyword(
+    http.Response response = await ProPublicaApi.getBillsByKeyword(
         keyword: keyword, client: client, offset: state.offset);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,

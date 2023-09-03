@@ -45,14 +45,13 @@ void main() {
           116, 'hr'.billTypeFromCode, 502, client);
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
-          File('${Strings.billFilePath}/bill_example.json')
-              .readAsStringSync());
+          File('${Strings.billFilePath}/bill_example.json').readAsStringSync());
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
       expect(jsonResponse['status'], 'OK');
       expect(jsonExample.keys, jsonResponse.keys);
     });
     test('Testing Bill retrieval by keyword', () async {
-      http.Response response = await ProPublicaApi.getBillByKeyword(
+      http.Response response = await ProPublicaApi.getBillsByKeyword(
           keyword: 'megahertz', client: client);
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
@@ -64,12 +63,12 @@ void main() {
     });
     // test bill retrieval by keyword with offset
     test('Testing Bill retrieval by keyword with offset', () async {
-      http.Response response1 = await ProPublicaApi.getBillByKeyword(
+      http.Response response1 = await ProPublicaApi.getBillsByKeyword(
           keyword: 'megahertz', client: client, offset: 0);
       expect(response1.statusCode, 200);
       Map<String, dynamic> jsonResponse1 = jsonDecode(response1.body);
       expect(jsonResponse1['status'], 'OK');
-      http.Response response2 = await ProPublicaApi.getBillByKeyword(
+      http.Response response2 = await ProPublicaApi.getBillsByKeyword(
           keyword: 'megahertz', client: client, offset: 20);
 
       expect(response2.statusCode, 200);
