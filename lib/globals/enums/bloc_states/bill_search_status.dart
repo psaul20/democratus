@@ -23,7 +23,7 @@ extension BillSearchStatusExtension on BillSearchStatus {
       case BillSearchStatus.success:
         return 'Search Successful';
       case BillSearchStatus.failure:
-        return 'Search Failed';
+        return 'Search failed. Please try again. If the problem persists, try another search term.';
     }
   }
 }

@@ -43,6 +43,9 @@ class _BillSearchPageState extends State<BillSearchPage> {
   @override
   Widget build(BuildContext context) {
     BillSearchBloc billSearchBloc = context.read<BillSearchBloc>();
+    if (billSearchBloc.state.keyword != '') {
+      billSearchBloc.add(KeywordSearch(keyword: billSearchBloc.state.keyword));
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -60,41 +63,38 @@ class _BillSearchPageState extends State<BillSearchPage> {
             switch (state.status) {
               case BillSearchStatus.initial:
                 {
-                  feedBackWidget = SliverFillRemaining(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          BillSearchStatus.initial.statusFeedback,
-                          style: Theme.of(context).textTheme.titleLarge,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                  feedBackWidget = Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        BillSearchStatus.initial.statusFeedback,
+                        style: Theme.of(context).textTheme.titleLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   );
                 }
               case BillSearchStatus.searching:
                 {
-                  feedBackWidget = SliverFillRemaining(
-                      child: LoadingFeedback(
-                          loadingTxt:
-                              BillSearchStatus.searching.statusFeedback));
+                  feedBackWidget = LoadingFeedback(
+                      loadingTxt: BillSearchStatus.searching.statusFeedback);
                 }
               case BillSearchStatus.failure:
                 {
-                  feedBackWidget = SliverFillRemaining(
-                      child: ErrorFeedback(
-                          errorMessage:
-                              BillSearchStatus.failure.statusFeedback));
+                  feedBackWidget = ErrorFeedback(
+                      errorMessage: BillSearchStatus.failure.statusFeedback,
+                      onRetry: () {
+                        billSearchBloc
+                            .add(KeywordSearch(keyword: state.keyword));
+                      });
                 }
               case BillSearchStatus.success:
                 {
-                  feedBackWidget =
-                      SliverList.list(children: const [SizedBox.shrink()]);
+                  feedBackWidget = const SizedBox.shrink();
                 }
             }
             return Padding(
@@ -108,7 +108,7 @@ class _BillSearchPageState extends State<BillSearchPage> {
                       billList: state.searchBills,
                     ),
                   ),
-                  feedBackWidget,
+                  SliverFillRemaining(child: feedBackWidget),
                 ],
               ),
             );

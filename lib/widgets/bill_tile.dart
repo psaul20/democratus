@@ -30,7 +30,8 @@ class BillTile extends StatelessWidget {
           if (state.status == BillStatus.failure) {
             return Card(
                 child: ErrorFeedback(
-                    errorMessage: BillStatus.failure.statusFeedback));
+              errorMessage: BillStatus.failure.statusFeedback,
+            ));
           } else if (!state.bill.isSaved) {
             checkSaved(state.bill);
           }

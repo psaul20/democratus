@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:democratus/theming/theme_data.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class LoadingFeedback extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const CircularProgressIndicator(),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Text(
           loadingTxt,
           style: Theme.of(context).textTheme.headlineSmall,
@@ -26,17 +27,40 @@ class LoadingFeedback extends StatelessWidget {
 }
 
 class ErrorFeedback extends StatelessWidget {
-  const ErrorFeedback({super.key, required this.errorMessage});
+  const ErrorFeedback({
+    Key? key,
+    required this.errorMessage,
+    this.onRetry,
+  }) : super(key: key);
   final String errorMessage;
+  final VoidCallback? onRetry;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      errorMessage,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: DemocScheme.scheme.error,
-          ),
-      textAlign: TextAlign.center,
-    );
+    List<Widget> children = [
+      Text(errorMessage,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: DemocScheme.scheme.error,
+              ),
+          textAlign: TextAlign.center),
+      const SizedBox(height: 8),
+    ];
+    if (onRetry != null) {
+      children.add(ElevatedButton(
+        onPressed: onRetry,
+        child: const Text("RETRY"),
+      ));
+    }
+    children.add(const SizedBox(height: 8));
+    children.add(ElevatedButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Text("BACK")));
+
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, children: children));
   }
 }
