@@ -63,9 +63,11 @@ class BillDisplay {
     }
   }
 
-  Widget displayBackgroundInfo() {
+  Widget displayBackgroundInfo({bool withDivider = true}) {
     List<Widget> returnWidgets = [];
-    returnWidgets.add(divider('Background', topSpace: false));
+    if (withDivider) {
+      returnWidgets.add(divider('Background'));
+    }
     returnWidgets.add(Padding(
       padding: padding,
       child: displayCongress(),

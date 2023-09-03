@@ -62,6 +62,7 @@ class _BillReaderPageState extends State<BillReaderPage> {
             case BillStatus.success:
               BillDisplay billDisplay = BillDisplay(state.bill, context);
               return CustomScrollView(
+                controller: _scrollController,
                 slivers: [
                   SliverAppBar(
                       backgroundColor: Theme.of(context).colorScheme.secondary,

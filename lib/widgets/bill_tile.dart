@@ -5,6 +5,7 @@ import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/pages/bill_reader_page.dart';
 import 'package:democratus/theming/text_styles.dart';
 import 'package:democratus/widgets/generic/feedback_widgets.dart';
+import 'package:democratus/widgets/reader_widgets/bill_display_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,6 +16,7 @@ class BillTile extends StatelessWidget {
   Widget build(BuildContext context) {
     BillBloc billBloc = context.read<BillBloc>();
     SavedBillsBloc savedBillsBloc = context.read<SavedBillsBloc>();
+
     List<String> savedIds = [
       for (final bill in savedBillsBloc.state.bills) bill.billId
     ];
@@ -27,6 +29,7 @@ class BillTile extends StatelessWidget {
     return BlocBuilder<BillBloc, BillState>(
         bloc: billBloc,
         builder: (context, state) {
+          BillDisplay billDisplay = BillDisplay(state.bill, context);
           if (state.status == BillStatus.failure) {
             return Card(
                 child: ErrorFeedback(
@@ -51,7 +54,13 @@ class BillTile extends StatelessWidget {
                 title: Text(
                   state.bill.displayTitle,
                   maxLines: 6,
-                  style: TextStyles(context).bodyStyle,
+                  style: TextStyles(context).bodyStyle.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: billDisplay.displayBackgroundInfo(withDivider: false),
                 ),
               ),
             ),

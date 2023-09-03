@@ -51,7 +51,7 @@ class _MyHomePageState extends State<HomePage> {
               break;
             case SavedBillsStatus.success:
               sliverList = [
-                const HomePageBar(),
+                // const HomePageBar(),
                 BillSliverList(billList: state.bills),
               ];
               break;
