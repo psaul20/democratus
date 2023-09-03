@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'dart:io';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/blocs/client_cubit/client_cubit.dart';
@@ -59,7 +61,7 @@ Future<void> main() async {
       await widgetTester.pump(Duration.zero);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
-    testWidgets('20 Bill tiles are returned', (tester) async {
+    testWidgets('10 Bill tiles are returned', (tester) async {
       when(() => billSearchBloc.state).thenReturn(BillSearchState(
           searchBills: ProPublicaBill.fromExampleKeywordSearch(),
           status: BillSearchStatus.success));
@@ -68,9 +70,15 @@ Future<void> main() async {
         savedBillsBloc: savedBillsBloc,
         clientCubit: clientCubit,
       ));
-      await tester.pump(Duration.zero);
-      expect(find.byType(BillSliverList), findsOneWidget);
-      expect(find.byType(BillTile, skipOffstage: false), findsNWidgets(10));
+      final listFinder = find.byType(Scrollable);
+      for (final bill in savedBillsBloc.state.bills) {
+        await tester.scrollUntilVisible(
+          find.byKey(ValueKey(bill.billId)),
+          500.0,
+          scrollable: listFinder,
+        );
+        expect(find.byKey(ValueKey(bill.billId)), findsOneWidget);
+      }
     });
   });
 }

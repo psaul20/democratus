@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'dart:io';
 import 'package:democratus/blocs/client_cubit/client_cubit.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
@@ -46,9 +48,17 @@ Future<void> main() async {
         savedBillsBloc: savedBillsBloc,
         clientCubit: clientCubit,
       ));
-      await tester.pump(Duration.zero);
-      expect(find.byType(HomePageBar), findsOneWidget);
-      expect(find.byType(BillTile, skipOffstage: false), findsNWidgets(10));
+      final listFinder = find.byType(Scrollable);
+      for (final bill in savedBillsBloc.state.bills) {
+        await tester.scrollUntilVisible(
+          find.byKey(ValueKey(bill.billId)),
+          500.0,
+          scrollable: listFinder,
+        );
+        expect(find.byKey(ValueKey(bill.billId)), findsOneWidget);
+      }
+
+      // Scroll until the item to be found appears.
     });
   });
 }

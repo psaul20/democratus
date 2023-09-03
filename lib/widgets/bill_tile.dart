@@ -38,16 +38,16 @@ class BillTile extends StatelessWidget {
           } else if (!state.bill.isSaved) {
             checkSaved(state.bill);
           }
-          return InkWell(
-            onTap: () => Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return BlocProvider.value(
-                  value: billBloc,
-                  child: const BillReaderPage(),
-                );
-              },
-            )),
-            child: Card(
+          return Card(
+            child: InkWell(
+              onTap: () => Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return BlocProvider.value(
+                    value: billBloc,
+                    child: const BillReaderPage(),
+                  );
+                },
+              )),
               child: ListTile(
                 //TODO: Redundant, figure out why it's not inheriting from themedata
                 shape: Border.all(style: BorderStyle.none, width: 0),

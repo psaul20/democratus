@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/errors.dart';
@@ -9,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_status.dart';
-
 
 import '../mocks.dart';
 
@@ -26,7 +27,6 @@ void main() {
     savedBillsBloc = SavedBillsBloc();
     savedBillsBloc.add(ReplaceBills(bills: [bill]));
     when(() => billBloc.state).thenReturn(BillState(bill: bill));
-    
   });
   group('BillTile widget tests', () {
     testWidgets('BillTile has a title', (tester) async {
@@ -39,7 +39,7 @@ void main() {
           .thenReturn(BillState(bill: bill, status: BillStatus.failure));
       await tester.pumpWidget(
           TileWrapper(savedBillsBloc: savedBillsBloc, billBloc: billBloc));
-      expect(find.text(errorMessages[Errors.dataFetchError]!), findsOneWidget);
+      expect(find.text(BillStatus.failure.statusFeedback), findsOneWidget);
     });
   });
 }
