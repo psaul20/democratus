@@ -1,7 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
-import 'package:democratus/blocs/client_cubit/client_cubit.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -23,11 +22,6 @@ class MockSavedBillsBloc extends MockBloc<SavedBillsEvent, SavedBillsState> impl
 class FakeSavedBillsEvent extends Fake implements SavedBillsEvent {}
 
 class FakeSavedBillsState extends Fake implements SavedBillsState {}
-
-class MockClientCubit extends MockCubit<ClientState> implements ClientCubit {
-}
-
-class FakeClientState extends Fake implements ClientState {}
 
 class MockBillBloc extends MockBloc<BillEvent, BillState> implements BillBloc {}
 

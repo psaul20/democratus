@@ -9,17 +9,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  setUpAll(() => dotenv.testLoad(fileInput: File('.env').readAsStringSync()));
-  http.Client client = http.Client();
+  late ProPublicaApi proPublicaApi;
+  setUpAll(() {
+    dotenv.testLoad(fileInput: File('.env').readAsStringSync());
+    http.Client client = http.Client();
+    proPublicaApi = ProPublicaApi(client: client);
+  });
+
   group('Testing Pro Publica API', () {
     test('Testing well-formed HTTPS request to Pro Publica', () async {
-      http.Response response =
-          await ProPublicaApi.getBillsBySubject('Meat', client);
+      http.Response response = await proPublicaApi.getBillsBySubject('Meat');
       expect(response.statusCode, 200);
     });
     test('Testing search for bills by subject', () async {
-      http.Response response =
-          await ProPublicaApi.getBillsBySubject('Meat', client);
+      http.Response response = await proPublicaApi.getBillsBySubject('Meat');
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
           File('${Strings.billFilePath}/bills_by_subject_example.json')
@@ -30,8 +33,7 @@ void main() {
       expect(jsonResponse.keys, jsonExample.keys);
     });
     test('Testing subject search', () async {
-      http.Response response =
-          await ProPublicaApi.getSubjectSearch('climate', client);
+      http.Response response = await proPublicaApi.getSubjectSearch('climate');
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
           File('${Strings.billFilePath}/subject_search_example.json')
@@ -41,8 +43,8 @@ void main() {
       expect(jsonExample.keys, jsonResponse.keys);
     });
     test('Testing Bill retrieval by ID', () async {
-      http.Response response = await ProPublicaApi.getBillById(
-          116, 'hr'.billTypeFromCode, 502, client);
+      http.Response response =
+          await proPublicaApi.getBillById(116, 'hr'.billTypeFromCode, 502);
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
           File('${Strings.billFilePath}/bill_example.json').readAsStringSync());
@@ -51,8 +53,8 @@ void main() {
       expect(jsonExample.keys, jsonResponse.keys);
     });
     test('Testing Bill retrieval by keyword', () async {
-      http.Response response = await ProPublicaApi.getBillsByKeyword(
-          keyword: 'megahertz', client: client);
+      http.Response response =
+          await proPublicaApi.getBillsByKeyword(keyword: 'megahertz');
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
           File('${Strings.billFilePath}/bill_search_example.json')
@@ -63,13 +65,13 @@ void main() {
     });
     // test bill retrieval by keyword with offset
     test('Testing Bill retrieval by keyword with offset', () async {
-      http.Response response1 = await ProPublicaApi.getBillsByKeyword(
-          keyword: 'megahertz', client: client, offset: 0);
+      http.Response response1 =
+          await proPublicaApi.getBillsByKeyword(keyword: 'megahertz');
       expect(response1.statusCode, 200);
       Map<String, dynamic> jsonResponse1 = jsonDecode(response1.body);
       expect(jsonResponse1['status'], 'OK');
-      http.Response response2 = await ProPublicaApi.getBillsByKeyword(
-          keyword: 'megahertz', client: client, offset: 20);
+      http.Response response2 = await proPublicaApi.getBillsByKeyword(
+          keyword: 'megahertz', offset: 20);
 
       expect(response2.statusCode, 200);
       Map<String, dynamic> jsonResponse2 = jsonDecode(response2.body);

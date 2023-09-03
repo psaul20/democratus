@@ -1,7 +1,6 @@
-import 'package:democratus/api/pro_publica_api.dart';
+import 'package:democratus/api/bills_api_provider.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/models/bill_models/bill.dart';
-import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'dart:developer';
@@ -14,9 +13,9 @@ part 'bill_search_event.dart';
 part 'bill_search_state.dart';
 
 class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
-  http.Client client;
+  BillApiProvider billApiProvider;
   BillSearchState? initState;
-  BillSearchBloc({required this.client, this.initState})
+  BillSearchBloc({required this.billApiProvider, this.initState})
       : super(initState ?? const BillSearchState()) {
     on<KeywordSearch>(_onKeywordSearch);
     on<ScrollSearchOffset>(_onScrollSearchOffset);
@@ -54,12 +53,12 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
   }
 
   Future<List<Bill>> _fetchBillsByKeyword(String keyword) async {
-    http.Response response = await ProPublicaApi.getBillsByKeyword(
-        keyword: keyword, client: client, offset: state.offset);
+    http.Response response = await billApiProvider.getBillsByKeyword(
+        keyword: keyword);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      List<Bill> bills = ProPublicaBill.fromResponseBodyList(response.body);
+      List<Bill> bills = Bill.fromResponseBodyList(response.body, billApiProvider.source);
       return bills;
     } else if (response.statusCode == 429) {
       throw Exception("429: Too many requests");

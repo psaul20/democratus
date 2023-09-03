@@ -5,6 +5,7 @@ import 'package:democratus/globals/enums/bill_source.dart';
 import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/models/bill_models/bill_action.dart';
 import 'package:democratus/models/bill_models/committee.dart';
+import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:democratus/models/bill_models/sponsor.dart';
 import 'package:equatable/equatable.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -226,6 +227,25 @@ class Bill extends Equatable {
 
   factory Bill.fromJson(String source) =>
       Bill.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  //TODO: Bad practice, probably needs repository to make this cleaner
+  static Bill fromResponseBody(String responseBody, BillSource source) {
+    switch (source) {
+      case BillSource.proPublica:
+        return ProPublicaBill.fromResponseBody(responseBody);
+        
+      default: throw Exception('Bill source not implemented');
+    }
+  }
+
+  static List<Bill> fromResponseBodyList(String responseBody, BillSource source) {
+    switch (source) {
+      case BillSource.proPublica:
+        return ProPublicaBill.fromResponseBodyList(responseBody);
+        
+      default: throw Exception('Bill source not implemented');
+    }
+  }
 
   @override
   bool get stringify => true;

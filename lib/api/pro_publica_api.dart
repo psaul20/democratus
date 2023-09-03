@@ -1,12 +1,15 @@
 // ignore_for_file: unused_import
 
-import 'package:democratus/api/bills_provider.dart';
+import 'package:democratus/api/bills_api_provider.dart';
+import 'package:democratus/globals/enums/bill_source.dart';
 import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/globals/enums/bill_provider_params.dart';
 import 'package:democratus/models/bill_models/congress_gov_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'api_usage.dart';
+
+//TODO: In the future, ideally this is a repository pattern
 
 class ProPublicaApi implements BillApiProvider {
   String apiKey = dotenv.env['PRO_PUBLICA_API_KEY'] ?? '';
@@ -15,9 +18,7 @@ class ProPublicaApi implements BillApiProvider {
         'X-API-Key': apiKey,
       };
 
-  @override
-  final http.Client client;
-  ProPublicaApi(this.client);
+  ProPublicaApi({required this.client});
 
   // Get bills by subject https://api.propublica.org/congress/v1/bills/subjects/{subject}.json
   Future<http.Response> getBillsBySubject(String subject) async {
@@ -28,8 +29,7 @@ class ProPublicaApi implements BillApiProvider {
   }
 
   // Get subject by search term https://api.propublica.org/congress/v1/bills/subjects/search.json?query={query}
-  Future<http.Response> getSubjectSearch(
-      String query, http.Client client) async {
+  Future<http.Response> getSubjectSearch(String query) async {
     String url =
         '$baseUrl/bills/subjects/search.json?query=${query.toLowerCase()}';
     http.Response response = await client.get(Uri.parse(url), headers: headers);
@@ -42,7 +42,9 @@ class ProPublicaApi implements BillApiProvider {
       int congress, BillType type, int number) async {
     String url =
         '$baseUrl/${congress.toString()}/bills/${type.typeCode}${number.toString()}.json';
-    return client.get(Uri.parse(url), headers: headers);
+    http.Response response = await client.get(Uri.parse(url), headers: headers);
+    logUsage(response);
+    return response;
   }
 
 // Get bill by keyword https://api.propublica.org/congress/v1/bills/search.json?query={query}
@@ -53,17 +55,19 @@ class ProPublicaApi implements BillApiProvider {
       int offset = 0}) async {
     String url =
         '$baseUrl/bills/search.json?query=${keyword.toLowerCase()}&sort=${sort.sortCode}&offset=$offset';
-    return client.get(Uri.parse(url), headers: headers);
-  }
-
-  @override
-  Future<http.Response> addOffset(
-      Future<http.Response> Function({int offset}) searchFunction, int offset) {
-    return searchFunction(offset: offset);
+    http.Response response = await client.get(Uri.parse(url), headers: headers);
+    logUsage(response);
+    return response;
   }
 
   @override
   void logUsage(http.Response response) {
     ApiUsage.logUsage(response);
   }
+
+  @override
+  http.Client client;
+
+  @override
+  BillSource source = BillSource.proPublica;
 }

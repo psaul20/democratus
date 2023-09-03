@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:democratus/api/bills_api_provider.dart';
+import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/globals/strings.dart';
@@ -17,6 +19,7 @@ import 'bill_search_bloc_test.mocks.dart';
 @GenerateMocks([http.Client])
 void main() {
   late MockClient client;
+  late BillApiProvider billsApiProvider;
   String searchBillJson =
       File('${Strings.billFilePath}/bill_search_example.json')
           .readAsStringSync();
@@ -31,6 +34,7 @@ void main() {
     initHydratedStorage();
     dotenv.testLoad(fileInput: File('.env').readAsStringSync());
     client = MockClient();
+    billsApiProvider = ProPublicaApi(client: client);
   });
   group('Bill_Search_Bloc Keyword tests', () {
     blocTest(
@@ -40,7 +44,7 @@ void main() {
       build: () {
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response(searchBillJson, 200));
-        return BillSearchBloc(client: client);
+        return BillSearchBloc(billApiProvider: billsApiProvider);
       },
       act: (bloc) => bloc.add(KeywordSearch(keyword: 'climate')),
       expect: () => <BillSearchState>[
@@ -61,7 +65,7 @@ void main() {
       build: () {
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response('error', 404));
-        return BillSearchBloc(client: client);
+        return BillSearchBloc(billApiProvider: billsApiProvider);
       },
       act: (bloc) => bloc.add(KeywordSearch(keyword: 'climate')),
       expect: () => <BillSearchState>[
@@ -81,7 +85,7 @@ void main() {
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response('', 200));
         return BillSearchBloc(
-            client: client,
+            billApiProvider: billsApiProvider,
             initState: const BillSearchState(keyword: 'climate'));
       },
       act: (bloc) => bloc.add(KeywordSearch(keyword: '')),
@@ -99,7 +103,7 @@ void main() {
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response(searchBillJson, 200));
         return BillSearchBloc(
-            client: client,
+            billApiProvider: billsApiProvider,
             initState: BillSearchState(
                 status: BillSearchStatus.success,
                 searchBills: testBills,
@@ -115,7 +119,7 @@ void main() {
       build: () {
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response(searchBillJson, 200));
-        return BillSearchBloc(client: client);
+        return BillSearchBloc(billApiProvider: billsApiProvider);
       },
       act: (bloc) => bloc.add(ScrollSearchOffset()),
       expect: () => <BillSearchState>[
@@ -134,7 +138,7 @@ void main() {
             .thenAnswer((_) async => http.Response(billJson, 200));
 
         return BillSearchBloc(
-            client: client,
+            billApiProvider: billsApiProvider,
             initState: BillSearchState(
                 status: BillSearchStatus.success,
                 searchBills: testBills + testBills,

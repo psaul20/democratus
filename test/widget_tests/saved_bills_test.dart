@@ -1,7 +1,8 @@
 // ignore_for_file: unused_import
 
 import 'dart:io';
-import 'package:democratus/blocs/client_cubit/client_cubit.dart';
+import 'package:democratus/api/bills_api_provider.dart';
+import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/saved_bills_status.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
@@ -14,11 +15,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:provider/provider.dart';
 import '../mocks.dart';
 
 Future<void> main() async {
   late MockSavedBillsBloc savedBillsBloc;
-  late ClientCubit clientCubit;
 
   setUpAll(() {
     initHydratedStorage();
@@ -26,7 +27,6 @@ Future<void> main() async {
     dotenv.testLoad(fileInput: File('.env').readAsStringSync());
     Client client = MockHttpClient();
     when(() => client.get(any())).thenAnswer((_) async => Response('', 200));
-    clientCubit = ClientCubit(client);
     savedBillsBloc = MockSavedBillsBloc();
   });
   group('Home Page Widget Tests', () {
@@ -34,7 +34,6 @@ Future<void> main() async {
       when(() => savedBillsBloc.state).thenReturn(const SavedBillsState());
       await widgetTester.pumpWidget(HomePageWrapper(
         savedBillsBloc: savedBillsBloc,
-        clientCubit: clientCubit,
       ));
       expect(find.byType(SliverFillRemaining), findsOneWidget);
       expect(
@@ -46,7 +45,6 @@ Future<void> main() async {
           status: SavedBillsStatus.success));
       await tester.pumpWidget(HomePageWrapper(
         savedBillsBloc: savedBillsBloc,
-        clientCubit: clientCubit,
       ));
       final listFinder = find.byType(Scrollable);
       for (final bill in savedBillsBloc.state.bills) {
@@ -64,24 +62,24 @@ Future<void> main() async {
 }
 
 class HomePageWrapper extends StatelessWidget {
-  const HomePageWrapper(
-      {Key? key, required this.savedBillsBloc, required this.clientCubit})
+  HomePageWrapper({Key? key, required this.savedBillsBloc, billApiProvider})
       : super(key: key);
   final SavedBillsBloc savedBillsBloc;
-  final ClientCubit clientCubit;
+  final BillApiProvider billApiProvider =
+      ProPublicaApi(client: MockHttpClient());
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(
-          value: savedBillsBloc,
-        ),
-        BlocProvider.value(
-          value: clientCubit,
-        )
-      ],
-      child: const MaterialApp(home: HomePage(title: 'MY BILLS')),
+    return Provider(
+      create: (_) => billApiProvider,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: savedBillsBloc,
+          ),
+        ],
+        child: const MaterialApp(home: HomePage(title: 'MY BILLS')),
+      ),
     );
   }
 }

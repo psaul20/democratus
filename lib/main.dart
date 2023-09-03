@@ -1,6 +1,5 @@
-import 'package:democratus/api/bills_provider.dart';
+import 'package:democratus/api/bills_api_provider.dart';
 import 'package:democratus/api/pro_publica_api.dart';
-import 'package:democratus/blocs/client_cubit/client_cubit.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/observers/bloc_observer.dart';
 import 'package:democratus/pages/home_page.dart';
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider<BillApiProvider>(
-      create: (_) => ProPublicaApi(Client()),
+      create: (_) => ProPublicaApi(client: Client()),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(

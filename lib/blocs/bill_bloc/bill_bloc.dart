@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 
-import 'package:democratus/api/bills_provider.dart';
-import 'package:democratus/api/pro_publica_api.dart';
+import 'package:democratus/api/bills_api_provider.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_status.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
@@ -14,8 +13,8 @@ part 'bill_event.dart';
 part 'bill_state.dart';
 
 class BillBloc extends Bloc<BillEvent, BillState> {
-  BillApiProvider billsProvider;
-  BillBloc({required bill, required this.billsProvider})
+  BillApiProvider billApiProvider;
+  BillBloc({required bill, required this.billApiProvider})
       : super(BillState(bill: bill)) {
     on<UpdateBill>((event, emit) => emit(state.copyWith(
           bill: event.bill,
@@ -41,7 +40,7 @@ class BillBloc extends Bloc<BillEvent, BillState> {
   }
 
   Future<Bill> _fetchBill() async {
-    http.Response response = await billsProvider.getBillById(
+    http.Response response = await billApiProvider.getBillById(
         state.bill.congress, state.bill.type, state.bill.number);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,

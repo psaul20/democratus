@@ -1,8 +1,9 @@
 // ignore_for_file: unused_import
 
 import 'dart:io';
+import 'package:democratus/api/bills_api_provider.dart';
+import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
-import 'package:democratus/blocs/client_cubit/client_cubit.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
@@ -16,12 +17,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:provider/provider.dart';
+import '../bloc_tests/bill_search_bloc_test.mocks.dart';
 import '../mocks.dart';
 
 Future<void> main() async {
   late MockBillSearchBloc billSearchBloc;
   late MockSavedBillsBloc savedBillsBloc;
-  late ClientCubit clientCubit;
 
   setUpAll(() {
     initHydratedStorage();
@@ -32,7 +34,6 @@ Future<void> main() async {
     when(() => savedBillsBloc.state).thenReturn(const SavedBillsState());
     Client client = MockHttpClient();
     when(() => client.get(any())).thenAnswer((_) async => Response('', 200));
-    clientCubit = ClientCubit(client);
   });
   group('Search Page Widget Tests', () {
     testWidgets('Initial Layout Checks', (widgetTester) async {
@@ -42,7 +43,6 @@ Future<void> main() async {
       await widgetTester.pumpWidget(SearchPageWrapper(
         billSearchBloc: billSearchBloc,
         savedBillsBloc: savedBillsBloc,
-        clientCubit: clientCubit,
       ));
       expect(find.byType(BillSearchBar), findsOneWidget);
       expect(find.byType(SliverFillRemaining), findsOneWidget);
@@ -56,7 +56,6 @@ Future<void> main() async {
       await widgetTester.pumpWidget(SearchPageWrapper(
         billSearchBloc: billSearchBloc,
         savedBillsBloc: savedBillsBloc,
-        clientCubit: clientCubit,
       ));
       await widgetTester.pump(Duration.zero);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -68,7 +67,6 @@ Future<void> main() async {
       await tester.pumpWidget(SearchPageWrapper(
         billSearchBloc: billSearchBloc,
         savedBillsBloc: savedBillsBloc,
-        clientCubit: clientCubit,
       ));
       final listFinder = find.byType(Scrollable);
       for (final bill in savedBillsBloc.state.bills) {
@@ -84,32 +82,32 @@ Future<void> main() async {
 }
 
 class SearchPageWrapper extends StatelessWidget {
-  const SearchPageWrapper(
+  SearchPageWrapper(
       {Key? key,
       required this.billSearchBloc,
       required this.savedBillsBloc,
-      required this.clientCubit})
+      billApiProvider})
       : super(key: key);
   final BillSearchBloc billSearchBloc;
   final SavedBillsBloc savedBillsBloc;
-  final ClientCubit clientCubit;
+  final BillApiProvider billApiProvider = ProPublicaApi(client: MockHttpClient());
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(
-          value: billSearchBloc,
+    return Provider(
+      create: (_) => billApiProvider,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: billSearchBloc,
+          ),
+          BlocProvider.value(
+            value: savedBillsBloc,
+          ),
+        ],
+        child: const MaterialApp(
+          home: BillSearchPage(),
         ),
-        BlocProvider.value(
-          value: savedBillsBloc,
-        ),
-        BlocProvider.value(
-          value: clientCubit,
-        ),
-      ],
-      child: const MaterialApp(
-        home: BillSearchPage(),
       ),
     );
   }
