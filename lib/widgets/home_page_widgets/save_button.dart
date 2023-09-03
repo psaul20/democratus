@@ -28,6 +28,7 @@ class SaveButton extends StatelessWidget {
     return BlocBuilder<SavedBillsBloc, SavedBillsState>(
       builder: (context, state) {
         return FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           onPressed: () => saveTap(bill),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +37,7 @@ class SaveButton extends StatelessWidget {
               Text(
                 checkSaved(bill) ? "Saved" : "Save",
                 textAlign: TextAlign.center,
-                style: TextStyles(context).bodyStyle,
+                style: TextStyles(context).fabTextStyle,
               )
             ],
           ),

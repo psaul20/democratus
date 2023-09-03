@@ -3,6 +3,7 @@ import 'package:democratus/globals/enums/bloc_states/bill_status.dart';
 import 'package:democratus/widgets/generic/feedback_widgets.dart';
 import 'package:democratus/widgets/home_page_widgets/save_button.dart';
 import 'package:democratus/widgets/reader_widgets/bill_display_widgets.dart';
+import 'package:democratus/widgets/reader_widgets/read_more_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,14 +100,22 @@ class _BillReaderPageState extends State<BillReaderPage> {
               builder: (context, state) {
                 switch (state.status) {
                   case BillStatus.success:
-                    return const SaveButton();
-
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SaveButton(),
+                        const SizedBox(width: 24),
+                        ReadMoreButton(url: state.bill.url),
+                      ],
+                    );
                   default:
                     return const SizedBox.shrink();
                 }
               },
             )
           : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -14,7 +14,7 @@ class LoadingFeedback extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const CircularProgressIndicator(),
+        const CircularProgressIndicator.adaptive(),
         const SizedBox(height: 8),
         Text(
           loadingTxt,

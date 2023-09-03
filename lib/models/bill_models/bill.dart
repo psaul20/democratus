@@ -7,6 +7,7 @@ import 'package:democratus/models/bill_models/bill_action.dart';
 import 'package:democratus/models/bill_models/committee.dart';
 import 'package:democratus/models/bill_models/sponsor.dart';
 import 'package:equatable/equatable.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Bill extends Equatable {
   final List<BillAction>? actions;
@@ -39,6 +40,18 @@ class Bill extends Equatable {
   String get displayTitle => shortTitle ?? title;
   String get displayNumber => '${type.typeCodeFormatted.toUpperCase()} $number';
   List get datesForDisplay => [introducedDate, lastUpdateDate];
+  Future<Uri?> get url async {
+    if (gpoUrl != null && await canLaunchUrl(gpoUrl!)) {
+      return gpoUrl!;
+    }
+    if (congressGovUrl != null && await canLaunchUrl(congressGovUrl!)) {
+      return congressGovUrl!;
+    }
+    if (govtrackUrl != null && await canLaunchUrl(govtrackUrl!)) {
+      return govtrackUrl!;
+    }
+    return null;
+  }
 
   const Bill({
     this.actions,

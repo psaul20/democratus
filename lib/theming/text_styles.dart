@@ -15,4 +15,10 @@ class TextStyles {
           .titleLarge
           ?.copyWith(color: DemocScheme.scheme.onSecondary) ??
       const TextStyle();
+  TextStyle get fabTextStyle =>
+      Theme.of(context)
+          .textTheme
+          .bodySmall
+          ?.copyWith(color: DemocScheme.scheme.onBackground) ??
+      const TextStyle();
 }
