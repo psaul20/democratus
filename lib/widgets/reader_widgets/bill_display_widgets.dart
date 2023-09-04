@@ -84,20 +84,17 @@ class BillDisplay {
   }
 
   Widget displaySource() {
-    if (bill.source != null) {
-      return RichText(
-        text: TextSpan(
-          style: TextStyles(context).bodyStyle,
-          children: [
-            const TextSpan(
-                text: 'Source: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            TextSpan(text: bill.source!.name),
-          ],
-        ),
-      );
-    }
-    return const SizedBox.shrink();
+    return RichText(
+      text: TextSpan(
+        style: TextStyles(context).bodyStyle,
+        children: [
+          const TextSpan(
+              text: 'Source: ',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: bill.source.name),
+        ],
+      ),
+    );
   }
 
   Widget displayChamber() {

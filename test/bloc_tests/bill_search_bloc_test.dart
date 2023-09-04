@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:democratus/api/bills_api_provider.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
@@ -23,9 +22,6 @@ void main() {
   offsetBills.add(testBill);
   String searchBillJson =
       File('${Strings.billFilePath}/govinfo_bill_search_example.json')
-          .readAsStringSync();
-  String billDetailsJson =
-      File('${Strings.billFilePath}/govinfo_bill_example.json')
           .readAsStringSync();
   Map<String, String> headers = {
     'content-type': 'application/json; charset=utf-8'

@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:democratus/api/bills_api_provider.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_status.dart';
 import 'package:democratus/models/bill_models/bill.dart';
-import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;

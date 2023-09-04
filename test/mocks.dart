@@ -1,6 +1,5 @@
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:democratus/api/bills_api_provider.dart';
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
