@@ -97,7 +97,6 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
 
   @override
   BillSearchState? fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
     return BillSearchState.fromMap(json);
   }
 

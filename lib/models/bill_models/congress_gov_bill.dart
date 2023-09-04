@@ -6,7 +6,6 @@ import 'package:democratus/globals/enums/bill_source.dart';
 import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:equatable/equatable.dart';
 
-//TODO: Conform to Bill class
 class CongressGovBill extends Equatable {
   //From CongressGov API
   final Map<String, dynamic>? actions;

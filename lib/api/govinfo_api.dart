@@ -5,7 +5,6 @@ import 'package:democratus/api/bills_api_provider.dart';
 import 'package:democratus/globals/enums/bill_provider_params.dart';
 import 'package:democratus/globals/enums/bill_source.dart';
 import 'package:democratus/models/bill_models/bill.dart';
-import 'package:democratus/models/package.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -24,7 +23,6 @@ class GovinfoApi implements BillApiProvider {
     return response;
   }
 
-  //TODO: Implement error handling, endDate
   Future<Response> searchPackages({
     required DateTime startDate,
     DateTime? endDate,
@@ -44,23 +42,23 @@ class GovinfoApi implements BillApiProvider {
     return response;
   }
 
-  Future<String> getHtml(Package package) async {
-    String? url = package.download?['txtLink'];
-    if (url != null) {
-      url = '$url?api_key=$apiKey';
-      final response = await http.get(Uri.parse(url));
-      ApiUsage.logUsage(response);
-      if (response.statusCode == 200) {
-        return response.body;
-      } else {
-        // If the server did not return a 200 OK response,
-        // then throw an exception.
-        throw Exception('Failed to retrieve package text');
-      }
-    } else {
-      return Future.error(Exception("Html Link not found"));
-    }
-  }
+  // Future<String> getHtml(Package package) async {
+  //   String? url = package.download?['txtLink'];
+  //   if (url != null) {
+  //     url = '$url?api_key=$apiKey';
+  //     final response = await http.get(Uri.parse(url));
+  //     ApiUsage.logUsage(response);
+  //     if (response.statusCode == 200) {
+  //       return response.body;
+  //     } else {
+  //       // If the server did not return a 200 OK response,
+  //       // then throw an exception.
+  //       throw Exception('Failed to retrieve package text');
+  //     }
+  //   } else {
+  //     return Future.error(Exception("Html Link not found"));
+  //   }
+  // }
 
   @override
   http.Client client;

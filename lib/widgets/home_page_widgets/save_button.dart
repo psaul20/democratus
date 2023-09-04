@@ -13,7 +13,6 @@ class SaveButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Bill bill = BlocProvider.of<BillBloc>(context).state.bill;
     saveTap(Bill bill) {
-      //TODO: Add repository to tie these events together
       BlocProvider.of<SavedBillsBloc>(context).add(ToggleSave(bill: bill));
     }
 

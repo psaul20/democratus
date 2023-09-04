@@ -42,8 +42,6 @@ class BillDisplay {
     );
   }
 
-  //TODO: Add status
-
   Widget displaySummaries() {
     List<Widget> returnWidgets = [];
     if (bill.crsSummaries != null) {

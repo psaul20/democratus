@@ -12,7 +12,6 @@ void main() {
   late Response response;
   dotenv.testLoad(fileInput: File('.env').readAsStringSync());
   setUpAll(() async {
-    //TODO: Figure out environment variables for testing
     dotenv.testLoad(fileInput: File('.env').readAsStringSync());
 
     response = await CongressGovAPI.getBillData(117, 'hr', 3076);

@@ -5,8 +5,6 @@ class BillSearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
-//TODO: Add events for keyword search & subject search
-
 class KeywordSearch extends BillSearchEvent {
   final String keyword;
 

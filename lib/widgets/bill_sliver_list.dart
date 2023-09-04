@@ -16,7 +16,7 @@ class BillSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BillApiProvider provider = Provider.of<BillApiProvider>(context);
+    BillApiProvider provider = Provider.of<BillApiProvider>(context, listen: false);
     return SliverList.builder(
       itemBuilder: (context, index) => BlocProvider<BillBloc>(
           key: ValueKey(billList[index].billId),

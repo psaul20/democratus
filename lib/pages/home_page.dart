@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-//TODO: Fix no added packages view + searching view
-
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
@@ -25,7 +23,7 @@ class HomePage extends StatefulWidget {
 class _MyHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    SavedBillsBloc savedBillsBloc = BlocProvider.of<SavedBillsBloc>(context);
+    SavedBillsBloc savedBillsBloc = BlocProvider.of<SavedBillsBloc>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -80,7 +78,7 @@ class _MyHomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          BillApiProvider provider = Provider.of<BillApiProvider>(context);
+          BillApiProvider provider = Provider.of<BillApiProvider>(context, listen: false);
           Navigator.push(
             context,
             MaterialPageRoute(
