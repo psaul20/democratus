@@ -89,8 +89,7 @@ class BillDisplay {
         style: TextStyles(context).bodyStyle,
         children: [
           const TextSpan(
-              text: 'Source: ',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              text: 'Source: ', style: TextStyle(fontWeight: FontWeight.bold)),
           TextSpan(text: bill.source.name),
         ],
       ),
@@ -179,11 +178,12 @@ class BillDisplay {
               text: TextSpan(
                 style: TextStyles(context).bodyStyle,
                 children: [
-                  const TextSpan(
-                      text: 'Introduced: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(
-                      text: DateConverters.formatDate(bill.introducedDate!)),
+                      text: date['title'],
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(
+                    text: date['date'],
+                  ),
                 ],
               ),
             ),

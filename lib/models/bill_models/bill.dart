@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:democratus/globals/converters/date_converters.dart';
 import 'package:democratus/globals/enums/bill_source.dart';
 import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/models/bill_models/bill_action.dart';
@@ -47,7 +48,23 @@ class Bill extends Equatable {
 
   String get displayTitle => shortTitle ?? title;
   String get displayNumber => '${type.typeCodeFormatted.toUpperCase()} $number';
-  List get datesForDisplay => [introducedDate, lastUpdateDate];
+  List get datesForDisplay {
+    List<Map> dates = [];
+    if (introducedDate != null) {
+      dates.add({
+        'title': 'Introduced: ',
+        'date': DateConverters.formatDate(introducedDate!),
+      });
+    }
+    if (lastUpdateDate != null) {
+      dates.add({
+        'title': 'Last Updated: ',
+        'date': DateConverters.formatDate(introducedDate!),
+      });
+    }
+    return dates;
+  }
+
   Future<Uri?> get url async {
     if (gpoUrl != null && await canLaunchUrl(gpoUrl!)) {
       return gpoUrl!;
