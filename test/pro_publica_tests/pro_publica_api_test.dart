@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:democratus/api/pro_publica_api.dart';
-import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,9 +24,9 @@ void main() {
     test('Testing search for bills by subject', () async {
       http.Response response = await proPublicaApi.getBillsBySubject('Meat');
       expect(response.statusCode, 200);
-      Map<String, dynamic> jsonExample = jsonDecode(
-          File('${Strings.billFilePath}/bills_by_subject_example.json')
-              .readAsStringSync());
+      Map<String, dynamic> jsonExample = jsonDecode(File(
+              '${Strings.billFilePath}/pro_publica_bills_by_subject_example.json')
+          .readAsStringSync());
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
       expect(jsonResponse['status'], 'OK');
       expect(jsonResponse['subject'], jsonExample['subject']);
@@ -36,20 +35,19 @@ void main() {
     test('Testing subject search', () async {
       http.Response response = await proPublicaApi.getSubjectSearch('climate');
       expect(response.statusCode, 200);
-      Map<String, dynamic> jsonExample = jsonDecode(
-          File('${Strings.billFilePath}/subject_search_example.json')
-              .readAsStringSync());
+      Map<String, dynamic> jsonExample = jsonDecode(File(
+              '${Strings.billFilePath}/pro_publica_subject_search_example.json')
+          .readAsStringSync());
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
       expect(jsonResponse['status'], 'OK');
       expect(jsonExample.keys, jsonResponse.keys);
     });
     test('Testing Bill Details Retrieval', () async {
       ProPublicaBill bill = ProPublicaBill.fromExample();
-      http.Response response =
-          await proPublicaApi.getBillDetails(bill);
+      http.Response response = await proPublicaApi.getBillDetails(bill: bill);
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
-          File('${Strings.billFilePath}/bill_example.json').readAsStringSync());
+          File('${Strings.billFilePath}/pro_publica_bill_example.json').readAsStringSync());
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
       expect(jsonResponse['status'], 'OK');
       expect(jsonExample.keys, jsonResponse.keys);
@@ -59,7 +57,7 @@ void main() {
           await proPublicaApi.searchBillsByKeyword(keyword: 'megahertz');
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
-          File('${Strings.billFilePath}/bill_search_example.json')
+          File('${Strings.billFilePath}/pro_publica_bill_search_example.json')
               .readAsStringSync());
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
       expect(jsonResponse['status'], 'OK');
@@ -73,7 +71,7 @@ void main() {
       Map<String, dynamic> jsonResponse1 = jsonDecode(response1.body);
       expect(jsonResponse1['status'], 'OK');
       http.Response response2 = await proPublicaApi.searchBillsByKeyword(
-          keyword: 'megahertz', offset: 20);
+          keyword: 'megahertz', resetOffset: false);
 
       expect(response2.statusCode, 200);
       Map<String, dynamic> jsonResponse2 = jsonDecode(response2.body);
@@ -95,7 +93,7 @@ void main() {
       }
 
       Map<String, dynamic> jsonExample = jsonDecode(
-          File('${Strings.billFilePath}/bill_search_example.json')
+          File('${Strings.billFilePath}/pro_publica_bill_search_example.json')
               .readAsStringSync());
 
       expect(jsonExample.keys, jsonResponse2.keys);

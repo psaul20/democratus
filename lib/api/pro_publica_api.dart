@@ -56,10 +56,10 @@ class ProPublicaApi implements BillApiProvider {
       SearchSort sort = SearchSort.relevance,
       bool resetOffset = false}) async {
     String url =
-        '$baseUrl/bills/search.json?query=${keyword.toLowerCase()}&sort=${sort.sortCode}&offset=$nextOffset';
+        '$baseUrl/bills/search.json?query=${keyword.toLowerCase()}&sort=${sort.sortCode(source)}&offset=$nextOffset';
     http.Response response = await client.get(Uri.parse(url), headers: headers);
     logUsage(response);
-    updateNextOffset('20', resetOffset);
+    updateNextOffset((int.parse(nextOffset) + 20).toString(), resetOffset);
     return response;
   }
 

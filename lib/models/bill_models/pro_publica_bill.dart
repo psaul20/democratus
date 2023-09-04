@@ -105,19 +105,21 @@ class ProPublicaBill extends Bill {
   }
 
   static ProPublicaBill fromExample() {
-    String billpath = '${Strings.billFilePath}/bill_example.json';
+    String billpath = '${Strings.billFilePath}/pro_publica_bill_example.json';
     String billString = File(billpath).readAsStringSync();
     return ProPublicaBill.fromMap(jsonDecode(billString)['results'][0]);
   }
 
   static List<ProPublicaBill> fromExampleSubjectSearch() {
-    String billpath = '${Strings.billFilePath}/bills_by_subject_example.json';
+    String billpath =
+        '${Strings.billFilePath}/pro_publica_bills_by_subject_example.json';
     String billString = File(billpath).readAsStringSync();
     return fromResponseBodyList(billString);
   }
 
   static List<ProPublicaBill> fromExampleKeywordSearch() {
-    String billpath = '${Strings.billFilePath}/bill_search_example.json';
+    String billpath =
+        '${Strings.billFilePath}/pro_publica_bill_search_example.json';
     String billString = File(billpath).readAsStringSync();
     return fromResponseBodyList(billString);
   }

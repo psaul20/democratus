@@ -41,7 +41,7 @@ class BillBloc extends Bloc<BillEvent, BillState> {
 
   Future<Bill> _fetchBill() async {
     http.Response response = await billApiProvider.getBillDetails(
-        state.bill);
+        bill: state.bill);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.

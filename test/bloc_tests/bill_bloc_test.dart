@@ -24,10 +24,10 @@ void main() {
       client = MockClient();
 
       dotenv.testLoad(fileInput: File('.env').readAsStringSync());
-            billsProvider = ProPublicaApi(client: client);
+      billsProvider = ProPublicaApi(client: client);
       when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(
-              File('${Strings.billFilePath}/bill_example.json')
+              File('${Strings.billFilePath}/pro_publica_bill_example.json')
                   .readAsStringSync(),
               200));
       billBloc = BillBloc(

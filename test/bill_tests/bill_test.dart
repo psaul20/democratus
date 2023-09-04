@@ -15,16 +15,17 @@ void main() {
     setUpAll(() => dotenv.testLoad(fileInput: File('.env').readAsStringSync()));
     test('Testing Pro Publica Bill creation from JSON', () {
       String billString =
-          File('${Strings.billFilePath}/bill_example.json').readAsStringSync();
+          File('${Strings.billFilePath}/pro_publica_bill_example.json')
+              .readAsStringSync();
       ProPublicaBill bill = ProPublicaBill.fromResponseBody(billString);
       expect(bill.billId, '116-hr-502');
       expect(bill.congress, 116);
     });
 
     test('Testing Pro Publica Bill creation from bill by subject result', () {
-      String billString =
-          File('${Strings.billFilePath}/bills_by_subject_example.json')
-              .readAsStringSync();
+      String billString = File(
+              '${Strings.billFilePath}/pro_publica_bills_by_subject_example.json')
+          .readAsStringSync();
       List<ProPublicaBill> bills =
           ProPublicaBill.fromResponseBodyList(billString);
       expect(bills.length, 20);
@@ -33,7 +34,7 @@ void main() {
 
     test('Testing Pro Publica Bill creation from bill search result', () {
       String billString =
-          File('${Strings.billFilePath}/bill_search_example.json')
+          File('${Strings.billFilePath}/pro_publica_bill_search_example.json')
               .readAsStringSync();
       List<ProPublicaBill> bills =
           ProPublicaBill.fromResponseBodyList(billString);
@@ -45,10 +46,10 @@ void main() {
       // https://www.govtrack.us/congress/bills/118/hr5204
       ProPublicaApi proPublicaApi = ProPublicaApi(client: client);
       Bill bill = ProPublicaBill.fromExample();
-      Response response =
-          await proPublicaApi.getBillDetails(bill);
-      Bill billDetails = Bill.fromResponseBody(response.body, BillSource.proPublica);
-      expect(billDetails.billId, '118-hr-5204');
+      Response response = await proPublicaApi.getBillDetails(bill: bill);
+      Bill billDetails =
+          Bill.fromResponseBody(response.body, BillSource.proPublica);
+      expect(billDetails.billId, '116-hr-502');
     });
   });
 }

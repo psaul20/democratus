@@ -21,10 +21,11 @@ void main() {
   late MockClient client;
   late BillApiProvider billsApiProvider;
   String searchBillJson =
-      File('${Strings.billFilePath}/bill_search_example.json')
+      File('${Strings.billFilePath}/pro_publica_bill_search_example.json')
           .readAsStringSync();
   String billJson =
-      File('${Strings.billFilePath}/bill_example.json').readAsStringSync();
+      File('${Strings.billFilePath}/pro_publica_bill_example.json')
+          .readAsStringSync();
   List<Bill> testBills = ProPublicaBill.fromExampleKeywordSearch();
   Bill testBill = ProPublicaBill.fromExample();
   List<Bill> offsetBills = [];
