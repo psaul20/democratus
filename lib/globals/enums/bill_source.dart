@@ -1,5 +1,5 @@
 enum BillSource {
   congressGovSearch,
   congressGovApi,
-  proPublica,
+  proPublica, govinfo,
 }

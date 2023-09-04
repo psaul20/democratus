@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/globals/enums/bill_source.dart';
-import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
@@ -45,10 +44,11 @@ void main() {
     test('Testing Pro Publica Bill Creation from API response', () async {
       // https://www.govtrack.us/congress/bills/118/hr5204
       ProPublicaApi proPublicaApi = ProPublicaApi(client: client);
+      Bill bill = ProPublicaBill.fromExample();
       Response response =
-          await proPublicaApi.getBillById(118, BillType.hr, 5204);
-      Bill bill = Bill.fromResponseBody(response.body, BillSource.proPublica);
-      expect(bill.billId, '118-hr-5204');
+          await proPublicaApi.getBillDetails(bill);
+      Bill billDetails = Bill.fromResponseBody(response.body, BillSource.proPublica);
+      expect(billDetails.billId, '118-hr-5204');
     });
   });
 }

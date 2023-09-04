@@ -34,6 +34,7 @@ class Bill extends Equatable {
   final Uri? gpoUrl;
   final bool hasDetails;
   final bool isSaved;
+  final String? govInfoId;
 
   String get billId =>
       '${congress.toString()}-${type.typeCode}-${number.toString()}';
@@ -78,6 +79,7 @@ class Bill extends Equatable {
     this.gpoUrl,
     this.hasDetails = false,
     this.isSaved = false,
+    this.govInfoId,
   });
 
   @override
@@ -90,7 +92,6 @@ class Bill extends Equatable {
       ];
 
   Bill copyWith({
-    String? billId,
     List<BillAction>? actions,
     List<Map<String, dynamic>>? amendments,
     List<Committee>? committees,
@@ -114,6 +115,7 @@ class Bill extends Equatable {
     Uri? gpoUrl,
     bool? hasDetails,
     bool? isSaved,
+    String? govInfoId,
   }) {
     return Bill(
       actions: actions ?? this.actions,
@@ -139,6 +141,7 @@ class Bill extends Equatable {
       gpoUrl: gpoUrl ?? this.gpoUrl,
       hasDetails: hasDetails ?? this.hasDetails,
       isSaved: isSaved ?? this.isSaved,
+      govInfoId: govInfoId ?? this.govInfoId,
     );
   }
 
@@ -167,6 +170,7 @@ class Bill extends Equatable {
       'gpoUrl': gpoUrl?.toString(),
       'hasDetails': hasDetails,
       'isSaved': isSaved,
+      'govInfoId': govInfoId,
     };
   }
 
@@ -220,6 +224,7 @@ class Bill extends Equatable {
       gpoUrl: map['gpoUrl'] != null ? Uri.parse(map['gpoUrl']) : null,
       hasDetails: map['hasDetails'] as bool,
       isSaved: map['isSaved'] as bool,
+      govInfoId: map['govInfoId'] as String?,
     );
   }
 
@@ -233,17 +238,20 @@ class Bill extends Equatable {
     switch (source) {
       case BillSource.proPublica:
         return ProPublicaBill.fromResponseBody(responseBody);
-        
-      default: throw Exception('Bill source not implemented');
+
+      default:
+        throw Exception('Bill source not implemented');
     }
   }
 
-  static List<Bill> fromResponseBodyList(String responseBody, BillSource source) {
+  static List<Bill> fromResponseBodyList(
+      String responseBody, BillSource source) {
     switch (source) {
       case BillSource.proPublica:
         return ProPublicaBill.fromResponseBodyList(responseBody);
-        
-      default: throw Exception('Bill source not implemented');
+
+      default:
+        throw Exception('Bill source not implemented');
     }
   }
 

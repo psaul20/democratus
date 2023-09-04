@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/globals/strings.dart';
+import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -42,9 +43,10 @@ void main() {
       expect(jsonResponse['status'], 'OK');
       expect(jsonExample.keys, jsonResponse.keys);
     });
-    test('Testing Bill retrieval by ID', () async {
+    test('Testing Bill Details Retrieval', () async {
+      ProPublicaBill bill = ProPublicaBill.fromExample();
       http.Response response =
-          await proPublicaApi.getBillById(116, 'hr'.billTypeFromCode, 502);
+          await proPublicaApi.getBillDetails(bill);
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
           File('${Strings.billFilePath}/bill_example.json').readAsStringSync());
@@ -54,7 +56,7 @@ void main() {
     });
     test('Testing Bill retrieval by keyword', () async {
       http.Response response =
-          await proPublicaApi.getBillsByKeyword(keyword: 'megahertz');
+          await proPublicaApi.searchBillsByKeyword(keyword: 'megahertz');
       expect(response.statusCode, 200);
       Map<String, dynamic> jsonExample = jsonDecode(
           File('${Strings.billFilePath}/bill_search_example.json')
@@ -66,11 +68,11 @@ void main() {
     // test bill retrieval by keyword with offset
     test('Testing Bill retrieval by keyword with offset', () async {
       http.Response response1 =
-          await proPublicaApi.getBillsByKeyword(keyword: 'megahertz');
+          await proPublicaApi.searchBillsByKeyword(keyword: 'megahertz');
       expect(response1.statusCode, 200);
       Map<String, dynamic> jsonResponse1 = jsonDecode(response1.body);
       expect(jsonResponse1['status'], 'OK');
-      http.Response response2 = await proPublicaApi.getBillsByKeyword(
+      http.Response response2 = await proPublicaApi.searchBillsByKeyword(
           keyword: 'megahertz', offset: 20);
 
       expect(response2.statusCode, 200);

@@ -1,0 +1,226 @@
+{
+    "results": [
+        {
+            "title": "Honoring the service to United States Armed Forces provided by military working dogs and contract working dogs, also known as war dogs.",
+            "packageId": "BILLS-115sres160is",
+            "granuleId": null,
+            "lastModified": "2023-01-04T14:15:12Z",
+            "governmentAuthor": [
+                "Congress",
+                "Senate"
+            ],
+            "dateIssued": "2017-05-09",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-115sres160is/summary",
+            "dateIngested": "2017-05-10",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-115sres160is/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-115sres160is/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-115sres160is/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-115sres160is/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-115sres160is/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-115sres160is/pdf"
+            }
+        },
+        {
+            "title": "Honoring the service to United States Armed Forces provided by military working dogs and contract working dogs, also known as war dogs.",
+            "packageId": "BILLS-115sres160ats",
+            "granuleId": null,
+            "lastModified": "2023-01-04T06:57:22Z",
+            "governmentAuthor": [
+                "Congress",
+                "Senate"
+            ],
+            "dateIssued": "2017-09-06",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-115sres160ats/summary",
+            "dateIngested": "2017-09-07",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-115sres160ats/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-115sres160ats/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-115sres160ats/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-115sres160ats/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-115sres160ats/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-115sres160ats/pdf"
+            }
+        },
+        {
+            "title": "Condemning the Dog Meat Festival in Yulin, China, and urging China to end the dog meat trade.",
+            "packageId": "BILLS-115hres30ih",
+            "granuleId": null,
+            "lastModified": "2023-01-05T04:18:27Z",
+            "governmentAuthor": [
+                "Congress",
+                "House of Representatives"
+            ],
+            "dateIssued": "2017-01-06",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-115hres30ih/summary",
+            "dateIngested": "2017-01-07",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-115hres30ih/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-115hres30ih/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-115hres30ih/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-115hres30ih/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-115hres30ih/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-115hres30ih/pdf"
+            }
+        },
+        {
+            "title": "Recognizing the honorable service of military working dogs and soldier handlers in the tactical explosive detection dog program of the Army and encouraging the Army and other government agencies, including law enforcement agencies, with former tactical explosive detection dogs to prioritize adoption of the dogs to former tactical explosive detection dog handlers.",
+            "packageId": "BILLS-115hconres145ih",
+            "granuleId": null,
+            "lastModified": "2023-01-03T02:04:35Z",
+            "governmentAuthor": [
+                "Congress",
+                "House of Representatives"
+            ],
+            "dateIssued": "2018-12-10",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-115hconres145ih/summary",
+            "dateIngested": "2018-12-11",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-115hconres145ih/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-115hconres145ih/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-115hconres145ih/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-115hconres145ih/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-115hconres145ih/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-115hconres145ih/pdf"
+            }
+        },
+        {
+            "title": "“Dog Fighting Prohibition Act”",
+            "packageId": "BILLS-110hr3219ih",
+            "granuleId": null,
+            "lastModified": "2023-01-10T18:16:00Z",
+            "governmentAuthor": [
+                "Congress",
+                "House of Representatives"
+            ],
+            "dateIssued": "2007-07-27",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-110hr3219ih/summary",
+            "dateIngested": "2010-09-18",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-110hr3219ih/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-110hr3219ih/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-110hr3219ih/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-110hr3219ih/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-110hr3219ih/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-110hr3219ih/pdf"
+            }
+        },
+        {
+            "title": "Federal Dog Protection Act",
+            "packageId": "BILLS-110hr3327ih",
+            "granuleId": null,
+            "lastModified": "2023-01-10T17:10:27Z",
+            "governmentAuthor": [
+                "Congress",
+                "House of Representatives"
+            ],
+            "dateIssued": "2007-08-02",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-110hr3327ih/summary",
+            "dateIngested": "2010-09-18",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-110hr3327ih/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-110hr3327ih/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-110hr3327ih/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-110hr3327ih/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-110hr3327ih/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-110hr3327ih/pdf"
+            }
+        },
+        {
+            "title": "Recognizing the honorable service of military working dogs and soldier handlers in the tactical explosive detection dog program of the Army and encouraging the Army and other government agencies, including law enforcement agencies, with former tactical explosive detection dogs to prioritize adoption of the dogs to former tactical explosive detection dog handlers.",
+            "packageId": "BILLS-116hconres43ih",
+            "granuleId": null,
+            "lastModified": "2023-01-02T12:31:17Z",
+            "governmentAuthor": [
+                "Congress",
+                "House of Representatives"
+            ],
+            "dateIssued": "2019-05-22",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-116hconres43ih/summary",
+            "dateIngested": "2019-05-23",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-116hconres43ih/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-116hconres43ih/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-116hconres43ih/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-116hconres43ih/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-116hconres43ih/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-116hconres43ih/pdf"
+            }
+        },
+        {
+            "title": "To authorize the National War Dogs Monument, Inc. to establish a national monument in honor of military working dog teams.",
+            "packageId": "BILLS-109hr5145ih",
+            "granuleId": null,
+            "lastModified": "2023-01-11T21:57:01Z",
+            "governmentAuthor": [
+                "Congress",
+                "House of Representatives"
+            ],
+            "dateIssued": "2006-04-06",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-109hr5145ih/summary",
+            "dateIngested": "2010-09-20",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-109hr5145ih/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-109hr5145ih/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-109hr5145ih/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-109hr5145ih/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-109hr5145ih/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-109hr5145ih/pdf"
+            }
+        },
+        {
+            "title": "Recognizing the honorable service of military working dogs and soldier handlers in the tactical explosive detection dog program of the Army and encouraging the Army and other government agencies, including law enforcement agencies, with former tactical explosive detection dogs to prioritize adoption of the dogs to former tactical explosive detection dog handlers.",
+            "packageId": "BILLS-115sconres58is",
+            "granuleId": null,
+            "lastModified": "2023-01-03T00:03:23Z",
+            "governmentAuthor": [
+                "Congress",
+                "Senate"
+            ],
+            "dateIssued": "2018-12-06",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-115sconres58is/summary",
+            "dateIngested": "2018-12-07",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-115sconres58is/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-115sconres58is/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-115sconres58is/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-115sconres58is/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-115sconres58is/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-115sconres58is/pdf"
+            }
+        },
+        {
+            "title": "Condemning the Dog Meat Festival in Yulin, China, and urging China to end the dog meat trade.",
+            "packageId": "BILLS-114hres752ih",
+            "granuleId": null,
+            "lastModified": "2023-01-05T19:19:06Z",
+            "governmentAuthor": [
+                "Congress",
+                "House of Representatives"
+            ],
+            "dateIssued": "2016-05-25",
+            "collectionCode": "BILLS",
+            "resultLink": "https://api.govinfo.gov/packages/BILLS-114hres752ih/summary",
+            "dateIngested": "2016-05-26",
+            "download": {
+                "premisLink": "https://api.govinfo.gov/packages/BILLS-114hres752ih/premis",
+                "xmlLink": "https://api.govinfo.gov/packages/BILLS-114hres752ih/xml",
+                "txtLink": "https://api.govinfo.gov/packages/BILLS-114hres752ih/htm",
+                "zipLink": "https://api.govinfo.gov/packages/BILLS-114hres752ih/zip",
+                "modsLink": "https://api.govinfo.gov/packages/BILLS-114hres752ih/mods",
+                "pdfLink": "https://api.govinfo.gov/packages/BILLS-114hres752ih/pdf"
+            }
+        }
+    ],
+    "offsetMark": "AoIIQeEa3TJCSUxMUy0xMTRocmVzNzUyaWg=",
+    "count": 1005
+}

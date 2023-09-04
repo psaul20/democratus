@@ -12,6 +12,7 @@ migrate_working_dir/
 .env
 lib/zz_prototyping/
 build_scripts.md
+lib/archive/
 
 # IntelliJ related
 *.iml

@@ -53,12 +53,13 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
   }
 
   Future<List<Bill>> _fetchBillsByKeyword(String keyword) async {
-    http.Response response = await billApiProvider.getBillsByKeyword(
-        keyword: keyword);
+    http.Response response =
+        await billApiProvider.searchBillsByKeyword(keyword: keyword);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      List<Bill> bills = Bill.fromResponseBodyList(response.body, billApiProvider.source);
+      List<Bill> bills =
+          Bill.fromResponseBodyList(response.body, billApiProvider.source);
       return bills;
     } else if (response.statusCode == 429) {
       throw Exception("429: Too many requests");

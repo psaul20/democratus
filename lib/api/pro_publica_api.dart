@@ -4,6 +4,7 @@ import 'package:democratus/api/bills_api_provider.dart';
 import 'package:democratus/globals/enums/bill_source.dart';
 import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/globals/enums/bill_provider_params.dart';
+import 'package:democratus/models/bill_models/bill.dart';
 import 'package:democratus/models/bill_models/congress_gov_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -38,10 +39,11 @@ class ProPublicaApi implements BillApiProvider {
   }
 
   @override
-  Future<http.Response> getBillById(
-      int congress, BillType type, int number) async {
+  Future<http.Response> getBillDetails({Bill? bill, String? billId}) async {
+    assert(bill != null);
+    assert(bill?.congress != null);
     String url =
-        '$baseUrl/${congress.toString()}/bills/${type.typeCode}${number.toString()}.json';
+        '$baseUrl/${bill!.congress.toString()}/bills/${bill.type.typeCode}${bill.number.toString()}.json';
     http.Response response = await client.get(Uri.parse(url), headers: headers);
     logUsage(response);
     return response;
@@ -49,14 +51,15 @@ class ProPublicaApi implements BillApiProvider {
 
 // Get bill by keyword https://api.propublica.org/congress/v1/bills/search.json?query={query}
   @override
-  Future<http.Response> getBillsByKeyword(
+  Future<http.Response> searchBillsByKeyword(
       {required String keyword,
       SearchSort sort = SearchSort.relevance,
-      int offset = 0}) async {
+      bool resetOffset = false}) async {
     String url =
-        '$baseUrl/bills/search.json?query=${keyword.toLowerCase()}&sort=${sort.sortCode}&offset=$offset';
+        '$baseUrl/bills/search.json?query=${keyword.toLowerCase()}&sort=${sort.sortCode}&offset=$nextOffset';
     http.Response response = await client.get(Uri.parse(url), headers: headers);
     logUsage(response);
+    updateNextOffset('20', resetOffset);
     return response;
   }
 
@@ -70,4 +73,12 @@ class ProPublicaApi implements BillApiProvider {
 
   @override
   BillSource source = BillSource.proPublica;
+
+  @override
+  String nextOffset = '0';
+
+  @override
+  void updateNextOffset(String nextOffset, bool resetOffset) {
+    resetOffset ? this.nextOffset = '0' : this.nextOffset = nextOffset;
+  }
 }

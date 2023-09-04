@@ -5,16 +5,19 @@
 
 import 'package:democratus/globals/enums/bill_provider_params.dart';
 import 'package:democratus/globals/enums/bill_source.dart';
-import 'package:democratus/globals/enums/bill_type.dart';
+import 'package:democratus/models/bill_models/bill.dart';
 import 'package:http/http.dart';
 
 //TODO: define this class to act as a consistent interface for all bills providers
 abstract class BillApiProvider {
   Client client;
   BillSource source;
-  BillApiProvider({required this.client, required this.source});
+  String nextOffset;
+  BillApiProvider(
+      {required this.client, required this.source, this.nextOffset = ''});
   void logUsage(Response response);
-  Future<Response> getBillById(int congress, BillType type, int number);
-  Future<Response> getBillsByKeyword(
-      {required String keyword, SearchSort sort, int offset});
+  Future<Response> getBillDetails({Bill? bill, String? billId});
+  Future<Response> searchBillsByKeyword(
+      {required String keyword, SearchSort sort, bool resetOffset = false});
+  void updateNextOffset(String nextOffset, bool resetOffset);
 }

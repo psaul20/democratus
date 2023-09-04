@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:democratus/api/govinfo_api.dart';
+import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/collection.dart';
 import 'package:democratus/models/package.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,40 +11,33 @@ import 'package:http/http.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  String testID = 'BILLS-116hr809ih';
-  setUpAll(() => dotenv.testLoad(fileInput: File('.env').readAsStringSync()));
-  test('Get Package by ID Test', () async {
-    Response response = await GovinfoApi().getPackageById(testID);
-    Package testPackage = Package.fromJson(response.body);
-    expect(testPackage.packageId, testID);
+  late GovinfoApi govinfoApi;
+  setUp(() {
+    dotenv.testLoad(fileInput: File('.env').readAsStringSync());
+    Client client = Client();
+    govinfoApi = GovinfoApi(client: client);
   });
 
-  test('Collection retrieval test', () async {
-    Response response = await GovinfoApi().getCollections();
-    CollectionList collections = CollectionList.fromJson(response.body);
-    expect(collections.collectionNames.first, "Congressional Bills");
-  });
-
-  test('Package List Retrieval Test', () async {
-    DateTime startDate = DateTime(2019, 1, 1);
-    DateTime endDate = DateTime(2019, 7, 31);
-    List collectionCodes = ["BILLS"];
-    Response response = await GovinfoApi().searchPackages(
-        startDate: startDate,
-        endDate: endDate,
-        collectionCodes: collectionCodes);
-    PackageList result = PackageList.fromJson(response.body);
-    expect(result.packages.length, greaterThan(0));
-    Package package = result.packages.first;
-    response = await GovinfoApi().getPackageById(package.packageId);
-    package = Package.fromJson(response.body);
-    expect(package.collectionCode, collectionCodes[0]);
-  });
-  test('HTML Retrieval Test', () async {
-    Response response = await GovinfoApi().getPackageById(testID);
-    Package package = Package.fromJson(response.body);
-    String result = await GovinfoApi().getHtml(package);
-    log("Test HTML: $result");
-    expect(result.isNotEmpty, true);
+  group('Testing Govinfo API', () {
+    test('Testing Get Bill Details', () async {
+      //Using https://github.com/usgpo/api/blob/main/samples/packages/BILLS-115hr1625enr-summary-formatted.json
+      Response response =
+          await govinfoApi.getBillDetails(billId: 'BILLS-115hr1625enr');
+      expect(response.statusCode, 200);
+      expect(response.body.contains('1625'), true);
+    });
+    test('Testing search bills by keyword', () async {
+      //Using democratus/lib/assets/text_files/bill_files/govinfo_bill_search_example.json
+      String billString =
+          File('${Strings.billFilePath}/govinfo_bill_search_example.json')
+              .readAsStringSync();
+      Map<String, dynamic> json1 = jsonDecode(billString);
+      Response response = await govinfoApi.searchBillsByKeyword(
+          keyword: 'dog', resetOffset: true);
+      Map<String, dynamic> json2 = jsonDecode(response.body);
+      expect(json1.keys, json2.keys);
+      expect(List.from(json1['results'])[0].keys,
+          List.from(json2['results'])[0].keys);
+    });
   });
 }
