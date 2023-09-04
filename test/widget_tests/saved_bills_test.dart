@@ -2,9 +2,11 @@
 
 import 'dart:io';
 import 'package:democratus/api/bills_api_provider.dart';
+import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/saved_bills_status.dart';
+import 'package:democratus/models/bill_models/govinfo_bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:democratus/pages/home_page.dart';
 import 'package:democratus/widgets/bill_tile.dart';
@@ -41,7 +43,7 @@ Future<void> main() async {
     });
     testWidgets('10 Bill tiles are returned', (tester) async {
       when(() => savedBillsBloc.state).thenReturn(SavedBillsState(
-          bills: ProPublicaBill.fromExampleKeywordSearch(),
+          bills: GovinfoBill.fromExampleKeywordSearch(),
           status: SavedBillsStatus.success));
       await tester.pumpWidget(HomePageWrapper(
         savedBillsBloc: savedBillsBloc,
@@ -66,7 +68,7 @@ class HomePageWrapper extends StatelessWidget {
       : super(key: key);
   final SavedBillsBloc savedBillsBloc;
   final BillApiProvider billApiProvider =
-      ProPublicaApi(client: MockHttpClient());
+      GovinfoApi(client: MockHttpClient());
 
   @override
   Widget build(BuildContext context) {

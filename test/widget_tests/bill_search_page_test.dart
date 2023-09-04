@@ -2,10 +2,12 @@
 
 import 'dart:io';
 import 'package:democratus/api/bills_api_provider.dart';
+import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
+import 'package:democratus/models/bill_models/govinfo_bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:democratus/pages/bill_search_page.dart';
 import 'package:democratus/widgets/bill_sliver_list.dart';
@@ -62,7 +64,7 @@ Future<void> main() async {
     });
     testWidgets('10 Bill tiles are returned', (tester) async {
       when(() => billSearchBloc.state).thenReturn(BillSearchState(
-          searchBills: ProPublicaBill.fromExampleKeywordSearch(),
+          searchBills: GovinfoBill.fromExampleKeywordSearch(),
           status: BillSearchStatus.success));
       await tester.pumpWidget(SearchPageWrapper(
         billSearchBloc: billSearchBloc,
@@ -90,7 +92,7 @@ class SearchPageWrapper extends StatelessWidget {
       : super(key: key);
   final BillSearchBloc billSearchBloc;
   final SavedBillsBloc savedBillsBloc;
-  final BillApiProvider billApiProvider = ProPublicaApi(client: MockHttpClient());
+  final BillApiProvider billApiProvider = GovinfoApi(client: MockHttpClient());
 
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,7 @@ import 'package:democratus/blocs/bill_bloc/bill_bloc.dart';
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/globals/enums/errors.dart';
 import 'package:democratus/models/bill_models/bill.dart';
+import 'package:democratus/models/bill_models/govinfo_bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:democratus/widgets/bill_tile.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ void main() {
   // Define a test. The TestWidgets function also provides a WidgetTester
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
-  Bill bill = ProPublicaBill.fromExample();
+  Bill bill = GovinfoBill.fromExample();
   late MockBillBloc billBloc;
   late SavedBillsBloc savedBillsBloc;
   setUp(() {

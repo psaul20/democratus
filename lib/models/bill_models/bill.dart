@@ -5,10 +5,13 @@ import 'package:democratus/globals/enums/bill_source.dart';
 import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/models/bill_models/bill_action.dart';
 import 'package:democratus/models/bill_models/committee.dart';
+import 'package:democratus/models/bill_models/govinfo_bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:democratus/models/bill_models/sponsor.dart';
 import 'package:equatable/equatable.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+//TODO: Implement govinfo bill
 
 class Bill extends Equatable {
   final List<BillAction>? actions;
@@ -17,7 +20,7 @@ class Bill extends Equatable {
   final int congress;
   final List<BillSponsor>? cosponsors;
   final DateTime? introducedDate;
-  final String latestAction;
+  final String? latestAction;
   final int number;
   final String? originChamber;
   final String? policyArea;
@@ -28,16 +31,19 @@ class Bill extends Equatable {
   final String? shortTitle;
   final BillType type;
   final DateTime? lastUpdateDate;
-  final BillSource? source;
+  final BillSource source;
   final Uri? congressGovUrl;
   final Uri? govtrackUrl;
   final Uri? gpoUrl;
   final bool hasDetails;
   final bool isSaved;
   final String? govInfoId;
+  final int? pages;
+  final String? currentChamber;
+  final String? version;
 
   String get billId =>
-      '${congress.toString()}-${type.typeCode}-${number.toString()}';
+      '${congress.toString()}-${type.typeCode}-${number.toString()}${version ?? ''}';
 
   String get displayTitle => shortTitle ?? title;
   String get displayNumber => '${type.typeCodeFormatted.toUpperCase()} $number';
@@ -62,7 +68,7 @@ class Bill extends Equatable {
     required this.congress,
     this.cosponsors,
     this.introducedDate,
-    required this.latestAction,
+    this.latestAction,
     required this.number,
     this.originChamber,
     this.policyArea,
@@ -72,7 +78,7 @@ class Bill extends Equatable {
     required this.title,
     required this.type,
     this.lastUpdateDate,
-    this.source,
+    required this.source,
     this.shortTitle,
     this.congressGovUrl,
     this.govtrackUrl,
@@ -80,6 +86,9 @@ class Bill extends Equatable {
     this.hasDetails = false,
     this.isSaved = false,
     this.govInfoId,
+    this.pages,
+    this.currentChamber,
+    this.version,
   });
 
   @override
@@ -116,6 +125,9 @@ class Bill extends Equatable {
     bool? hasDetails,
     bool? isSaved,
     String? govInfoId,
+    int? pages,
+    String? currentChamber,
+    String? version,
   }) {
     return Bill(
       actions: actions ?? this.actions,
@@ -142,6 +154,9 @@ class Bill extends Equatable {
       hasDetails: hasDetails ?? this.hasDetails,
       isSaved: isSaved ?? this.isSaved,
       govInfoId: govInfoId ?? this.govInfoId,
+      pages: pages ?? this.pages,
+      currentChamber: currentChamber ?? this.currentChamber,
+      version: version ?? this.version,
     );
   }
 
@@ -163,7 +178,7 @@ class Bill extends Equatable {
       'title': title,
       'type': type.typeCode.toString(),
       'lastUpdateDate': lastUpdateDate?.toIso8601String(),
-      'source': source?.toString(),
+      'source': source.toString(),
       'shortTitle': shortTitle,
       'congressGovUrl': congressGovUrl?.toString(),
       'govtrackUrl': govtrackUrl?.toString(),
@@ -171,6 +186,9 @@ class Bill extends Equatable {
       'hasDetails': hasDetails,
       'isSaved': isSaved,
       'govInfoId': govInfoId,
+      'pages': pages.toString(),
+      'currentChamber': currentChamber,
+      'version': version,
     };
   }
 
@@ -210,10 +228,8 @@ class Bill extends Equatable {
       lastUpdateDate: map['lastUpdateDate'] != null
           ? DateTime.parse(map['lastUpdateDate'])
           : null,
-      source: map['source'] != null
-          ? BillSource.values.firstWhere((element) =>
-              element.toString() == map['source'].toString().toLowerCase())
-          : null,
+      source: BillSource.values.firstWhere((element) =>
+          element.toString() == map['source'].toString().toLowerCase()),
       shortTitle:
           map['shortTitle'] != null ? map['shortTitle'] as String : null,
       congressGovUrl: map['congressGovUrl'] != null
@@ -225,6 +241,11 @@ class Bill extends Equatable {
       hasDetails: map['hasDetails'] as bool,
       isSaved: map['isSaved'] as bool,
       govInfoId: map['govInfoId'] as String?,
+      pages: map['pages'] != null ? int.parse(map['pages']) : null,
+      currentChamber: map['currentChamber'] != null
+          ? map['currentChamber'] as String
+          : null,
+      version: map['version'] != null ? map['version'] as String : null,
     );
   }
 
@@ -238,6 +259,8 @@ class Bill extends Equatable {
     switch (source) {
       case BillSource.proPublica:
         return ProPublicaBill.fromResponseBody(responseBody);
+      case BillSource.govinfo:
+        return GovinfoBill.fromResponseBody(responseBody);
 
       default:
         throw Exception('Bill source not implemented');
@@ -249,6 +272,8 @@ class Bill extends Equatable {
     switch (source) {
       case BillSource.proPublica:
         return ProPublicaBill.fromResponseBodyList(responseBody);
+      case BillSource.govinfo:
+        return GovinfoBill.fromResponseBodyList(responseBody);
 
       default:
         throw Exception('Bill source not implemented');

@@ -1,5 +1,8 @@
+// ignore_for_file: unused_import
+
 import 'package:democratus/blocs/saved_bills_bloc/saved_bills_bloc.dart';
 import 'package:democratus/models/bill_models/bill.dart';
+import 'package:democratus/models/bill_models/govinfo_bill.dart';
 import 'package:democratus/models/bill_models/pro_publica_bill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -9,7 +12,7 @@ import '../mocks.dart';
 
 void main() {
   group('Saved Bills Bloc Tests', () {
-    List<Bill> bills = ProPublicaBill.fromExampleSubjectSearch();
+    List<Bill> bills = GovinfoBill.fromExampleKeywordSearch();
     setUpAll(() async {
       initHydratedStorage();
     });

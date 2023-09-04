@@ -35,5 +35,13 @@ class StringConverters {
 
       return result;
     }
+
+    
   }
+
+  static List<String> splitStringIntoChunks(String input) {
+  final RegExp regex = RegExp(r'\d+|[A-Za-z]+');
+  final List<String> chunks = regex.allMatches(input).map((match) => match.group(0)!).toList();
+  return chunks;
+}
 }

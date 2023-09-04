@@ -45,7 +45,7 @@ class BillBloc extends Bloc<BillEvent, BillState> {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      Bill bill = ProPublicaBill.fromResponseBody(response.body);
+      Bill bill = Bill.fromResponseBody(response.body, state.bill.source);
       return bill;
     } else if (response.statusCode == 429) {
       throw Exception("429: Too many requests");

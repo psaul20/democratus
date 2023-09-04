@@ -1,41 +1,44 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:democratus/api/bills_api_provider.dart';
-import 'package:democratus/api/pro_publica_api.dart';
 import 'package:democratus/blocs/bill_search_bloc/bill_search_bloc.dart';
 import 'package:democratus/globals/enums/bloc_states/bill_search_status.dart';
 import 'package:democratus/globals/strings.dart';
 import 'package:democratus/models/bill_models/bill.dart';
-import 'package:democratus/models/bill_models/pro_publica_bill.dart';
+import 'package:democratus/models/bill_models/govinfo_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:http/http.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:http/http.dart' as http;
 
 import '../mocks.dart';
-import 'bill_search_bloc_test.mocks.dart';
 
-@GenerateMocks([http.Client])
 void main() {
-  late MockClient client;
   late BillApiProvider billsApiProvider;
-  String searchBillJson =
-      File('${Strings.billFilePath}/pro_publica_bill_search_example.json')
-          .readAsStringSync();
-  String billJson =
-      File('${Strings.billFilePath}/pro_publica_bill_example.json')
-          .readAsStringSync();
-  List<Bill> testBills = ProPublicaBill.fromExampleKeywordSearch();
-  Bill testBill = ProPublicaBill.fromExample();
+  List<Bill> testBills = GovinfoBill.fromExampleKeywordSearch();
+  Bill testBill = GovinfoBill.fromExample();
   List<Bill> offsetBills = [];
   offsetBills.addAll(testBills + testBills);
   offsetBills.add(testBill);
+  String searchBillJson =
+      File('${Strings.billFilePath}/govinfo_bill_search_example.json')
+          .readAsStringSync();
+  String billDetailsJson =
+      File('${Strings.billFilePath}/govinfo_bill_example.json')
+          .readAsStringSync();
+  Map<String, String> headers = {
+    'content-type': 'application/json; charset=utf-8'
+  };
+  Response searchResponse = Response(searchBillJson, 200, headers: headers);
   setUp(() {
     initHydratedStorage();
     dotenv.testLoad(fileInput: File('.env').readAsStringSync());
-    client = MockClient();
-    billsApiProvider = ProPublicaApi(client: client);
+    billsApiProvider = MockBillApiProvider();
+    when(() => billsApiProvider.searchBillsByKeyword(
+            keyword: any(named: 'keyword'),
+            resetOffset: any(named: 'resetOffset')))
+        .thenAnswer((invocation) async => searchResponse);
   });
   group('Bill_Search_Bloc Keyword tests', () {
     blocTest(
@@ -43,8 +46,6 @@ void main() {
       'BillSearchState(status: BillSearchStatus.success, searchBills: [Bills])]'
       'when KeywordSearch is added',
       build: () {
-        when(client.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response(searchBillJson, 200));
         return BillSearchBloc(billApiProvider: billsApiProvider);
       },
       act: (bloc) => bloc.add(KeywordSearch(keyword: 'climate')),
@@ -64,8 +65,10 @@ void main() {
       'BillSearchState(status: BillSearchStatus.failure, searchBills: [])]'
       'when KeywordSearch is added',
       build: () {
-        when(client.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response('error', 404));
+        when(() => billsApiProvider.searchBillsByKeyword(
+                keyword: any(named: 'keyword'),
+                resetOffset: any(named: 'resetOffset')))
+            .thenAnswer((invocation) async => Response('', 400));
         return BillSearchBloc(billApiProvider: billsApiProvider);
       },
       act: (bloc) => bloc.add(KeywordSearch(keyword: 'climate')),
@@ -83,8 +86,6 @@ void main() {
       'searchBills: [])]'
       'when KeywordSearch is added',
       build: () {
-        when(client.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response('', 200));
         return BillSearchBloc(
             billApiProvider: billsApiProvider,
             initState: const BillSearchState(keyword: 'climate'));
@@ -101,8 +102,6 @@ void main() {
       'BillSearchState(status: BillSearchStatus.success, searchBills: [Bills])]'
       'when KeywordSearch is added',
       build: () {
-        when(client.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response(searchBillJson, 200));
         return BillSearchBloc(
             billApiProvider: billsApiProvider,
             initState: BillSearchState(
@@ -118,8 +117,6 @@ void main() {
     blocTest(
       'ScrollSearchOffset adds more bills to searchBills',
       build: () {
-        when(client.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response(searchBillJson, 200));
         return BillSearchBloc(billApiProvider: billsApiProvider);
       },
       act: (bloc) => bloc.add(ScrollSearchOffset()),
@@ -134,9 +131,6 @@ void main() {
     blocTest(
       'Search does not add more bills if hasReachedMax is true',
       build: () {
-        when(client.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response(billJson, 200));
-
         return BillSearchBloc(
             billApiProvider: billsApiProvider,
             initState: BillSearchState(
