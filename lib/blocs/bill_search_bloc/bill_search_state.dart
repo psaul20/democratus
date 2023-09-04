@@ -5,14 +5,12 @@ class BillSearchState extends Equatable {
   final BillSearchStatus status;
   final List<Bill> searchBills;
   final String keyword;
-  final int offset;
   final bool hasReachedMax;
 
   const BillSearchState({
     this.status = BillSearchStatus.initial,
     this.searchBills = const <Bill>[],
     this.keyword = '',
-    this.offset = 0,
     this.hasReachedMax = false,
   });
 
@@ -21,7 +19,6 @@ class BillSearchState extends Equatable {
         status,
         searchBills,
         keyword,
-        offset,
         hasReachedMax,
       ];
 
@@ -36,7 +33,6 @@ class BillSearchState extends Equatable {
       status: status ?? this.status,
       searchBills: searchBills ?? this.searchBills,
       keyword: keyword ?? this.keyword,
-      offset: offset ?? this.offset,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
@@ -45,7 +41,6 @@ class BillSearchState extends Equatable {
     Map<String, dynamic> map = {};
     map['keyword'] = keyword;
     map['status'] = status.toString();
-    map['offset'] = offset.toString();
     map['hasReachedMax'] = hasReachedMax.toString();
     return map;
   }
@@ -58,7 +53,6 @@ class BillSearchState extends Equatable {
         keyword: map['keyword'],
         status: BillSearchStatus.values
             .firstWhere((element) => element.toString() == map['status']),
-        offset: int.parse(map['offset']),
         hasReachedMax: map['hasReachedMax'] == 'true',
       );
     }
@@ -78,7 +72,6 @@ class BillSearchState extends Equatable {
     string.write('$status, ');
     string.write("Keyword: $keyword, ");
     string.write("SearchBills Length: ${searchBills.length}, ");
-    string.write("Offset: $offset ");
     string.write('hasReachedMax: $hasReachedMax');
     return string.toString();
   }

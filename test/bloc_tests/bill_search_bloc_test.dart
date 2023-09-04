@@ -124,11 +124,10 @@ void main() {
       },
       act: (bloc) => bloc.add(ScrollSearchOffset()),
       expect: () => <BillSearchState>[
-        const BillSearchState(status: BillSearchStatus.searching, offset: 20),
+        const BillSearchState(status: BillSearchStatus.searching),
         BillSearchState(
             status: BillSearchStatus.success,
             searchBills: testBills,
-            offset: 20,
             hasReachedMax: true),
       ],
     );
@@ -141,9 +140,9 @@ void main() {
         return BillSearchBloc(
             billApiProvider: billsApiProvider,
             initState: BillSearchState(
-                status: BillSearchStatus.success,
-                searchBills: testBills + testBills,
-                offset: 0));
+              status: BillSearchStatus.success,
+              searchBills: testBills + testBills,
+            ));
       },
       act: (bloc) {
         bloc.add(ScrollSearchOffset());
@@ -152,7 +151,6 @@ void main() {
       verify: (bloc) =>
           bloc.state.searchBills.length == 21 &&
           bloc.state.hasReachedMax &&
-          bloc.state.offset == 20 &&
           bloc.state.status == BillSearchStatus.success,
     );
   });

@@ -29,7 +29,6 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
       emit(state.copyWith(
           status: BillSearchStatus.initial,
           keyword: event.keyword,
-          offset: 0,
           hasReachedMax: false,
           searchBills: []));
       return;
@@ -39,11 +38,10 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
           status: BillSearchStatus.searching,
           keyword: event.keyword,
           searchBills: []));
-      final List<Bill> bills = await _fetchBillsByKeyword(event.keyword);
+      final List<Bill> bills = await _fetchBillsByKeyword(event.keyword, true);
       emit(state.copyWith(
         searchBills: bills,
         hasReachedMax: false,
-        offset: 0,
         status: BillSearchStatus.success,
       ));
     } catch (e) {
@@ -52,9 +50,9 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
     }
   }
 
-  Future<List<Bill>> _fetchBillsByKeyword(String keyword) async {
+  Future<List<Bill>> _fetchBillsByKeyword(String keyword, bool resetOffset) async {
     http.Response response =
-        await billApiProvider.searchBillsByKeyword(keyword: keyword);
+        await billApiProvider.searchBillsByKeyword(keyword: keyword, resetOffset: resetOffset);
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -80,11 +78,10 @@ class BillSearchBloc extends HydratedBloc<BillSearchEvent, BillSearchState> {
     try {
       emit(state.copyWith(
         status: BillSearchStatus.searching,
-        offset: state.offset + 20,
       ));
 
       final List<Bill> bills = [];
-      final List<Bill> newBills = await _fetchBillsByKeyword(state.keyword);
+      final List<Bill> newBills = await _fetchBillsByKeyword(state.keyword, false);
       bills.addAll(state.searchBills);
       bills.addAll(newBills);
       emit(state.copyWith(
