@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:democratus/globals/converters/date_converters.dart';
+import 'package:democratus/globals/converters/string_converters.dart';
 import 'package:democratus/globals/enums/bill_source.dart';
 import 'package:democratus/globals/enums/bill_type.dart';
 import 'package:democratus/models/bill_models/bill_action.dart';
@@ -48,6 +49,8 @@ class Bill extends Equatable {
 
   String get displayTitle => shortTitle ?? title;
   String get displayNumber => '${type.typeCodeFormatted.toUpperCase()} $number';
+  String? get displayOriginChamber => StringConverters.toTitleCase(originChamber);
+  
   List get datesForDisplay {
     List<Map> dates = [];
     if (introducedDate != null) {

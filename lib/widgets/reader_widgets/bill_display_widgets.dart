@@ -63,9 +63,6 @@ class BillDisplay {
 
   Widget displayBackgroundInfo({bool withDivider = true}) {
     List<Widget> returnWidgets = [];
-    if (withDivider) {
-      returnWidgets.add(divider('Background'));
-    }
     returnWidgets.add(Padding(
       padding: padding,
       child: displayCongress(),
@@ -80,6 +77,9 @@ class BillDisplay {
       child: displayPolicyArea(),
     ));
     returnWidgets.addAll(displaySubjects() ?? []);
+    if (withDivider && returnWidgets.isNotEmpty) {
+      returnWidgets = [divider('Background'), ...returnWidgets];
+    }
     return Wrap(spacing: 8.0, children: returnWidgets);
   }
 
@@ -97,7 +97,7 @@ class BillDisplay {
   }
 
   Widget displayChamber() {
-    if (bill.originChamber != null) {
+    if (bill.displayOriginChamber != null) {
       return RichText(
         text: TextSpan(
           style: TextStyles(context).bodyStyle,
@@ -105,7 +105,7 @@ class BillDisplay {
             const TextSpan(
                 text: 'Chamber: ',
                 style: TextStyle(fontWeight: FontWeight.bold)),
-            TextSpan(text: bill.originChamber!),
+            TextSpan(text: bill.displayOriginChamber!),
           ],
         ),
       );
@@ -194,9 +194,9 @@ class BillDisplay {
     return returnWidgets;
   }
 
-  Widget displayActions() {
+  Widget? displayActions() {
+    List<Widget> returnWidgets = [];
     if (bill.actions != null) {
-      List<Widget> returnWidgets = [];
       returnWidgets.add(divider('Actions'));
       for (final action in bill.actions!) {
         returnWidgets.add(Column(
@@ -223,26 +223,17 @@ class BillDisplay {
           ],
         ));
       }
-      return Wrap(
-        children: returnWidgets,
-      );
     }
-
-    return RichText(
-        text: TextSpan(
-      style: Theme.of(context).textTheme.bodyLarge,
-      children: [
-        const TextSpan(
-            text: 'Latest Action: ',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        TextSpan(text: bill.latestAction),
-      ],
-    ));
+    return returnWidgets.isNotEmpty
+        ? Wrap(
+            children: returnWidgets,
+          )
+        : null;
   }
 
-  Widget displaySponsors() {
+  Widget? displaySponsors() {
     List<Widget> returnWidgets = [];
-    returnWidgets.add(divider('Sponsors'));
+
     if (bill.sponsors != null) {
       for (final sponsor in bill.sponsors!) {
         returnWidgets.add(RichText(
@@ -258,6 +249,9 @@ class BillDisplay {
           ),
         ));
       }
+    }
+    if (returnWidgets.isNotEmpty) {
+      returnWidgets = [divider('Sponsors'), ...returnWidgets];
     }
     return Wrap(
       children: returnWidgets,

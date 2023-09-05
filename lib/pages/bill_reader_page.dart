@@ -76,8 +76,8 @@ class _BillReaderPageState extends State<BillReaderPage> {
                         billDisplay.displayTitle(),
                         billDisplay.displayBackgroundInfo(),
                         billDisplay.displaySummaries(),
-                        billDisplay.displayActions(),
-                        billDisplay.displaySponsors(),
+                        billDisplay.displayActions() ?? const SizedBox.shrink(),
+                        billDisplay.displaySponsors() ?? const SizedBox.shrink(),
                       ]),
                     ),
                   )
