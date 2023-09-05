@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/globals/strings.dart';
+import 'package:democratus/models/bill_models/govinfo_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
@@ -48,7 +49,7 @@ void main() async {
       expect(response2.statusCode, 200);
       Map<String, dynamic> jsonResponse2 = jsonDecode(response2.body);
 
-            expect(jsonResponse1.keys, jsonResponse2.keys);
+      expect(jsonResponse1.keys, jsonResponse2.keys);
 
       List<String> billIds1 = List<String>.from(jsonResponse1['results']
           .map((bill) => bill['packageId'].toString())
@@ -67,6 +68,16 @@ void main() async {
               .readAsStringSync());
 
       expect(jsonExample.keys, jsonResponse2.keys);
+    });
+    test('Testing get bill details with bill object vs id', () async {
+      Response response1 =
+          await govinfoApi.getBillDetails(billId: 'BILLS-115hr1625enr');
+      expect(response1.statusCode, 200);
+      expect(response1.body[0], '{');
+
+      Response response2 = await govinfoApi.getBillDetails(bill: GovinfoBill.fromExample());
+      expect(response2.statusCode, 200);
+      expect(response2.body.contains('<billStatus>'), true);
     });
   });
 }

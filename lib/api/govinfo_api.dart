@@ -69,13 +69,33 @@ class GovinfoApi implements BillApiProvider {
   @override
   Future<http.Response> getBillDetails({Bill? bill, String? billId}) async {
     assert(bill != null || billId != null);
-    String packageId = billId ?? bill!.govInfoId!;
-    final String url =
-        "https://api.govinfo.gov/packages/$packageId/summary?api_key=$apiKey";
-    final http.Response response = await http.get(Uri.parse(url));
-    logUsage(response);
-    return response;
+    // If just a billid, return a summary
+    if (billId != null) {
+      final String url =
+          "https://api.govinfo.gov/packages/$billId/summary?api_key=$apiKey";
+      final http.Response response = await http.get(Uri.parse(url));
+      logUsage(response);
+      return response;
+    }
+    // If a bill object, return the billstatus xml
+    else {
+      final String url = bill!.billStatusLink.toString();
+      final http.Response response = await http.get(Uri.parse(url));
+      logUsage(response);
+      return response;
+    }
   }
+
+  // Previous implementation
+  //   Future<http.Response> getBillDetails({Bill? bill, String? billId}) async {
+  //   assert(bill != null || billId != null);
+  //   String packageId = billId ?? bill!.govInfoId!;
+  //   final String url =
+  //       "https://api.govinfo.gov/packages/$packageId/summary?api_key=$apiKey";
+  //   final http.Response response = await http.get(Uri.parse(url));
+  //   logUsage(response);
+  //   return response;
+  // }
 
   // See postman for examples: https://web.postman.co/workspace/486fcfdc-96d7-44af-8358-e483423cfc49/request/29492470-1de52e7c-b0b9-4b57-8d84-b4fc5cdc7817
 

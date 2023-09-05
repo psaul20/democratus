@@ -23,9 +23,13 @@ class GovinfoBill extends Bill {
           title: map['title'],
           source: BillSource.govinfo,
           version: getVersionFromPackageId(map['packageId']),
+          billStatusLink:
+              map['related'] != null && map['related']['billStatusLink'] != null
+                  ? Uri.parse(map['related']['billStatusLink'])
+                  : null,
         );
 
-    static String getVersionFromPackageId(String packageId) {
+  static String getVersionFromPackageId(String packageId) {
     List<String> strings = StringConverters.splitStringIntoChunks(packageId);
     return strings[4];
   }

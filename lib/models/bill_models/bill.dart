@@ -43,14 +43,16 @@ class Bill extends Equatable {
   final int? pages;
   final String? currentChamber;
   final String? version;
+  final Uri? billStatusLink;
 
   String get billId =>
       '${congress.toString()}-${type.typeCode}-${number.toString()}${version ?? ''}';
 
   String get displayTitle => shortTitle ?? title;
   String get displayNumber => '${type.typeCodeFormatted.toUpperCase()} $number';
-  String? get displayOriginChamber => StringConverters.toTitleCase(originChamber);
-  
+  String? get displayOriginChamber =>
+      StringConverters.toTitleCase(originChamber);
+
   List get datesForDisplay {
     List<Map> dates = [];
     if (introducedDate != null) {
@@ -109,6 +111,7 @@ class Bill extends Equatable {
     this.pages,
     this.currentChamber,
     this.version,
+    this.billStatusLink,
   });
 
   @override
@@ -148,6 +151,7 @@ class Bill extends Equatable {
     int? pages,
     String? currentChamber,
     String? version,
+    Uri? billStatusLink,
   }) {
     return Bill(
       actions: actions ?? this.actions,
@@ -177,6 +181,7 @@ class Bill extends Equatable {
       pages: pages ?? this.pages,
       currentChamber: currentChamber ?? this.currentChamber,
       version: version ?? this.version,
+      billStatusLink: billStatusLink ?? this.billStatusLink,
     );
   }
 
@@ -209,6 +214,7 @@ class Bill extends Equatable {
       'pages': pages.toString(),
       'currentChamber': currentChamber,
       'version': version,
+      'billStatusLink': billStatusLink?.toString(),
     };
   }
 
@@ -266,6 +272,9 @@ class Bill extends Equatable {
           ? map['currentChamber'] as String
           : null,
       version: map['version'] != null ? map['version'] as String : null,
+      billStatusLink: map['billStatusLink'] != null
+          ? Uri.parse(map['billStatusLink'])
+          : null,
     );
   }
 
