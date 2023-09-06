@@ -44,12 +44,12 @@ class BillDisplay {
 
   Widget displaySummaries() {
     List<Widget> returnWidgets = [];
-    if (bill.crsSummaries != null) {
+    if (bill.displaySummary != null) {
       returnWidgets.add(divider('Congressional Research Service Summary'));
       returnWidgets.add(
         Padding(
             padding: padding,
-            child: Text(bill.crsSummaries!.first,
+            child: Text(bill.displaySummary!,
                 style: TextStyles(context).bodyStyle)),
       );
 
@@ -119,6 +119,8 @@ class BillDisplay {
       returnWidgets.add(Padding(
         padding: padding,
         child: RichText(
+          maxLines: 4,
+          overflow: TextOverflow.ellipsis,
           text: TextSpan(
             style: TextStyles(context).bodyStyle,
             children: [
@@ -218,6 +220,7 @@ class BillDisplay {
                   TextSpan(text: action.description),
                 ],
               ),
+              textAlign: TextAlign.start,
             ),
             const SizedBox(height: 16.0),
           ],

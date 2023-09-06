@@ -48,6 +48,10 @@ class Bill extends Equatable {
   String get billId =>
       '${congress.toString()}-${type.typeCode}-${number.toString()}${version ?? ''}';
 
+  String? get displaySummary => crsSummaries != null
+      ? StringConverters.removeHtmlTags(crsSummaries!.first).trim()
+      : null;
+
   String get displayTitle => shortTitle ?? title;
   String get displayNumber => '${type.typeCodeFormatted.toUpperCase()} $number';
   String? get displayOriginChamber =>

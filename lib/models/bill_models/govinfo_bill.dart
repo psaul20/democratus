@@ -85,29 +85,42 @@ class GovinfoBill extends Bill {
           xmlDocument != null ? getCommitteesFromXml(xmlDocument) : null,
       actions: xmlDocument != null ? getActionsFromXml(xmlDocument) : null,
       sponsors: xmlDocument != null ? getSponsorsFromXml(xmlDocument) : null,
-      policyArea: xmlDocument != null &&
-              xmlDocument.findElements('policyArea').isNotEmpty
-          ? xmlDocument.findElements('policyArea').first.children.first.text
-          : null,
-      subjects:
-          xmlDocument != null && xmlDocument.findElements('subjects').isNotEmpty
-              ? xmlDocument
-                  .findElements('subjects')
-                  .first
-                  .findElements('legislativeSubjects')
-                  .map((e) => e.findElements('name').first.text)
-                  .toList()
-              : null,
-      crsSummaries: xmlDocument != null &&
-              xmlDocument.findElements('summaries').isNotEmpty
+      policyArea:
+          xmlDocument != null ? getPolicyAreaFromXml(xmlDocument) : null,
+      subjects: xmlDocument != null &&
+              xmlDocument.findAllElements('subjects').isNotEmpty
           ? xmlDocument
-              .findElements('summaries')
+              .findAllElements('subjects')
               .first
-              .children
-              .map((e) => e.findElements('text').first.text)
+              .findAllElements('legislativeSubjects')
+              .first
+              .findAllElements('name')
+              .map((e) => e.text)
+              .toList()
+          : null,
+      crsSummaries: xmlDocument != null &&
+              xmlDocument.findAllElements('summaries').isNotEmpty
+          ? xmlDocument
+              .findAllElements('summaries')
+              .first
+              .findAllElements('text')
+              .map((e) => e.text)
               .toList()
           : null,
     );
+  }
+
+  static String? getPolicyAreaFromXml(XmlDocument xmlDocument) {
+    if (xmlDocument.findAllElements('policyArea').isEmpty) {
+      return null;
+    }
+
+    return xmlDocument
+        .findAllElements('policyArea')
+        .first
+        .findAllElements('name')
+        .first
+        .text;
   }
 
   static List<BillSponsor> getSponsorsFromXml(XmlDocument xmlDocument) {
@@ -214,11 +227,15 @@ class GovinfoBill extends Bill {
     return GovinfoBill.fromResponseBody(billString);
   }
 
-  // factory GovinfoBill.fromExampleXml() {
-  //   String billpath = '${Strings.billFilePath}/govinfo_bill_example.xml';
-  //   String billString = File(billpath).readAsStringSync();
-  //   return GovinfoBill.fromResponseBody(billString);
-  // }
+  factory GovinfoBill.fromExampleDetails() {
+    String billpathJson = '${Strings.billFilePath}/govinfo_bill_example.json';
+    String jsonString = File(billpathJson).readAsStringSync();
+    String billpathXml =
+        '${Strings.billFilePath}/govinfo_bill_status_example.xml';
+    String xmlString = File(billpathXml).readAsStringSync();
+    String billString = '$jsonString|$xmlString';
+    return GovinfoBill.fromDetailBody(billString);
+  }
 
   static List<GovinfoBill> fromExampleKeywordSearch() {
     String billpath =

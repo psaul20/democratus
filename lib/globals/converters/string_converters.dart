@@ -51,4 +51,11 @@ class StringConverters {
         regex.allMatches(input).map((match) => match.group(0)!).toList();
     return chunks;
   }
+
+  //Remove html tags from a string
+  static String removeHtmlTags(String input) {
+    final RegExp regex = RegExp(r'<[^>]*>');
+    final String result = input.replaceAll(regex, '');
+    return result;
+  }
 }

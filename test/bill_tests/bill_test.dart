@@ -60,7 +60,7 @@ void main() {
       expect(bill.billId, '115-hr-1625enr');
       expect(bill.title.contains('State Department Basic Authorities'), true);
     });
-        test('Testing govinfobill creation from example XML', () {
+    test('Testing govinfobill creation from example XML', () {
       Bill bill = GovinfoBill.fromExampleJson();
       expect(bill.billId, '115-hr-1625enr');
       expect(bill.title.contains('State Department Basic Authorities'), true);
@@ -89,6 +89,29 @@ void main() {
       expect(response.statusCode, 200);
       List<Bill> bills = GovinfoBill.fromResponseBodyList(response.body);
       expect(bills.length, 20);
+    });
+    test('Testing govinfo bill creation with XML details', () {
+      Bill bill = GovinfoBill.fromExampleDetails();
+      expect(bill.billId, '115-hr-1625enr');
+      expect(bill.title.contains('State Department Basic Authorities'), true);
+      expect(bill.committees!.length, 2);
+      expect(bill.committees!.first.description, 'Foreign Relations Committee');
+
+      expect(bill.actions!.length, 48);
+      expect(bill.actions!.first.description, 'Became Public Law No: 115-141.');
+      expect(bill.actions!.first.actionDate, DateTime(2018, 3, 23));
+
+      expect(bill.sponsors!.length, 1);
+      expect(bill.sponsors!.first.sponsorFullName,
+          'Rep. Royce, Edward R. [R-CA-39]');
+
+      expect(bill.policyArea, 'Economics and Public Finance');
+
+      expect(bill.subjects!.length > 100, true);
+      expect(bill.subjects!.first, 'Access Board');
+
+      expect(bill.crsSummaries!.length, 6);
+      expect(bill.crsSummaries!.first.contains('Targeted Rewards'), true);
     });
   });
 }
