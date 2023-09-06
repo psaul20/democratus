@@ -76,11 +76,9 @@ class GovinfoApi implements BillApiProvider {
     logUsage(response);
     Uri? billStatusLink =
         Uri.parse(jsonDecode(response.body)['related']?['billStatusLink']);
-    if (billStatusLink != null) {
-      final http.Response response2 = await http.get(billStatusLink);
-      response =
-          Response('${response.body}|${response2.body}', response.statusCode);
-    }
+    final http.Response response2 = await http.get(billStatusLink);
+    response =
+        Response('${response.body}|${response2.body}', response.statusCode);
     return response;
   }
 
