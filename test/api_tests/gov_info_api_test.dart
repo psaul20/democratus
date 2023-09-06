@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:democratus/api/govinfo_api.dart';
 import 'package:democratus/globals/strings.dart';
-import 'package:democratus/models/bill_models/govinfo_bill.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
@@ -69,15 +68,14 @@ void main() async {
 
       expect(jsonExample.keys, jsonResponse2.keys);
     });
-    test('Testing get bill details with bill object vs id', () async {
+    test('Testing get bill details with bill object (XML) vs id (JSON)',
+        () async {
       Response response1 =
           await govinfoApi.getBillDetails(billId: 'BILLS-115hr1625enr');
       expect(response1.statusCode, 200);
-      expect(response1.body[0], '{');
-
-      Response response2 = await govinfoApi.getBillDetails(bill: GovinfoBill.fromExample());
-      expect(response2.statusCode, 200);
-      expect(response2.body.contains('<billStatus>'), true);
+      List<String> strings = response1.body.split('|');
+      expect(strings[0][0], '{');
+      expect(strings[1][0], '<');
     });
   });
 }

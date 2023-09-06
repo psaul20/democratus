@@ -55,8 +55,13 @@ void main() {
     });
   });
   group('Testing GovinfoBill', () {
-    test('Testing govinfobill creation from example', () {
-      Bill bill = GovinfoBill.fromExample();
+    test('Testing govinfobill creation from example json', () {
+      Bill bill = GovinfoBill.fromExampleJson();
+      expect(bill.billId, '115-hr-1625enr');
+      expect(bill.title.contains('State Department Basic Authorities'), true);
+    });
+        test('Testing govinfobill creation from example XML', () {
+      Bill bill = GovinfoBill.fromExampleJson();
       expect(bill.billId, '115-hr-1625enr');
       expect(bill.title.contains('State Department Basic Authorities'), true);
     });

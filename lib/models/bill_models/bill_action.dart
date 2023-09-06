@@ -3,67 +3,71 @@
 
 import 'dart:convert';
 
+import 'package:democratus/globals/converters/string_converters.dart';
 import 'package:equatable/equatable.dart';
 
 class BillAction extends Equatable {
-  final int actionId;
+  final String? actionCode;
   final DateTime actionDate;
   final String description;
   final String type;
-  final String chamber;
+
+  String get displayActionType {
+    List<String> strings =
+        StringConverters.splitStringIntoChunksAtCapitalLetters(type);
+    if (strings.length > 1) {
+      return strings.join(' ');
+    } else {
+      return strings.first;
+    }
+  }
 
   const BillAction({
-    required this.actionId,
+    this.actionCode,
     required this.actionDate,
     required this.description,
     required this.type,
-    required this.chamber,
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
-      actionId,
+      actionCode,
       actionDate,
       description,
       type,
-      chamber,
     ];
   }
 
   BillAction copyWith({
-    int? actionId,
+    String? actionCode,
     DateTime? actionDate,
     String? description,
     String? type,
-    String? chamber,
   }) {
     return BillAction(
-      actionId: actionId ?? this.actionId,
+      actionCode: actionCode ?? this.actionCode,
       actionDate: actionDate ?? this.actionDate,
       description: description ?? this.description,
       type: type ?? this.type,
-      chamber: chamber ?? this.chamber,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'actionId': actionId,
+      'actionCode': actionCode,
       'actionDate': actionDate.toIso8601String(),
       'description': description,
       'type': type,
-      'chamber': chamber,
     };
   }
 
   factory BillAction.fromMap(Map<String, dynamic> map) {
     return BillAction(
-      actionId: map['actionId'] as int,
+      actionCode: map['actionCode'] as String?,
       actionDate: DateTime.parse(map['actionDate']),
       description: map['description'] as String,
       type: map['type'] as String,
-      chamber: map['chamber'] as String,
     );
   }
 

@@ -19,7 +19,7 @@ void main() {
   // Define a test. The TestWidgets function also provides a WidgetTester
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
-  Bill bill = GovinfoBill.fromExample();
+  Bill bill = GovinfoBill.fromExampleJson();
   late MockBillBloc billBloc;
   late SavedBillsBloc savedBillsBloc;
   setUp(() {

@@ -20,7 +20,6 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(
     () {
-
       dotenv.testLoad(fileInput: File('.env').readAsStringSync());
       billsApiProvider = MockBillApiProvider();
       String billDetailsJson =
@@ -34,9 +33,8 @@ void main() {
       when(() => billsApiProvider.getBillDetails(
               bill: any(named: 'bill'), billId: any(named: 'billId')))
           .thenAnswer((invocation) async => searchResponse);
-      testBill = GovinfoBill.fromExample();
-      billBloc = BillBloc(
-          bill: testBill, billApiProvider: billsApiProvider);
+      testBill = GovinfoBill.fromExampleJson();
+      billBloc = BillBloc(bill: testBill, billApiProvider: billsApiProvider);
     },
   );
 
@@ -47,13 +45,11 @@ void main() {
     blocTest<BillBloc, BillState>(
         'emits [BillState(bill: bill.copyWith(hasDetails: true),'
         'status: BillStatus.success)] when GetBillDetails is added',
-        build: () => BillBloc(
-          bill: testBill, billApiProvider: billsApiProvider),
+        build: () =>
+            BillBloc(bill: testBill, billApiProvider: billsApiProvider),
         act: (bloc) => bloc.add(GetBillDetails()),
         expect: () => <BillState>[
-              BillState(
-                  bill: testBill,
-                  status: BillStatus.loading),
+              BillState(bill: testBill, status: BillStatus.loading),
               BillState(
                   bill: testBill.copyWith(hasDetails: true),
                   status: BillStatus.success),
@@ -61,13 +57,11 @@ void main() {
     blocTest<BillBloc, BillState>(
         'emits [BillState(bill: event.bill,'
         'status: BillStatus.success)] when UpdateBill is added',
-        build: () => BillBloc(
-          bill: testBill, billApiProvider: billsApiProvider),
+        build: () =>
+            BillBloc(bill: testBill, billApiProvider: billsApiProvider),
         act: (bloc) => bloc.add(UpdateBill(testBill)),
         expect: () => <BillState>[
-              BillState(
-                  bill: testBill,
-                  status: BillStatus.success),
+              BillState(bill: testBill, status: BillStatus.success),
             ]);
     blocTest<BillBloc, BillState>(
       'emits [BillState(status: BillStatus.failure,'
@@ -76,9 +70,7 @@ void main() {
         when(() => billsApiProvider.getBillDetails(
                 bill: any(named: 'bill'), billId: any(named: 'billId')))
             .thenAnswer((invocation) async => Response('', 404));
-        return BillBloc(
-            bill: testBill,
-            billApiProvider: billsApiProvider);
+        return BillBloc(bill: testBill, billApiProvider: billsApiProvider);
       },
       act: (bloc) => bloc.add(GetBillDetails()),
       verify: (bloc) =>

@@ -35,13 +35,20 @@ class StringConverters {
 
       return result;
     }
-
-    
   }
 
-  static List<String> splitStringIntoChunks(String input) {
-  final RegExp regex = RegExp(r'\d+|[A-Za-z]+');
-  final List<String> chunks = regex.allMatches(input).map((match) => match.group(0)!).toList();
-  return chunks;
-}
+  static List<String> splitStringIntoChunksCharsOrNums(String input) {
+    final RegExp regex = RegExp(r'\d+|[A-Za-z]+');
+    final List<String> chunks =
+        regex.allMatches(input).map((match) => match.group(0)!).toList();
+    return chunks;
+  }
+
+// Split a string into chunks at each capital letter
+  static List<String> splitStringIntoChunksAtCapitalLetters(String input) {
+    final RegExp regex = RegExp(r'[A-Z][a-z]*');
+    final List<String> chunks =
+        regex.allMatches(input).map((match) => match.group(0)!).toList();
+    return chunks;
+  }
 }

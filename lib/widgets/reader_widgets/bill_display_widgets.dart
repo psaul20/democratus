@@ -213,7 +213,7 @@ class BillDisplay {
                 style: TextStyles(context).bodyStyle,
                 children: [
                   TextSpan(
-                      text: '${action.chamber} Action: ',
+                      text: '${action.displayActionType} Action: ',
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(text: action.description),
                 ],
@@ -236,18 +236,26 @@ class BillDisplay {
 
     if (bill.sponsors != null) {
       for (final sponsor in bill.sponsors!) {
-        returnWidgets.add(RichText(
-          text: TextSpan(
+        if (sponsor.sponsorFullName != null) {
+          returnWidgets.add(RichText(
+              text: TextSpan(
+            text: '${sponsor.sponsorFullName}; ',
             style: TextStyles(context).bodyStyle,
-            children: [
-              TextSpan(
-                  text: '${sponsor.sponsorName} ',
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: '(${sponsor.sponsorParty}) - '),
-              TextSpan(text: '${sponsor.sponsorState}; '),
-            ],
-          ),
-        ));
+          )));
+        } else {
+          returnWidgets.add(RichText(
+            text: TextSpan(
+              style: TextStyles(context).bodyStyle,
+              children: [
+                TextSpan(
+                    text: '${sponsor.sponsorName} ',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: '(${sponsor.sponsorParty}) - '),
+                TextSpan(text: '${sponsor.sponsorState}; '),
+              ],
+            ),
+          ));
+        }
       }
     }
     if (returnWidgets.isNotEmpty) {

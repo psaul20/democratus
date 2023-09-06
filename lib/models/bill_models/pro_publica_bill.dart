@@ -17,23 +17,21 @@ class ProPublicaBill extends Bill {
                   (map['actions'] as List)
                       .map(
                         (e) => BillAction(
-                          actionId: e['id'],
+                          actionCode: e['id'].toString(),
                           actionDate: DateTime.parse(e['datetime']),
                           description: e['description'],
                           type: e['action_type'],
-                          chamber: e['chamber'],
                         ),
                       )
                       .toList(),
                 )
               : [
                   BillAction(
-                      actionId: 1,
+                      actionCode: 1.toString(),
                       actionDate:
                           DateTime.parse(map['latest_major_action_date']),
                       description: map['latest_major_action'],
-                      type: 'Unknown',
-                      chamber: 'Unknown')
+                      type: 'Unknown',)
                 ],
           committees: [
             Committee(

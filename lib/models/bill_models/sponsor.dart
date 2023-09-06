@@ -12,22 +12,29 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class BillSponsor extends Equatable {
-  final String sponsorTitle;
-  final String sponsorName;
-  final String sponsorId;
-  final Uri sponsorUri;
-  final String sponsorParty;
-  final String sponsorState;
+  final String? sponsorFullName;
+  final String? sponsorTitle;
+  final String? sponsorName;
+  final String? sponsorId;
+  final Uri? sponsorUri;
+  final String? sponsorParty;
+  final String? sponsorState;
   const BillSponsor({
-    required this.sponsorTitle,
-    required this.sponsorName,
-    required this.sponsorId,
-    required this.sponsorUri,
-    required this.sponsorParty,
-    required this.sponsorState,
-  });
+    this.sponsorFullName,
+    this.sponsorTitle,
+    this.sponsorName,
+    this.sponsorId,
+    this.sponsorUri,
+    this.sponsorParty,
+    this.sponsorState,
+  }) : assert(sponsorFullName != null ||
+            (sponsorName != null &&
+                sponsorTitle != null &&
+                sponsorParty != null &&
+                sponsorState != null));
 
   BillSponsor copyWith({
+    String? sponsorFullName,
     String? sponsorTitle,
     String? sponsorName,
     String? sponsorId,
@@ -36,6 +43,7 @@ class BillSponsor extends Equatable {
     String? sponsorState,
   }) {
     return BillSponsor(
+      sponsorFullName: sponsorFullName ?? this.sponsorFullName,
       sponsorTitle: sponsorTitle ?? this.sponsorTitle,
       sponsorName: sponsorName ?? this.sponsorName,
       sponsorId: sponsorId ?? this.sponsorId,
@@ -47,6 +55,7 @@ class BillSponsor extends Equatable {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'sponsorFullName': sponsorFullName,
       'sponsorTitle': sponsorTitle,
       'sponsorName': sponsorName,
       'sponsorId': sponsorId,
@@ -58,24 +67,26 @@ class BillSponsor extends Equatable {
 
   factory BillSponsor.fromMap(Map<String, dynamic> map) {
     return BillSponsor(
-      sponsorTitle: map['sponsorTitle'] as String,
-      sponsorName: map['sponsorName'] as String,
-      sponsorId: map['sponsorId'] as String,
-      sponsorUri: Uri.parse(map['sponsorUri']),
-      sponsorParty: map['sponsorParty'] as String,
-      sponsorState: map['sponsorState'] as String,
+      sponsorFullName: map['sponsorFullName'] as String?,
+      sponsorTitle: map['sponsorTitle'] as String?,
+      sponsorName: map['sponsorName'] as String?,
+      sponsorId: map['sponsorId'] as String?,
+      sponsorUri: Uri.parse(map['sponsorUri'] as String),
+      sponsorParty: map['sponsorParty'] as String?,
+      sponsorState: map['sponsorState'] as String?,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory BillSponsor.fromJson(String source) => BillSponsor.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory BillSponsor.fromJson(String source) =>
+      BillSponsor.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   bool get stringify => true;
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       sponsorTitle,
       sponsorName,

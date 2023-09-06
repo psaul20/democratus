@@ -16,7 +16,7 @@ import '../mocks.dart';
 void main() {
   late BillApiProvider billsApiProvider;
   List<Bill> testBills = GovinfoBill.fromExampleKeywordSearch();
-  Bill testBill = GovinfoBill.fromExample();
+  Bill testBill = GovinfoBill.fromExampleJson();
   List<Bill> offsetBills = [];
   offsetBills.addAll(testBills + testBills);
   offsetBills.add(testBill);
