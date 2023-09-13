@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "887891283246",
+    "firebase_url": "https://democratus-default-rtdb.firebaseio.com",
+    "project_id": "democratus",
+    "storage_bucket": "democratus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887891283246:android:98273f76309fa23b04febf",
+        "android_client_info": {
+          "package_name": "com.example.democratus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeh4OEDVek_yRhFpGpfqQPny9CK5D9m48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
