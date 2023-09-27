@@ -49,3 +49,4 @@ void initHydratedStorage() {
   ).thenAnswer((_) async {});
   HydratedBloc.storage = hydratedStorage;
 }
+
