@@ -24,9 +24,7 @@ Future<void> main() async {
         : await getTemporaryDirectory(),
   );
   await dotenv.load();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
