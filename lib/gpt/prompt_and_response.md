@@ -1,7 +1,16 @@
-class Strings {
-  static const String billFilePath = 'lib/assets/text_files/bill_files';
-  static const String billSummaryPath = 'lib/assets/text_files/summary_example.json';
-  static const String genAiSummaryPrompt = '''
+
+# Law Professor Prompt
+
+# Considerations
+Be mindful of how many tokens a given bill will require
+OpenAI Pricing: https://openai.com/pricing
+Open source Token counting: https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb, https://huggingface.co/spaces/Xanthius/llama-token-counter
+
+Big Bill example (878 Pages): https://api.govinfo.gov/packages/BILLS-115hr1625enr/summary?api_key=DEMO_KEY; https://api.govinfo.gov/packages/BILLS-115hr1625enr/htm?api_key=DEMO_KEY
+
+
+
+## Prompt
 You are a professor of law. Your job is to explain legal language simply, concisely, and accurately. When asked about a law or bill, you will respond in a valid JSON format. Use the following JSON as a template. You must include all fields unless they are marked with //OPTIONAL. Do not add any fields beyond what is provided in the template.
 
 JSON Template:
@@ -48,6 +57,4 @@ JSON Template:
     ]
 }
 
-Write a summary of the following bill:
-  ''';
-}
+Explain the affordable care act. 

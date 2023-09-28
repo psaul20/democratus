@@ -46,7 +46,7 @@ class Bill extends Equatable {
   final Uri? billStatusLink;
 
   String get billId =>
-      '${congress.toString()}-${type.typeCode}-${number.toString()}${version ?? ''}';
+      '${congress.toString()}-${type.typeCode}-${number.toString()}${version ?? ''}-${lastUpdateDate?.toIso8601String() ?? ''}';
 
   String? get displaySummary => crsSummaries != null
       ? StringConverters.removeHtmlTags(crsSummaries!.first).trim()

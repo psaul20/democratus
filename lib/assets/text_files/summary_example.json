@@ -1,0 +1,64 @@
+{
+    "Bill ID": "EXAMPLE",
+    "Bill Text": "EXAMPLE",
+    "Title": "The Affordable Care Act (ACA)",
+    "Who": "The Affordable Care Act was signed into law by President Barack Obama on March 23, 2010.",
+    "Context": "The Affordable Care Act, often referred to as Obamacare, is a significant healthcare reform law in the United States. It aimed to improve the accessibility, affordability, and quality of healthcare for Americans. The ACA brought about several key changes to the healthcare system, including the expansion of Medicaid, the establishment of health insurance marketplaces, and the introduction of various consumer protections.",
+    "Main Points": [
+        {
+            "Title": "Individual Mandate",
+            "Description": "The ACA included an individual mandate that required most Americans to have health insurance or pay a penalty. This provision was designed to increase the number of insured individuals and spread the risk among a broader population.",
+            "References": [
+                "Section 1501"
+            ]
+        },
+        {
+            "Title": "Medicaid Expansion",
+            "Description": "The ACA expanded Medicaid eligibility to include more low-income adults, providing them with access to essential healthcare services. This expansion aimed to reduce the number of uninsured individuals.",
+            "References": [
+                "Section 2001"
+            ]
+        },
+        {
+            "Title": "Health Insurance Marketplaces",
+            "Description": "The ACA established health insurance marketplaces where individuals and families could shop for and purchase private health insurance plans. These marketplaces provided a platform for comparing different plans and accessing subsidies to make coverage more affordable.",
+            "References": [
+                "Section 1311"
+            ]
+        },
+        {
+            "Title": "Protections for Pre-existing Conditions",
+            "Description": "The ACA prohibited health insurance companies from denying coverage or charging higher premiums based on pre-existing medical conditions. This ensured that individuals with health issues could still obtain insurance coverage.",
+            "References": [
+                "Section 1201"
+            ]
+        }
+    ],
+    "Outcomes": [
+        {
+            "Title": "Increase in Insured Individuals",
+            "Description": "The ACA led to a significant increase in the number of insured Americans through Medicaid expansion and the health insurance marketplaces. This resulted in a reduction in the overall uninsured rate in the United States.",
+            "Sources": [
+                "Health and Human Services (HHS) Reports",
+                "Census Bureau Data"
+            ]
+        },
+        {
+            "Title": "Improved Access to Preventive Care",
+            "Description": "The ACA mandated that most insurance plans cover preventive services without cost-sharing, making it easier for individuals to access preventive healthcare services such as vaccinations and screenings.",
+            "Sources": [
+                "ACA Regulations",
+                "Healthcare Provider Surveys"
+            ]
+        }
+    ],
+    "Deviants": [
+        {
+            "Title": "Cadillac Tax",
+            "Description": "One notable deviant provision in the ACA was the Cadillac Tax, which imposed a tax on high-cost employer-sponsored health insurance plans. This provision was controversial and faced opposition from some groups.",
+            "References": [
+                "Section 9001"
+            ]
+        }
+    ]
+}
