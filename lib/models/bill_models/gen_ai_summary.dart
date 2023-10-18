@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:democratus/globals/strings.dart';
+import 'package:flutter/services.dart';
 
 class GenAiSummary {
   // model class for a gen ai summary based on the summary_example.json file format
@@ -130,8 +131,10 @@ class GenAiSummary {
         summaryDeviants.hashCode;
   }
 
-  static getExampleSummary() =>
-      GenAiSummary.fromJson(File(Strings.billSummaryPath).readAsStringSync());
+  static Future<GenAiSummary> getExampleSummary() async {
+    String fileString = await rootBundle.loadString(Strings.billSummaryPath);
+    return GenAiSummary.fromJson(fileString);
+  }
 }
 
 class SummaryPoint {

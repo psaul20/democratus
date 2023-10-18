@@ -18,11 +18,7 @@ class FirebaseRealtimeDatabase {
   Future<String> getSummaryAt(String billId) async {
     DatabaseReference dbRef = _database.ref('$billSummaryPath/$billId');
     final snapshot = await dbRef.get();
-    if (snapshot.exists) {
-      return snapshot.value as String;
-    } else {
-      throw Exception('No summary found for $billId');
-    }
+    return snapshot.value as String;
   }
 
   Future<void> setSummaryAt(String billId, String summary) async {
