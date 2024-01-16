@@ -3,7 +3,7 @@
 Democratus is a WIP project attempting to answer one simple question: Can we leverage the power of Generative AI to re-engage the general public in the democratic process?
 
 The initial MVP concept includes the following features:
- - Allow a user to identify meaningful legislation according to their individual interests [Complete]
+ - Allow a user to search by keyword for meaningful legislation according to their individual interests [Complete]
  - Issue a pre-determined prompt to a Gen AI provider (OpenAI initially) to summarize and surface the most relevant information [WIP]
  - Allow users to share summaries with others & contact their representative [Not Started]
 
