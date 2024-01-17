@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,8 +50,8 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCeh4OEDVek_yRhFpGpfqQPny9CK5D9m48',
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: DotEnv().env['FIREBASE_API_KEY_ANDROID']!,
     appId: '1:887891283246:android:98273f76309fa23b04febf',
     messagingSenderId: '887891283246',
     projectId: 'democratus',
@@ -58,8 +59,8 @@ class DefaultFirebaseOptions {
     storageBucket: 'democratus.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDfZVEZrqkP4ZziEnpwHeitEfzFPpJFraA',
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: DotEnv().env['FIREBASE_API_KEY_IOS']!,
     appId: '1:887891283246:ios:6c21d9b0968211ad04febf',
     messagingSenderId: '887891283246',
     projectId: 'democratus',
